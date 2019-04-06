@@ -1,0 +1,31 @@
+{
+  "name": "agenda",
+  "version": "1.0.0",
+  "description": "Agenda",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "sync": "node src/database/sync.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brcxzam/Agenda.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brcxzam/Agenda/issues"
+  },
+  "homepage": "https://github.com/brcxzam/Agenda#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "mysql2": "^1.6.5",
+    "sequelize": "^5.2.12"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
