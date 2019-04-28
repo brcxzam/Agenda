@@ -1,11 +1,7 @@
-const {User } = require('./model');
+const {
+    sequelize
+} = require('./model');
 
-User.sync({
+sequelize.sync({
     force: true
-})
-.then(() => {
-    return User.create({
-        firstName: 'Nayeli',
-        lastName: 'Dinamita'
-    });
 });
