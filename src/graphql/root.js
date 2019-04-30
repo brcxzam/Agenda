@@ -1,4 +1,4 @@
-const { User } = require('../database/model');
+const { User, Setting } = require('../database/model');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 var root = {
@@ -8,6 +8,7 @@ var root = {
         const hash = await bcrypt.hash(password, salt);
         data.password = hash;
         const user = await User.create(data);
+        await Setting.create({user : user.id});
         return user;
     },
     users: async () => {
@@ -35,7 +36,7 @@ var root = {
         return "Done";
     },
     deleteUser: async ({ id }) => {
-        const user = await User.destroy({
+        await User.destroy({
             where: {
                 id
             }

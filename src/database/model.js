@@ -16,19 +16,37 @@ User.init(
     {
         firstName: {
             type: STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                is: ["^[a-z]+$", 'i'],
+                notEmpty: true
+            }
         },
         lastName: {
-            type: STRING
+            type: STRING,
+            validate: {
+                is: ["^[a-z]+$", 'i'],
+                notEmpty: true
+            }
         },
         email: {
-            type: STRING
+            type: STRING,
+            allowNull: false,
+            validate: {
+                isEmail: true
+            }
         },
         password: {
-            type: STRING
+            type: STRING,
+            allowNull: false,
+            validate: {
+                min: 8
+            }
         },
         profile_image: {
-            type: STRING
+            type: STRING,
+            allowNull: false,
+            defaultValue: "default.png"
         }
     },
     {
@@ -39,8 +57,8 @@ User.init(
                 fields: ['email']
             },
         ],
-        sequelize,
-        modelName: 'User'
+        modelName: 'User',
+        sequelize
     }
 );
 
@@ -88,7 +106,7 @@ Setting.init(
             }
 
         }
-    },  
+    },
     {
         sequelize,
         modelName: 'Setting'
@@ -180,7 +198,7 @@ Personalization.init(
                 key: 'id'
             }
 
-        }, 
+        },
         color: {
             type: INTEGER,
 
@@ -314,7 +332,7 @@ Partial_subject.init(
                 key: 'id'
             }
 
-        }, 
+        },
         subject: {
             type: INTEGER,
 
@@ -331,6 +349,4 @@ Partial_subject.init(
     }
 );
 
-
-
-module.exports = { Notification, Setting, User , Academic_data, Partial, Color, Icon, Personalization, Subject, Schedule, Event, Partial_subject , sequelize};
+module.exports = { Notification, Setting, User, Academic_data, Partial, Color, Icon, Personalization, Subject, Schedule, Event, Partial_subject, sequelize };
