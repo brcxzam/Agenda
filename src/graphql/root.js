@@ -8,7 +8,8 @@ var root = {
         const hash = await bcrypt.hash(password, salt);
         data.password = hash;
         const user = await User.create(data);
-        await Setting.create({user : user.id});
+        const {id} = user;
+        await Setting.create({user: id});
         return user;
     },
     users: async () => {
@@ -25,9 +26,11 @@ var root = {
     },
     updateUser: async ({ id, data }) => {
         const { password } = data;
+        if (password) {
         const salt = await bcrypt.genSalt(saltRounds);
         const hash = await bcrypt.hash(password, salt);
         data.password = hash;
+        }
         await User.update(data, {
             where: {
                 id

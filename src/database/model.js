@@ -7,6 +7,7 @@ const {
     DECIMAL,
     DATEONLY,
     BOOLEAN,
+    TIME,
     DATE
 } = require("sequelize");
 const sequelize = require("./connection");
@@ -38,15 +39,14 @@ User.init(
         },
         password: {
             type: STRING,
-            allowNull: false,
-            validate: {
-                min: 8
-            }
+            allowNull: false
         },
         profile_image: {
             type: STRING,
-            allowNull: false,
-            defaultValue: "default.png"
+            defaultValue: "default.png",
+            validate: {
+                is: ["^[^\/+\:+\*+\"+\<+\>+\|]+$"]
+            }
         }
     },
     {
@@ -66,50 +66,99 @@ class Notification extends Model { }//<---
 Notification.init(
     {
         morning: {
-            type: DATE
+            type: TIME,
+            defaultValue: "08:00:00"
         },
         afternoon: {
-            type: DATE
+            type: TIME,
+            defaultValue: "14:00:00"
         },
         night: {
-            type: DATE
+            type: TIME,
+            defaultValue: "20:00:00"
         }
     },
     {
         sequelize,
-        modelName: 'Notification'
+        modelName: 'Notification',
+        timestamps: false
     }
 );
 
+class Day extends Model { }//<---
+Day.init(
+    {
+        monday: {
+            type: BOOLEAN,
+            defaultValue: true
+        },
+        tuesday: {
+            type: BOOLEAN,
+            defaultValue: true
+        },
+        wednesday: {
+            type: BOOLEAN,
+            defaultValue: true
+        },
+        thursday: {
+            type: BOOLEAN,
+            defaultValue: true
+        },
+        friday: {
+            type: BOOLEAN,
+            defaultValue: true
+        },
+        saturday: {
+            type: BOOLEAN,
+            defaultValue: false
+        },
+        sunday: {
+            type: BOOLEAN,
+            defaultValue: false
+        }
+    },
+    {
+        sequelize,
+        modelName: 'Day',
+        timestamps: false
+    }
+);
 
 class Setting extends Model { }
 Setting.init(
     {
+        user: {
+            type: INTEGER,
+            primaryKey: true,
+            references: {
+                model: User,
+                key: 'id',
+            }, 
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+        },
         days: {
-            type: STRING
+            type: INTEGER,
+            allowNull: false,
+            references: {
+                model: Day,
+                key: 'id'
+            }
         },
         notification: {
             type: INTEGER,
-
+            allowNull: false,
             references: {
                 model: Notification,
                 key: 'id'
             }
 
         },
-        user: {
-            type: INTEGER,
-
-            references: {
-                model: User,
-                key: 'id'
-            }
-
-        }
     },
     {
         sequelize,
-        modelName: 'Setting'
+        modelName: 'Setting',
+        timestamps: false
     }
 );
 
