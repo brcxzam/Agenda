@@ -135,7 +135,7 @@ Setting.init(
                 key: 'id',
             }, 
             onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
+            onDelete: 'CASCADE'
         },
         days: {
             type: INTEGER,
@@ -143,7 +143,9 @@ Setting.init(
             references: {
                 model: Day,
                 key: 'id'
-            }
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
         },
         notification: {
             type: INTEGER,
@@ -151,7 +153,9 @@ Setting.init(
             references: {
                 model: Notification,
                 key: 'id'
-            }
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
 
         },
     },
@@ -166,47 +170,65 @@ Setting.init(
 class Academic_data extends Model { }//<---
 Academic_data.init(
     {
+        partials: {
+            type: INTEGER,
+            allowNull: false
+        },
         maximun: {
-            type: INTEGER
+            type: INTEGER,
+            allowNull: false
         },
         aproving: {
-            type: INTEGER
+            type: INTEGER,
+            allowNull: false
         },
         final_score: {
             type: DOUBLE
+        },
+        user: {
+            type: INTEGER,
+            allowNull: false,
+            references: {
+                model: User,
+                key: 'id',
+            }, 
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
         }
     },
     {
         sequelize,
-        modelName: 'Academic_data'
+        modelName: 'Academic_data',
+        timestamps: false
     }
 );
 
-class Partial extends Model { }
-Partial.init(
+class Percentage extends Model { }
+Percentage.init(
     {
-        number: {
-            type: INTEGER
+        partial: {
+            type: INTEGER,
+            allowNull: false
         },
         percent: {
-            type: INTEGER
-        },
-        obtained: {
-            type: DOUBLE
+            type: INTEGER,
+            allowNull: false
         },
         academic: {
             type: INTEGER,
-
+            allowNull: false,
             references: {
                 model: Academic_data,
                 key: 'id'
-            }
-
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
         }
     },
     {
         sequelize,
-        modelName: 'Partial'
+        modelName: 'Percentage',
+        timestamps: false
     }
 );
 
@@ -268,44 +290,90 @@ class Subject extends Model { }
 Subject.init(
     {
         name: {
-            type: STRING
-        },
-        personalization: {
-            type: INTEGER,
-
-            references: {
-                model: Personalization,
-                key: 'id'
+            type: STRING,
+            allowNull: false,
+            validate: {
+                is: ["^[^\/+\:+\*+\"+\<+\>+\|]+$"]
             }
-
+        },
+        user: {
+            type: INTEGER,
+            allowNull: false,
+            references: {
+                model: User,
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
         }
     },
     {
         sequelize,
-        modelName: 'Subject'
+        modelName: 'Subject',
+        timestamps: false
     }
 );
+
+class Partial extends Model { }
+Partial.init(
+    {
+        obtained: {
+            type: DOUBLE
+        },
+        percent: {
+            type: INTEGER,
+            allowNull: false,
+            references: {
+                model: Percentage,
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        },
+        subject: {
+            type: INTEGER,
+            allowNull: false,
+            references: {
+                model: Subject,
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }
+    },
+    {
+        sequelize,
+        modelName: 'Partial',
+        timestamps: false
+    }
+);
+
 
 
 class Schedule extends Model { }
 Schedule.init(
     {
         start: {
-            type: DATE
+            type: TIME,
+            allowNull: false
         },
         finish: {
-            type: DATE
+            type: TIME,
+            allowNull: false
         },
         day: {
-            type: STRING
+            type: STRING,
+            allowNull: false
         },
         subject: {
             type: INTEGER,
-
+            allowNull: false,
             references: {
                 model: Subject,
                 key: 'id'
-            }
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
 
         }
     },
@@ -370,32 +438,4 @@ Event.init(
     }
 );
 
-class Partial_subject extends Model { }
-Partial_subject.init(
-    {
-        partial: {
-            type: INTEGER,
-
-            references: {
-                model: Partial,
-                key: 'id'
-            }
-
-        },
-        subject: {
-            type: INTEGER,
-
-            references: {
-                model: Subject,
-                key: 'id'
-            }
-
-        }
-    },
-    {
-        sequelize,
-        modelName: 'Partial_subject'
-    }
-);
-
-module.exports = { Notification, Setting, User, Academic_data, Partial, Color, Icon, Personalization, Subject, Schedule, Event, Partial_subject, sequelize };
+module.exports = { Notification, Setting, User, Academic_data, Percentage, Partial, Color, Icon, Personalization, Subject, Schedule, Event, sequelize };
