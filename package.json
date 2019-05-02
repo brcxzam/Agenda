@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/brcxzam/Agenda#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.4.4",
     "bcrypt": "^3.0.6",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",

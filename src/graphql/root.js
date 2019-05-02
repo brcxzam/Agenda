@@ -12,10 +12,6 @@ var root = {
         await Setting.create({user: id});
         return user;
     },
-    users: async () => {
-        const users = await User.findAll();
-        return users;
-    },
     user: async ({ id }) => {
         const user = await User.findAll({
             where: {
