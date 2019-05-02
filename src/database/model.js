@@ -438,4 +438,4 @@ Event.init(
     }
 );
 
-module.exports = { Notification, Setting, User, Academic_data, Percentage, Partial, Color, Icon, Personalization, Subject, Schedule, Event, sequelize };
+module.exports = { Notification, Day, Setting, User, Academic_data, Percentage, Partial, Color, Icon, Personalization, Subject, Schedule, Event, sequelize };
