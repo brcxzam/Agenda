@@ -1,4 +1,4 @@
-const { User, Setting } = require('../database/model');
+const { User, Setting, Day, Notification } = require('../database/model');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 var root = {
@@ -9,7 +9,9 @@ var root = {
         data.password = hash;
         const user = await User.create(data);
         const {id} = user;
-        await Setting.create({user: id});
+        const days = await Day.create();
+        const notification = await Notification.create();
+        await Setting.create({user : id, days : days.id, notification : notification.id});
         return user;
     },
     user: async ({ id }) => {
@@ -18,6 +20,10 @@ var root = {
                 id
             }
         });
+        return user;
+    },
+    users: async () => {
+        const user = await User.findAll();
         return user;
     },
     updateUser: async ({ id, data }) => {
