@@ -1,6 +1,7 @@
-const { Router } = require('express');
+import { Router } from 'express';
+import { unlink } from 'fs';
 const router = Router();
-const { unlink } = require('fs');
+
 router.post('/', async ({ body, file }, res) => {
     if (body.deleteImage) {
         unlink('src/public/img/uploads/'+body.deleteImage, function (err) {
@@ -19,4 +20,4 @@ router.post('/delete',({body}, res) => {
     });
 });
 
-module.exports = router;
+export default router;

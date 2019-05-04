@@ -1,3 +1,4 @@
+import "@babel/polyfill";
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
@@ -11,19 +12,15 @@ class App extends Component {
         this.handleChange = this.handleChange.bind(this);
 
         window.addEventListener('beforeunload', (event) => {
-            // // Cancel the event as stated by the standard.
-            event.preventDefault();
-            // // Chrome requires returnValue to be set.
-            event.returnValue = '';
             const formData = new FormData();
             const actual = this.state.profile_image;
             if (actual != "dk_wize_owl_product_icon.png" && this.state.isSaved == false) {
                 formData.append('deleteImage', actual);
+                fetch('/upload/delete', {
+                    method: 'POST',
+                    body: formData
+                });
             }
-            fetch('/upload/delete', {
-                method: 'POST',
-                body: formData
-            });
         });
     }
 
@@ -44,7 +41,7 @@ class App extends Component {
         }
         console.log(fData);
         
-        const url = '/graphql';
+        const url = '/api';
         const data = { 
             query: `mutation{ createUser(data: { ${fData} }){ id } }` 
         };

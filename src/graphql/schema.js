@@ -2,6 +2,7 @@ var { buildSchema } = require('graphql');
 
 var schema = buildSchema(`
     type Query {
+        hello: String
         users: [Users]
         user(id: ID): [Users]
     }
@@ -153,4 +154,4 @@ var schema = buildSchema(`
     }
 `);
 
-module.exports = schema;
+export default schema;

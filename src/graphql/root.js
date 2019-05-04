@@ -2,6 +2,7 @@ const { User, Setting, Day, Notification } = require('../database/model');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 var root = {
+    hello: () => 'Hello world!',
     createUser: async ({ data }) => {
         const { password } = data;
         const salt = await bcrypt.genSalt(saltRounds);
@@ -50,4 +51,4 @@ var root = {
     }
 };
 
-module.exports = root;
+export default root;
