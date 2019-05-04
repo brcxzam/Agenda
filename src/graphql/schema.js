@@ -1,16 +1,23 @@
-var { buildSchema } = require('graphql');
+import { buildSchema } from 'graphql';
 
-var schema = buildSchema(`
+const schema = buildSchema(`
     type Query {
         hello: String
-        users: [Users]
-        user(id: ID): [Users]
+        user(id: ID): Users
+        settings(id: ID): Settings
+        notifications(id: ID): Notifications
+        days(id: ID): Days
+        academicData(id: ID): AcademicData
     }
 
     type Mutation {
-        createUser(data: iUsers!): Users
-        updateUser(id: ID, data: iUsers): String
-        deleteUser(id: ID): String
+        cUser(data: iUsers!): Users
+        uUser(id: ID, data: iUsers): String
+        dUser(id: ID): String
+        uNotifications(id: ID, data: iNotifications): String
+        uDays(id: ID, data: iDays): String
+        cAcademicData(data: iAcademicData): AcademicData
+        uAcademicData(id: ID, data: iAcademicData): String
     }
 
     type Users {
@@ -22,16 +29,71 @@ var schema = buildSchema(`
         profile_image: String
     }
     type Settings {
-        id: ID
-        days: String
-        id_user: ID
-        id_notification: ID
+        user: ID
+        days: ID
+        notification: ID
     }
     type Notifications {
         id: ID
         morning: String
         afternoon: String
-        nigth: String
+        night: String
+    }
+    type Days {
+        id: ID
+        monday: String
+        tuesday: String
+        wednesday: String
+        thursday: String
+        friday: String
+        saturday: String
+        sunday: String
+    }
+    type AcademicData {
+        id: ID
+        partials: Int
+        maximum: Int
+        aproving: Int
+        final_score: Float
+        id_user: ID
+    }
+    type Percentages {
+        id: ID
+        partial: Int
+        percent: Int
+        id_academic: ID
+    }
+    type Subjects {
+        id: ID
+        name: String
+        id_user: ID
+    }
+    type Schedules {
+        id: ID
+        start: String
+        finish: String
+        day: String
+        id_subject: ID
+    }
+    type Partials {
+        id: ID
+        obtained: Float
+        id_percent: ID
+        id_subject: ID
+    }
+    type Personalizations {
+        id: ID
+        id_icon: ID
+        id_color: ID
+        id_subject: ID
+    }
+    type Colors {
+        id: ID
+        color: String
+    }
+    type Icons {
+        id: ID
+        icon: String
     }
     type Events {
         id: ID
@@ -42,71 +104,87 @@ var schema = buildSchema(`
         priority: String
         school: String
         id_user: ID
-        id_personalization: ID
         id_subject: ID
+        id_personalization: ID
     }
-    type Personalizations {
+    
+    input iUsers {
         id: ID
-        id_icon: ID
-        id_color: ID
+        firstName: String
+        lastName: String
+        email: String
+        password: String
+        profile_image: String
     }
-    type Colors {
+    input iSettings {
+        id_user: ID
+        id_days: ID
+        id_notification: ID
+    }
+    input iNotifications {
         id: ID
-        color: String
+        morning: String
+        afternoon: String
+        night: String
     }
-    type Icons {
+    input iDays {
         id: ID
-        icon: String
+        monday: String
+        tuesday: String
+        wednesday: String
+        thursday: String
+        friday: String
+        saturday: String
+        sunday: String
     }
-    type Subjects {
+    input iAcademicData {
+        id: ID
+        partials: Int
+        maximum: Int
+        aproving: Int
+        final_score: Float
+        id_user: ID
+    }
+    input iPercentages {
+        id: ID
+        partial: Int
+        percent: Int
+        id_academic: ID
+    }
+    input iSubjects {
         id: ID
         name: String
-        id_personalization: ID
+        id_user: ID
     }
-    type Schedules {
+    input iSchedules {
         id: ID
         start: String
         finish: String
         day: String
         id_subject: ID
     }
-    type PartialSubject {
+    input iPartials {
         id: ID
-        id_partial: ID
+        obtained: Float
+        id_percent: ID
         id_subject: ID
     }
-    type Partials {
+    input iPersonalizations {
         id: ID
-        number: Int
-        percent: Int
-        obtained: Float
-        id_academic: String
+        id_icon: ID
+        id_color: ID
+        id_subject: ID
     }
-    type AcademicData {
+    input iColors {
         id: ID
-        maximum: Int
-        aproving: Int
-        final_score: Float
+        color: String
     }
-    
-    input iUsers {
-        firstName: String
-        lastName: String
-        email: String
-        password: String
-        profile_image: String
-        id_setting: Int
-    }
-    input iSettings {
-        days: String
-        id_notification: Int
-    }
-    input iNotifications {
-        morning: String
-        afternoon: String
-        nigth: String
+    input iIcons {
+        id: ID
+        icon: String
     }
     input iEvents {
+        id: ID
         title: String
         date: String
         time: String
@@ -114,43 +192,8 @@ var schema = buildSchema(`
         priority: String
         school: String
         id_user: ID
+        id_subject: ID
         id_personalization: ID
-        id_subject: ID
-    }
-    input iPersonalizations {
-        id_icon: ID
-        id_color: ID
-    }
-    input iColors {
-        color: String
-    }
-    input iIcons {
-        icon: String
-    }
-    input iSubjects {
-        name: String
-        id_personalization: ID
-    }
-    input iSchedules {
-        start: String
-        finish: String
-        day: String
-        id_subject: ID
-    }
-    input iPartialSubject {
-        id_partial: ID
-        id_subject: ID
-    }
-    input iPartials {
-        number: Int
-        percent: Int
-        obtained: Float
-        id_academic: String
-    }
-    input iAcademicData {
-        maximum: Int
-        aproving: Int
-        final_score: Float
     }
 `);
 
