@@ -2,12 +2,19 @@ import { buildSchema } from 'graphql';
 
 const schema = buildSchema(`
     type Query {
-        hello: String
         user(id: ID): Users
         settings(id: ID): Settings
         notifications(id: ID): Notifications
         days(id: ID): Days
         academicData(id: ID): AcademicData
+        percentages(id: ID): [Percentages]
+        subjects(id: ID): [Subjects]
+        schedules(id: ID): [Schedules]
+        partials(id: ID): [Partials]
+        personalizations(id: ID): Personalizations
+        colors: Colors
+        icons: Icons
+        events(id: ID): [Events]
     }
 
     type Mutation {
@@ -18,6 +25,19 @@ const schema = buildSchema(`
         uDays(id: ID, data: iDays): String
         cAcademicData(data: iAcademicData): AcademicData
         uAcademicData(id: ID, data: iAcademicData): String
+        uPercentages(id: ID, data: iPercentages): String
+        cSubjects(data: iSubjects): Subjects
+        uSubjects(id: ID, data: iSubjects): String
+        dSubjects(id: ID): String
+        cSchedules(data: iSchedules): Schedules
+        uSchedules(id: ID, data: iSchedules): String
+        cPartials(data: iPartials): Partials
+        uPartials(id: ID, data: iPartials): String
+        cPersonalizations(data: iPersonalizations): Personalizations
+        uPersonalizations(id: ID, data: iPersonalizations): String
+        cEvents(data: iEvents): Events
+        uEvents(id: ID, data: iEvents): String
+        dEvents(id: ID): String
     }
 
     type Users {

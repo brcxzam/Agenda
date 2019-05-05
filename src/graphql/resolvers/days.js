@@ -6,11 +6,11 @@ export default {
         return days;
     },
     uDays: async ({ id, data }) => {
-        const days = await Day.update(data,{
+        await Day.update(data,{
             where: {
                 id
             }
         });
-        return days;
+        return 'Done';
     },
 }
