@@ -236,7 +236,8 @@ class Color extends Model { }//<---
 Color.init(
     {
         color: {
-            type: STRING
+            type: STRING,
+            allowNull: false
         }
     },
     {
@@ -249,40 +250,13 @@ class Icon extends Model { }//<---
 Icon.init(
     {
         icon: {
-            type: STRING
+            type: STRING,
+            allowNull: false
         }
     },
     {
         sequelize,
         modelName: 'Icon'
-    }
-);
-
-class Personalization extends Model { }//<---
-Personalization.init(
-    {
-        icon: {
-            type: INTEGER,
-
-            references: {
-                model: Icon,
-                key: 'id'
-            }
-
-        },
-        color: {
-            type: INTEGER,
-
-            references: {
-                model: Color,
-                key: 'id'
-            }
-
-        }
-    },
-    {
-        sequelize,
-        modelName: 'Personalization'
     }
 );
 
@@ -313,6 +287,49 @@ Subject.init(
         timestamps: false
     }
 );
+
+class Personalization extends Model { }//<---
+Personalization.init(
+    {
+        icon: {
+            type: INTEGER,
+            allowNull: false,
+            references: {
+                model: Icon,
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        },
+        color: {
+            type: INTEGER,
+            allowNull: false,
+            references: {
+                model: Color,
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        },
+        subject: {
+            type: INTEGER,
+            allowNull: false,
+            references: {
+                model: Subject,
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+
+        }
+    },
+    {
+        sequelize,
+        modelName: 'Personalization',
+        timestamps: false
+    }
+);
+
 
 class Partial extends Model { }
 Partial.init(
@@ -362,8 +379,7 @@ Schedule.init(
             allowNull: false
         },
         day: {
-            type: STRING,
-            allowNull: false
+            type: STRING
         },
         subject: {
             type: INTEGER,
@@ -387,30 +403,41 @@ class Event extends Model { }
 Event.init(
     {
         title: {
-            type: STRING
+            type: STRING,
+            allowNull: false,
+            validate: {
+                is: ["^[^\/+\:+\*+\"+\<+\>+\|]+$"]
+            }
         },
         date: {
-            type: DATEONLY
+            type: DATEONLY,
+            allowNull: false
         },
         time: {
-            type: DATE
+            type: TIME,
+            allowNull: false
         },
         repeat: {
-            type: STRING
+            type: STRING,
+            defaultValue: "No repetir"
         },
         priority: {
-            type: STRING
+            type: STRING,
+            defaultValue: "Ninguna"
         },
         school: {
-            type: BOOLEAN
+            type: BOOLEAN,
+            defaultValue: false
         },
         user: {
             type: INTEGER,
-
+            allowNull: false,
             references: {
                 model: User,
                 key: 'id'
-            }
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
 
         },
         personalization: {
@@ -419,7 +446,9 @@ Event.init(
             references: {
                 model: Personalization,
                 key: 'id'
-            }
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
 
         },
         subject: {
@@ -428,14 +457,18 @@ Event.init(
             references: {
                 model: Subject,
                 key: 'id'
-            }
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
 
         }
     },
     {
         sequelize,
-        modelName: 'Event'
+        modelName: 'Event',
+        timestamps: false
     }
 );
 
-module.exports = { Notification, Day, Setting, User, Academic_data, Percentage, Partial, Color, Icon, Personalization, Subject, Schedule, Event, sequelize };
+
+module.exports = { Notification, Day, Setting, User, Academic_data, Percentage, Partial, Color, Icon, Subject, Personalization, Schedule, Event, sequelize };
