@@ -176,6 +176,7 @@ Academic_data.init(
         },
         user: {
             type: INTEGER,
+            primaryKey: true,
             allowNull: false,
             references: {
                 model: User,
@@ -208,7 +209,7 @@ Percentage.init(
             allowNull: false,
             references: {
                 model: Academic_data,
-                key: 'id'
+                key: 'user'
             },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE'
