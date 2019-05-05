@@ -1,16 +1,5 @@
-const {
-    Model,
-    STRING,
-    INTEGER,
-    FLOAT,
-    DOUBLE,
-    DECIMAL,
-    DATEONLY,
-    BOOLEAN,
-    TIME,
-    DATE
-} = require("sequelize");
-const sequelize = require("./connection");
+import { Model, STRING, INTEGER, DOUBLE, DATEONLY, BOOLEAN, TIME } from "sequelize";
+import sequelize from "./connection";
 
 class User extends Model { }//<---
 User.init(
@@ -133,7 +122,7 @@ Setting.init(
             references: {
                 model: User,
                 key: 'id',
-            }, 
+            },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE'
         },
@@ -191,7 +180,7 @@ Academic_data.init(
             references: {
                 model: User,
                 key: 'id',
-            }, 
+            },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE'
         }
@@ -471,4 +460,4 @@ Event.init(
 );
 
 
-module.exports = { Notification, Day, Setting, User, Academic_data, Percentage, Partial, Color, Icon, Subject, Personalization, Schedule, Event, sequelize };
+export { Notification, Day, Setting, User, Academic_data, Percentage, Partial, Color, Icon, Subject, Personalization, Schedule, Event, sequelize };

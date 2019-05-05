@@ -1,6 +1,4 @@
-const {
-    sequelize
-} = require('./model');
+import {sequelize} from './model'
 
 sequelize.sync({
     force: true

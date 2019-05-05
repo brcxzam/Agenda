@@ -7,7 +7,7 @@
     "build": "babel src --out-dir dist",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.js --exec babel-node",
-    "sync": "node src/database/sync.js",
+    "sync": "babel-node src/database/sync.js",
     "wpack": "webpack --mode development --watch"
   },
   "repository": {
