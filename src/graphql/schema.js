@@ -12,8 +12,8 @@ const schema = buildSchema(`
         schedules(id: ID): [Schedules]
         partials(id: ID): [Partials]
         personalizations(id: ID): Personalizations
-        colors: Colors
-        icons: Icons
+        colors: [Colors]
+        icons: [Icons]
         events(id: ID): [Events]
     }
 

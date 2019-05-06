@@ -2,7 +2,11 @@ import { Percentage } from '../../database/model';
 
 export default {
     percentages: async ({ id }) => {
-        const percentages = await Percentage.findByPk(id);
+        const percentages = await Percentage.findAll({
+            where: {
+                academic: id
+            }
+        });
         return percentages;
     },
     uPercentages: async ({ id, data }) => {
