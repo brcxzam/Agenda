@@ -54,6 +54,16 @@ User.init(
 class Notification extends Model { }//<---
 Notification.init(
     {
+        user: {
+            type: INTEGER,
+            primaryKey: true,
+            references: {
+                model: User,
+                key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }, 
         morning: {
             type: TIME,
             defaultValue: "08:00:00"
@@ -77,6 +87,16 @@ Notification.init(
 class Day extends Model { }//<---
 Day.init(
     {
+        user: {
+            type: INTEGER,
+            primaryKey: true,
+            references: {
+                model: User,
+                key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        },
         monday: {
             type: BOOLEAN,
             defaultValue: true
@@ -113,8 +133,8 @@ Day.init(
     }
 );
 
-class Setting extends Model { }
-Setting.init(
+class Academic_data extends Model { }//<---
+Academic_data.init(
     {
         user: {
             type: INTEGER,
@@ -126,39 +146,6 @@ Setting.init(
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE'
         },
-        days: {
-            type: INTEGER,
-            allowNull: false,
-            references: {
-                model: Day,
-                key: 'id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
-        },
-        notification: {
-            type: INTEGER,
-            allowNull: false,
-            references: {
-                model: Notification,
-                key: 'id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
-
-        },
-    },
-    {
-        sequelize,
-        modelName: 'Setting',
-        timestamps: false
-    }
-);
-
-
-class Academic_data extends Model { }//<---
-Academic_data.init(
-    {
         partials: {
             type: INTEGER,
             allowNull: false
@@ -461,4 +448,4 @@ Event.init(
 );
 
 
-export { Notification, Day, Setting, User, Academic_data, Percentage, Partial, Color, Icon, Subject, Personalization, Schedule, Event, sequelize };
+export { Notification, Day, User, Academic_data, Percentage, Partial, Color, Icon, Subject, Personalization, Schedule, Event, sequelize };

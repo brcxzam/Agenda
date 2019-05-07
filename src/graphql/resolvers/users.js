@@ -11,7 +11,7 @@ export default {
         const user = await User.create(data);
         const days = await Day.create();
         const notification = await Notification.create();
-        await Setting.create({ user: user.id, days: days.id, notification: notification.id });
+       // await Setting.create({ user: user.id, days: days.id, notification: notification.id });
         return user;
     },
     user: async ({ id }) => {
