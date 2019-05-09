@@ -8,7 +8,8 @@ const schema = buildSchema(`
 
         academicData(id: ID): AcademicData
 
-        percentages(id: ID): [Percentages]
+        percentage(partial: Int, academic: ID): Percentages
+
         subjects(id: ID): [Subjects]
         schedules(id: ID): [Schedules]
         partials(id: ID): [Partials]
@@ -24,7 +25,7 @@ const schema = buildSchema(`
         dUser(id: ID): String
         uNotifications(id: ID, data: iNotifications): String
         uDays(id: ID, data: iDays): String
-        
+
         cAcademicData(data: iAcademicData): AcademicData
         uAcademicData(id: ID, data: iAcademicData): String
 
@@ -65,7 +66,6 @@ const schema = buildSchema(`
         sunday: String
     }
     type AcademicData {
-        user: ID
         partials: Int
         maximum: Int
         aproving: Int
@@ -76,7 +76,7 @@ const schema = buildSchema(`
         id: ID
         partial: Int
         percent: Int
-        id_academic: ID
+        academic: ID
     }
     type Subjects {
         id: ID
@@ -156,7 +156,7 @@ const schema = buildSchema(`
         id: ID
         partial: Int
         percent: Int
-        user: ID
+        academic: ID
     }
     input iSubjects {
         id: ID

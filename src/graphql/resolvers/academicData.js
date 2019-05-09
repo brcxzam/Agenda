@@ -3,6 +3,9 @@ import { Academic_data, Percentage } from '../../database/model';
 function validatePercentages({percentages}) {
     var percent = 0;
     percentages.forEach(data => {
+        if (data.percent == 0) {
+            throw new Error("invalid percentages");
+        }
         percent += data.percent;
     });
     if (percent != 100) {
@@ -33,20 +36,29 @@ export default {
     },
     uAcademicData: async ({ id, data }) => {
         validatePercentages(data);
-        const { user } = data;
         await Academic_data.update(data, {
             where: {
                 user: id
             }
         });
         data.percentages.forEach(async data => {
-            data.academic = user;
+            data.academic = id;
             await Percentage.update(data, {
                 where: {
-                    id: data.id
+                    id: data.id,
+                    academic: id
                 }
             });
         });
         return 'done';
+    },
+    percentage: async ({ partial, academic }) => {
+        const percentages = await Percentage.findOne({
+            where: {
+                partial,
+                academic
+            }
+        });
+        return percentages;
     }
 }
