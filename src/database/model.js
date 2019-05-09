@@ -150,7 +150,7 @@ Academic_data.init(
             type: INTEGER,
             allowNull: false
         },
-        maximun: {
+        maximum: {
             type: INTEGER,
             allowNull: false
         },
@@ -160,17 +160,6 @@ Academic_data.init(
         },
         final_score: {
             type: DOUBLE
-        },
-        user: {
-            type: INTEGER,
-            primaryKey: true,
-            allowNull: false,
-            references: {
-                model: User,
-                key: 'id',
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
         }
     },
     {

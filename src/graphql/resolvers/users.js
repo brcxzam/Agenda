@@ -1,17 +1,24 @@
 import bcrypt from 'bcrypt';
-import { Day, Notification, Setting, User } from '../../database/model';
+import { Day, Notification, User } from '../../database/model';
 const saltRounds = 10;
+
+async function encrypt(password) {
+    if (password.length < 8 || password.length > 60) {
+        throw new Error("invalid password size");
+    }
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
+}
 
 export default {
     cUser: async ({ data }) => {
         const { password } = data;
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hash = await bcrypt.hash(password, salt);
-        data.password = hash;
+        data.password = await encrypt(password);
         const user = await User.create(data);
-        const days = await Day.create();
-        const notification = await Notification.create();
-       // await Setting.create({ user: user.id, days: days.id, notification: notification.id });
+        const { id } = user;
+        await Notification.create({ user: id });
+        await Day.create({ user: id });
         return user;
     },
     user: async ({ id }) => {
@@ -21,16 +28,14 @@ export default {
     uUser: async ({ id, data }) => {
         const { password } = data;
         if (password) {
-            const salt = await bcrypt.genSalt(saltRounds);
-            const hash = await bcrypt.hash(password, salt);
-            data.password = hash;
+            data.password = await encrypt(password);
         }
         await User.update(data, {
             where: {
                 id
             }
         });
-        return 'Done';
+        return 'done';
     },
     dUser: async ({ id }) => {
         await User.destroy({
@@ -38,6 +43,6 @@ export default {
                 id
             }
         });
-        return 'Done';
+        return 'done';
     }
 }

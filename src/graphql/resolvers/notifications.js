@@ -6,11 +6,11 @@ export default {
         return notifications;
     },
     uNotifications: async ({ id, data }) => {
-        await Notification.update(data,{
+        await Notification.update(data, {
             where: {
-                id
+                user: id
             }
         });
-        return 'Done';
+        return 'done';
     }
 }

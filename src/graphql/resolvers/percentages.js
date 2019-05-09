@@ -8,13 +8,5 @@ export default {
             }
         });
         return percentages;
-    },
-    uPercentages: async ({ id, data }) => {
-        await Percentage.update(data,{
-            where: {
-                id
-            }
-        });
-        return 'Done';
-    },
+    }
 }

@@ -3,10 +3,11 @@ import { buildSchema } from 'graphql';
 const schema = buildSchema(`
     type Query {
         user(id: ID): Users
-        settings(id: ID): Settings
         notifications(id: ID): Notifications
         days(id: ID): Days
+
         academicData(id: ID): AcademicData
+
         percentages(id: ID): [Percentages]
         subjects(id: ID): [Subjects]
         schedules(id: ID): [Schedules]
@@ -18,14 +19,15 @@ const schema = buildSchema(`
     }
 
     type Mutation {
-        cUser(data: iUsers!): Users
+        cUser(data: iUsers): Users
         uUser(id: ID, data: iUsers): String
         dUser(id: ID): String
         uNotifications(id: ID, data: iNotifications): String
         uDays(id: ID, data: iDays): String
+        
         cAcademicData(data: iAcademicData): AcademicData
         uAcademicData(id: ID, data: iAcademicData): String
-        uPercentages(id: ID, data: iPercentages): String
+
         cSubjects(data: iSubjects): Subjects
         uSubjects(id: ID, data: iSubjects): String
         dSubjects(id: ID): String
@@ -48,19 +50,12 @@ const schema = buildSchema(`
         password: String
         profile_image: String
     }
-    type Settings {
-        user: ID
-        days: ID
-        notification: ID
-    }
     type Notifications {
-        id: ID
         morning: String
         afternoon: String
         night: String
     }
     type Days {
-        id: ID
         monday: String
         tuesday: String
         wednesday: String
@@ -70,12 +65,12 @@ const schema = buildSchema(`
         sunday: String
     }
     type AcademicData {
-        id: ID
+        user: ID
         partials: Int
         maximum: Int
         aproving: Int
         final_score: Float
-        id_user: ID
+        percentages: [Percentages]
     }
     type Percentages {
         id: ID
@@ -129,26 +124,18 @@ const schema = buildSchema(`
     }
     
     input iUsers {
-        id: ID
         firstName: String
         lastName: String
         email: String
         password: String
         profile_image: String
     }
-    input iSettings {
-        id_user: ID
-        id_days: ID
-        id_notification: ID
-    }
     input iNotifications {
-        id: ID
         morning: String
         afternoon: String
         night: String
     }
     input iDays {
-        id: ID
         monday: String
         tuesday: String
         wednesday: String
@@ -158,18 +145,18 @@ const schema = buildSchema(`
         sunday: String
     }
     input iAcademicData {
-        id: ID
+        user: ID
         partials: Int
         maximum: Int
         aproving: Int
         final_score: Float
-        id_user: ID
+        percentages: [iPercentages]
     }
     input iPercentages {
         id: ID
         partial: Int
         percent: Int
-        id_academic: ID
+        user: ID
     }
     input iSubjects {
         id: ID
