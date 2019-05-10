@@ -5,14 +5,11 @@ const schema = buildSchema(`
         user(id: ID): Users
         notifications(id: ID): Notifications
         days(id: ID): Days
-
         academicData(id: ID): AcademicData
-
         percentage(partial: Int, academic: ID): Percentages
-
         subjects(id: ID): [Subjects]
-        schedules(id: ID): [Schedules]
-        partials(id: ID): [Partials]
+
+        partials(subject: ID): [Partials]
         personalizations(id: ID): Personalizations
         colors: [Colors]
         icons: [Icons]
@@ -25,17 +22,14 @@ const schema = buildSchema(`
         dUser(id: ID): String
         uNotifications(id: ID, data: iNotifications): String
         uDays(id: ID, data: iDays): String
-
         cAcademicData(data: iAcademicData): AcademicData
         uAcademicData(id: ID, data: iAcademicData): String
+        cSubject(data: iSubjects): Subjects
+        uSubject(id: ID, data: iSubjects): String
+        dSubject(id: ID): String
 
-        cSubjects(data: iSubjects): Subjects
-        uSubjects(id: ID, data: iSubjects): String
-        dSubjects(id: ID): String
-        cSchedules(data: iSchedules): Schedules
-        uSchedules(id: ID, data: iSchedules): String
-        cPartials(data: iPartials): Partials
-        uPartials(id: ID, data: iPartials): String
+        cPartial(data: iPartials): Partials
+        uPartial(id: ID, data: iPartials): String
         cPersonalizations(data: iPersonalizations): Personalizations
         uPersonalizations(id: ID, data: iPersonalizations): String
         cEvents(data: iEvents): Events
@@ -81,20 +75,21 @@ const schema = buildSchema(`
     type Subjects {
         id: ID
         name: String
-        id_user: ID
+        user: ID
+        schedules: [Schedules]
     }
     type Schedules {
         id: ID
         start: String
         finish: String
         day: String
-        id_subject: ID
+        subject: ID
     }
     type Partials {
         id: ID
         obtained: Float
-        id_percent: ID
-        id_subject: ID
+        percent: ID
+        subject: ID
     }
     type Personalizations {
         id: ID
@@ -159,22 +154,21 @@ const schema = buildSchema(`
         academic: ID
     }
     input iSubjects {
-        id: ID
         name: String
-        id_user: ID
+        user: ID
+        schedules: [iSchedules]
     }
     input iSchedules {
         id: ID
         start: String
         finish: String
         day: String
-        id_subject: ID
     }
     input iPartials {
         id: ID
         obtained: Float
-        id_percent: ID
-        id_subject: ID
+        percent: ID
+        subject: ID
     }
     input iPersonalizations {
         id: ID

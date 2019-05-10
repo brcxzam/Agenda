@@ -63,7 +63,7 @@ Notification.init(
             },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE'
-        }, 
+        },
         morning: {
             type: TIME,
             defaultValue: "08:00:00"
@@ -361,7 +361,8 @@ Schedule.init(
     },
     {
         sequelize,
-        modelName: 'Schedule'
+        modelName: 'Schedule',
+        timestamps: false
     }
 );
 
