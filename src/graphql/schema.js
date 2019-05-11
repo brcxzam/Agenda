@@ -8,11 +8,11 @@ const schema = buildSchema(`
         academicData(id: ID): AcademicData
         percentage(partial: Int, academic: ID): Percentages
         subjects(id: ID): [Subjects]
-
         partials(subject: ID): [Partials]
-        personalizations(id: ID): Personalizations
+        personalization(id: ID): Personalizations
         colors: [Colors]
         icons: [Icons]
+
         events(id: ID): [Events]
     }
 
@@ -27,14 +27,14 @@ const schema = buildSchema(`
         cSubject(data: iSubjects): Subjects
         uSubject(id: ID, data: iSubjects): String
         dSubject(id: ID): String
-
         cPartial(data: iPartials): Partials
         uPartial(id: ID, data: iPartials): String
-        cPersonalizations(data: iPersonalizations): Personalizations
-        uPersonalizations(id: ID, data: iPersonalizations): String
-        cEvents(data: iEvents): Events
-        uEvents(id: ID, data: iEvents): String
-        dEvents(id: ID): String
+        cPersonalization(data: iPersonalizations): Personalizations
+        uPersonalization(id: ID, data: iPersonalizations): String
+
+        cEvent(data: iEvents): Events
+        uEvent(id: ID, data: iEvents): String
+        dEvent(id: ID): String
     }
 
     type Users {
@@ -93,9 +93,9 @@ const schema = buildSchema(`
     }
     type Personalizations {
         id: ID
-        id_icon: ID
-        id_color: ID
-        id_subject: ID
+        icon: ID
+        color: ID
+        subject: ID
     }
     type Colors {
         id: ID
@@ -113,9 +113,9 @@ const schema = buildSchema(`
         repeat: String
         priority: String
         school: String
-        id_user: ID
-        id_subject: ID
-        id_personalization: ID
+        user: ID
+        subject: Subjects
+        personalization: Personalizations
     }
     
     input iUsers {
@@ -172,17 +172,9 @@ const schema = buildSchema(`
     }
     input iPersonalizations {
         id: ID
-        id_icon: ID
-        id_color: ID
-        id_subject: ID
-    }
-    input iColors {
-        id: ID
-        color: String
-    }
-    input iIcons {
-        id: ID
-        icon: String
+        icon: ID
+        color: ID
+        subject: ID
     }
     input iEvents {
         id: ID
@@ -192,9 +184,9 @@ const schema = buildSchema(`
         repeat: String
         priority: String
         school: String
-        id_user: ID
-        id_subject: ID
-        id_personalization: ID
+        user: ID
+        subject: ID
+        setPersonalization: iPersonalizations
     }
 `);
 

@@ -1,4 +1,4 @@
-import {Icon, Color} from '../../database/model';
+import { Icon, Color } from '../../database/model';
 
 export default {
     colors: async () => {

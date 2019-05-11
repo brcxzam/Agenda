@@ -1,23 +1,20 @@
 import { Personalization } from '../../database/model';
-//CRU
+
 export default {
-    cPersonalization: async ({data}) => {
+    cPersonalization: async ({ data }) => {
         const personalization = await Personalization.create(data);
         return personalization;
     },
-    personalizations: async ({id}) => {
-        const personalizations = await Personalization.findAll({
+    personalization: async ({ id }) => {
+        const personalization = await Personalization.findByPk(id);
+        return personalization;
+    },
+    uPersonalization: async ({ id, data }) => {
+        await Personalization.update(data, {
             where: {
                 id
             }
         });
-        return personalizations;
-    },
-    uPersonalization: async ({id, data}) => {
-        await Personalization.update(data,{
-            where:{
-                id
-            }
-        })
+        return 'done';
     }
 }

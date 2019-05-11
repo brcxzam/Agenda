@@ -208,7 +208,8 @@ Color.init(
     },
     {
         sequelize,
-        modelName: 'Color'
+        modelName: 'Color',
+        timestamps: false
     }
 );
 
@@ -222,7 +223,8 @@ Icon.init(
     },
     {
         sequelize,
-        modelName: 'Icon'
+        modelName: 'Icon',
+        timestamps: false
     }
 );
 
@@ -279,7 +281,6 @@ Personalization.init(
         },
         subject: {
             type: INTEGER,
-            allowNull: false,
             references: {
                 model: Subject,
                 key: 'id'
@@ -409,7 +410,6 @@ Event.init(
         },
         personalization: {
             type: INTEGER,
-
             references: {
                 model: Personalization,
                 key: 'id'
@@ -420,7 +420,6 @@ Event.init(
         },
         subject: {
             type: INTEGER,
-
             references: {
                 model: Subject,
                 key: 'id'
