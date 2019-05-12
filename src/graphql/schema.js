@@ -113,7 +113,6 @@ const schema = buildSchema(`
 		repeat: String
 		priority: String
 		school: String
-		user: ID
 		subject: Subjects
 		personalization: Personalizations
 	}
@@ -154,7 +153,6 @@ const schema = buildSchema(`
 	}
 	input iSubjects {
 		name: String
-		user: ID
 		schedules: [iSchedules]
 	}
 	input iSchedules {
@@ -183,7 +181,6 @@ const schema = buildSchema(`
 		repeat: String
 		priority: String
 		school: String
-		user: ID
 		subject: ID
 		setPersonalization: iPersonalizations
 	}
