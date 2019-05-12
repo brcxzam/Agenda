@@ -7,7 +7,7 @@ const schema = buildSchema(`
 		notifications: Notifications
 		days: Days
 		academicData: AcademicData
-		percentage(partial: Int, academic: ID): Percentages
+		percentage(partial: Int): Percentages
 		subjects(id: ID): [Subjects]
 		partials(subject: ID): [Partials]
 		personalization(id: ID): Personalizations
@@ -140,7 +140,6 @@ const schema = buildSchema(`
 		sunday: Boolean
 	}
 	input iAcademicData {
-		user: ID
 		partials: Int
 		maximum: Int
 		aproving: Int
