@@ -37,21 +37,25 @@ export default {
         return academicData;
     },
     uAcademicData: async ({ id, data }) => {
-        validatePercentages(data);
         const { percentages } = data;
+        if (percentages) {
+            validatePercentages(data);
+        }
         await Academic_data.update(data, {
             where: {
                 user: id
             }
         });
-        for await (let data of percentages) {
-            data.academic = id;
-            await Percentage.update(data, {
-                where: {
-                    id: data.id,
-                    academic: id
-                }
-            });
+        if (percentages) {
+            for await (let data of percentages) {
+                data.academic = id;
+                await Percentage.update(data, {
+                    where: {
+                        id: data.id,
+                        academic: id
+                    }
+                });
+            }
         }
         return 'done';
     },

@@ -36,22 +36,24 @@ export default {
                 subject: id
             }
         })
-        for await (let data of schedules) {
-            let exist = false;
-            for (let schls of getSchedules) {
-                if (data.id == schls.id) {
-                    exist = true;
+        if (schedules) {
+            for await (let data of schedules) {
+                let exist = false;
+                for (let schls of getSchedules) {
+                    if (data.id == schls.id) {
+                        exist = true;
+                    }
                 }
-            }
-            if (!exist) {
-                throw new Error("non-existent schedule");
-            }
-            await Schedule.update(data, {
-                where: {
-                    id: data.id,
-                    subject: id
+                if (!exist) {
+                    throw new Error("non-existent schedule");
                 }
-            })
+                await Schedule.update(data, {
+                    where: {
+                        id: data.id,
+                        subject: id
+                    }
+                })
+            }
         }
         await Subject.update(data, {
             where: {
