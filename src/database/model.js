@@ -8,14 +8,14 @@ User.init(
             type: STRING,
             allowNull: false,
             validate: {
-                is: ["^[a-z]+$", 'i'],
+                is: ["^[a-zñáéíóúü]+$", 'i'],
                 notEmpty: true
             }
         },
         lastName: {
             type: STRING,
             validate: {
-                is: ["^[a-z]+$", 'i'],
+                is: ["^[a-zñáéíóúü]+$", 'i'],
                 notEmpty: true
             }
         },
