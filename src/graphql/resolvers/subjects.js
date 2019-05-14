@@ -33,6 +33,17 @@ export default {
 		}
 		return subjects;
 	},
+	subject: async ({ id }, { request }) => {
+		verify(request);
+		const subject = await Subject.findByPk(id);
+		const schedules = await Schedule.findAll({
+			where: {
+				subject: subject.id
+			}
+		})
+		subject.schedules = schedules;
+		return subject;
+	},
 	uSubject: async ({ id, data }, { request }) => {
 		verify(request);
 		const { schedules } = data;

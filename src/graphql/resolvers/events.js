@@ -28,6 +28,15 @@ export default {
 		}
 		return events;
 	},
+	event: async ({ id }, { request }) => {
+		verify(request);
+		const event = await Event.findByPk(id);
+		const subject = await Subject.findByPk(event.subject);
+		const personalization = await Personalization.findByPk(event.personalization);
+		event.subject = subject;
+		event.personalization = personalization;
+		return event;
+	},
 	uEvent: async ({ id, data }, { request }) => {
 		verify(request);
 		await Event.update(data, {

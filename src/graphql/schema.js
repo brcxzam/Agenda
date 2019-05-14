@@ -8,12 +8,14 @@ const schema = buildSchema(`
 		days: Days
 		academicData: AcademicData
 		percentage(partial: Int): Percentages
-		subjects(id: ID): [Subjects]
+		subjects: [Subjects]
+		subject(id: ID): Subjects
 		partials(subject: ID): [Partials]
 		personalization(id: ID): Personalizations
 		colors: [Colors]
 		icons: [Icons]
 		events: [Events]
+		event(id: ID): Events
 	}
 
 	type Mutation {
@@ -24,7 +26,7 @@ const schema = buildSchema(`
 		uNotifications(data: iNotifications): String
 		uDays(data: iDays): String
 		cAcademicData(data: iAcademicData): AcademicData
-		uAcademicData(id: ID,data: iAcademicData): String
+		uAcademicData(data: iAcademicData): String
 		cSubject(data: iSubjects): Subjects
 		uSubject(id: ID, data: iSubjects): String
 		dSubject(id: ID): String
