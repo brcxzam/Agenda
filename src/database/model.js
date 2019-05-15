@@ -147,19 +147,19 @@ Academic_data.init(
             onDelete: 'CASCADE'
         },
         partials: {
-            type: INTEGER,
+            type: INTEGER.UNSIGNED,
             allowNull: false
         },
         maximum: {
-            type: INTEGER,
+            type: INTEGER.UNSIGNED,
             allowNull: false
         },
         aproving: {
-            type: INTEGER,
+            type: INTEGER.UNSIGNED,
             allowNull: false
         },
         final_score: {
-            type: DOUBLE
+            type: DOUBLE.UNSIGNED
         }
     },
     {
@@ -173,11 +173,11 @@ class Percentage extends Model { }
 Percentage.init(
     {
         partial: {
-            type: INTEGER,
+            type: INTEGER.UNSIGNED,
             allowNull: false
         },
         percent: {
-            type: INTEGER,
+            type: INTEGER.UNSIGNED,
             allowNull: false
         },
         academic: {
@@ -302,7 +302,7 @@ class Partial extends Model { }
 Partial.init(
     {
         obtained: {
-            type: DOUBLE
+            type: DOUBLE.UNSIGNED
         },
         percent: {
             type: INTEGER,
