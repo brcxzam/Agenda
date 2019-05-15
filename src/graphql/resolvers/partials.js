@@ -16,11 +16,11 @@ export default {
 		const partial = await Partial.create(data);
 		return partial;
 	},
-	partials: async ({ id }, { request }) => {
+	partials: async ({ subject }, { request }) => {
 		verify(request);
 		const partials = await Partial.findAll({
 			where: {
-				subject: id
+				subject
 			}
 		});
 		return partials;
