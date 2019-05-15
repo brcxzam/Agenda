@@ -4,7 +4,7 @@ import verify from '../jwt/verify';
 export default {
 	cEvent: async ({ data }, { request }) => {
 		const user = verify(request);
-		const { setPersonalization } = data;
+		const { setPersonalization, subject } = data;
 		if (setPersonalization) {
 			const personalization = await Personalization.create(setPersonalization);
 			data.personalization = personalization.id;
@@ -13,6 +13,10 @@ export default {
 		const event = await Event.create(data);
 		if (setPersonalization) {
 			event.personalization = personalization;
+		}
+		if (subject) {
+			const rSubject = await Subject.findByPk(subject);
+			event.subject = rSubject;
 		}
 		return event;
 	},
