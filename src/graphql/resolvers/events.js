@@ -11,7 +11,9 @@ export default {
 		}
 		data.user = user;
 		const event = await Event.create(data);
-		event.personalization = personalization;
+		if (setPersonalization) {
+			event.personalization = personalization;
+		}
 		return event;
 	},
 	events: async (_, { request }) => {
