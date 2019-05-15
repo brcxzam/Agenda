@@ -5,13 +5,14 @@ export default {
 	cEvent: async ({ data }, { request }) => {
 		const user = verify(request);
 		const { setPersonalization, subject } = data;
+		let personalization;
 		if (setPersonalization) {
-			const personalization = await Personalization.create(setPersonalization);
+			personalization = await Personalization.create(setPersonalization);
 			data.personalization = personalization.id;
 		}
 		data.user = user;
 		const event = await Event.create(data);
-		if (setPersonalization) {
+		if (personalization) {
 			event.personalization = personalization;
 		}
 		if (subject) {
