@@ -8,40 +8,38 @@ import root from '../graphql/root';
 import schema from '../graphql/schema';
 const router = Router();
 
-router.post('/',
-    graphqlHTTP((request, response, graphQLParams) => ({
-        schema: schema,
-        rootValue: root,
-        context: {
-            request: request
-        }
-    }))
-);
-
 const storage = multer.diskStorage({
-    destination: join(__dirname, '..', 'public', 'img', 'uploads'),
-    filename: (req, file, cb, filename) => {
-        cb(null, uuid() + extname(file.originalname));
-    }
+	destination: join(__dirname, '..', '..', 'public', 'img', 'uploads'),
+	filename: (req, file, cb, filename) => {
+		cb(null, uuid() + extname(file.originalname));
+	}
 });
 
+function deleteImg({ deleteImage }) {
+	unlink('public/img/profile_images/' + deleteImage, function (err) {
+		if (err) throw err;
+	});
+}
+
+router.post('/',
+	graphqlHTTP((request, response, graphQLParams) => ({
+		schema: schema,
+		rootValue: root,
+		context: {
+			request: request
+		}
+	}))
+);
+
 router.post('/upload', multer({ storage }).single('profile_image'), async ({ body, file }, res) => {
-    if (body.deleteImage) {
-        unlink('src/public/img/uploads/' + body.deleteImage, function (err) {
-            if (err) throw err;
-            console.log('File deleted!');
-        });
-    }
-    res.json({
-        profile_image: file.filename
-    });
+	if (body.deleteImage) {
+		deleteImg(body);
+	}
+	res.json({ profile_image: file.filename });
 });
 
 router.post('/upload/delete', ({ body }, res) => {
-    unlink('src/public/img/uploads/' + body.deleteImage, function (err) {
-        if (err) throw err;
-        console.log('File deleted!');
-    });
+	deleteImg(body);
 });
 
 export default router;
