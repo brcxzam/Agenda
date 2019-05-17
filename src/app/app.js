@@ -5,60 +5,117 @@ import { render } from 'react-dom';
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { profile_image: 'default.png' };
+		this.state = {
+			profile_image: 'default.png',
+			isSaved: false
+		};
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+
+		window.addEventListener('beforeunload', (event) => {
+			if (this.state.profile_image !== 'default.png' && this.state.isSaved === false) {
+				fetch('/api/upload/delete', {
+					method: 'POST',
+					body: JSON.stringify({ deleteImage: this.state.profile_image }),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+			}
+		});
 	}
 
 	handleChange(event) {
-		this.setState({ value: event.target.value });
+		let formData = new FormData();
+		if (this.state.profile_image !== 'default.png' && this.state.isSaved === false) {
+			formData.append('deleteImage', this.state.profile_image);
+		}
+		formData.append('profile_image', event.target.files[0]);
+		fetch('/api/upload', {
+			method: 'POST',
+			body: formData
+		})
+			.then(response => response.json())
+			.catch(error => console.error('Error:', error))
+			.then(response => this.setState({ profile_image: response.profile_image }));
 	}
 
 	handleSubmit(event) {
-		alert('A name was submitted: ' + this.state.value);
 		event.preventDefault();
+		const form = document.getElementById("formulario");
+		const formData = new FormData(form);
+		if (this.state.profile_image !== 'default.png' && this.state.isSaved === false) {
+			formData.append('profile_image', this.state.profile_image);
+		}
+		let data = Object.fromEntries(formData);
+		if (!data.lastName) {
+			delete data.lastName;
+		}
+		const query = {
+			query: 'mutation($data: iUsers){ cUser(data: $data) }',
+			variables: {
+				data
+			}
+		};
+		fetch('/api', {
+			method: 'POST',
+			body: JSON.stringify(query),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(res => res.json())
+			.catch(error => console.error('Error:', error))
+			.then(response => console.log('Success:', response));
 	}
 
 	render() {
 		return (
 			<div className="row">
-				<form className="col s12 container">
+				<form className="col s12 container" onSubmit={this.handleSubmit} id="formulario">
 					<div className="row">
 						<div className="input-field col s12">
 							<div className="file-field input-field">
-									<input type="file"/>
+								<div className="center">
+									<h4>Imagen de perfil</h4>
+									<input type="file" onChange={this.handleChange} accept="image/png, image/jpg" />
+								</div>
 								<div className="file-path-wrapper center">
-									<img width="250" src={'img/profile_images/'+this.state.profile_image}/>
+									<img className="circle" src={'img/profile_images/' + this.state.profile_image} />
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="row">
 						<div className="input-field col s6">
-							<input placeholder="Placeholder" id="first_name" type="text" className="validate"/>
-							<label htmlFor="first_name">First Name</label>
+							<input id="firstName" name="firstName" type="text" className="validate" required />
+							<label htmlFor="firstName">First Name</label>
 						</div>
 						<div className="input-field col s6">
-							<input id="last_name" type="text" className="validate"/>
-							<label htmlFor="last_name">Last Name</label>
+							<input id="lastName" name="lastName" type="text" className="validate" />
+							<label htmlFor="lastName">Last Name</label>
 						</div>
 					</div>
 					<div className="row">
 						<div className="input-field col s12">
-							<input id="email" type="email" className="validate"/>
+							<input id="email" name="email" type="email" className="validate" required />
 							<label htmlFor="email">Email</label>
 						</div>
 					</div>
 					<div className="row">
 						<div className="input-field col s12">
-							<input id="password" type="password" className="validate"/>
+							<input id="password" name="password" type="password" className="validate" required />
 							<label htmlFor="password">Password</label>
 						</div>
 					</div>
-					<button className="btn waves-effect waves-light" type="submit" name="action">Submit
-						<i className="material-icons right">send</i>
-					</button>
+					<div className="row">
+						<div className="input-field col s12">
+							<button className="btn waves-effect waves-light right" type="submit" name="action">Submit
+								<i className="material-icons right">send</i>
+							</button>
+						</div>
+					</div>
 				</form>
 			</div>
 		);
