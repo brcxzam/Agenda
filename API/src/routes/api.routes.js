@@ -9,7 +9,7 @@ import schema from '../graphql/schema';
 const router = Router();
 
 const storage = multer.diskStorage({
-	destination: join(__dirname, '..', '..', 'public', 'img', 'profile_images'),
+	destination: join(__dirname, '..', '..', 'public', 'profile_images'),
 	filename: (req, file, cb, filename) => {
 		cb(null, uuid() + extname(file.originalname));
 	}
