@@ -9,7 +9,7 @@ import schema from '../graphql/schema';
 const router = Router();
 
 const storage = multer.diskStorage({
-	destination: join(__dirname, '..', '..', 'public', 'img', 'uploads'),
+	destination: join(__dirname, '..', '..', 'public', 'profile_images'),
 	filename: (req, file, cb, filename) => {
 		cb(null, uuid() + extname(file.originalname));
 	}
@@ -39,6 +39,7 @@ router.post('/upload', multer({ storage }).single('profile_image'), async ({ bod
 });
 
 router.post('/upload/delete', ({ body }, res) => {
+	console.log(body)
 	deleteImg(body);
 });
 
