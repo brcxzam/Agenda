@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css'
-import './materialize.min.css'
+import './sass/materialize.scss'
 import Home from './components/home'
 import Register from './components/register'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Login from './components/login'
 
 class App extends Component {
 	render() {
@@ -12,6 +13,7 @@ class App extends Component {
 				<Home />
 				<Switch>
 					<Route path="/registrar" exact component={Register} />
+					<Route path="/acceder" exact component={Login} />
 				</Switch>
 			</Router>
 		)

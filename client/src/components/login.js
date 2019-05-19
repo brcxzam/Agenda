@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import '../css/login.css'
 
-class Register extends Component {
+class Login extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -107,103 +108,54 @@ class Register extends Component {
 
 	render() {
 		return (
-			<div className="container row">
-				<form
-					className="col s12 container"
-					onSubmit={this.handleSubmit}
-					id="formulario">
-					<div className="row">
-						<div className="col s5" />
-						<div className="input-field col s2">
-							<div className="file-field input-field">
-								<div className="">
-									<input
-										type="file"
-										onChange={this.handleChange}
-										accept="image/png, image/jpg"
-									/>
-									<img
-										className="imagen circle"
-										src={
-											'http://localhost:3001/profile_images/' +
-											this.state.profile_image
-										}
-										alt=""
-									/>
-								</div>
-								<div className="file-path-wrapper">
-									<input
-										className="file-path validate"
-										type="text"
-									/>
-								</div>
-							</div>
-							<div className="center-align">
-								<span>Imagen de Perfil</span>
-							</div>
-						</div>
-						<div className="col s5" />
+			<div className="wrapper fadeInDown">
+				<div id="formContent">
+					{/* <!-- Tabs Titles --> */}
+					<h2 className="active"> Sign In </h2>
+					<h2 className="inactive underlineHover">Sign Up </h2>
+
+					{/* <!-- Icon --> */}
+					<div className="fadeIn first">
+						<img
+							src="http://localhost:3001/profile_images/default.png"
+							id="icon"
+							alt="User Icon"
+						/>
 					</div>
-					<div className="row">
-						<div className="input-field col s6">
-							<input
-								id="firstName"
-								name="firstName"
-								type="text"
-								className="validate "
-								required
-							/>
-							<label htmlFor="firstName">Nombre</label>
-						</div>
-						<div className="input-field col s6">
-							<input
-								id="lastName"
-								name="lastName"
-								type="text"
-								className="validate"
-							/>
-							<label htmlFor="lastName">Apellido/s</label>
-						</div>
+
+					{/* <!-- Login Form --> */}
+					<form>
+						<input
+							type="text"
+							id="login"
+							className="fadeIn second"
+							name="login"
+							placeholder="login"
+						/>
+						<input
+							type="text"
+							id="password"
+							className="fadeIn third"
+							name="login"
+							placeholder="password"
+						/>
+						<input
+							type="submit"
+							className="fadeIn fourth"
+							value="Log In"
+						/>
+					</form>
+
+					{/* <!-- Remind Passowrd --> */}
+					<div id="formFooter">
+						<a className="underlineHover" href="/">
+							Forgot Password?
+						</a>
 					</div>
-					<div className="row">
-						<div className="input-field col s12">
-							<input
-								id="email"
-								name="email"
-								type="email"
-								className="validate"
-								required
-							/>
-							<label htmlFor="email">Correo Electrónico</label>
-						</div>
-					</div>
-					<div className="row">
-						<div className="input-field col s12">
-							<input
-								id="password"
-								name="password"
-								type="password"
-								className="validate"
-								minLength="8"
-								required
-							/>
-							<label htmlFor="password">Contraseña</label>
-						</div>
-					</div>
-					<div className="row">
-						<div className="input-field col s12">
-							<button
-								className="btn waves-effect waves-light right"
-								type="submit"
-								name="action">
-								Submit
-							</button>
-						</div>
-					</div>
-				</form>
+				</div>
 			</div>
 		)
 	}
 }
 
-export default Register
+export default Login

@@ -1,19 +1,19 @@
 body {
-	background-color: #607d8b;
+    background-color: #607d8b;
 }
 
 .imagen {
-	height: 300px;
-	width: 300px;
-	object-fit: cover;
-	object-position: center center;
+    height: 165.19px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center center;
 }
 
 .imagen-input {
-	height: 300px;
-	width: 300px;
+    height: 300px;
+    width: 300px;
 }
 
 .file-path {
-	display: none;
+    display: none;
 }
