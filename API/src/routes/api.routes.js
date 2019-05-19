@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 });
 
 function deleteImg({ deleteImage }) {
-	unlink('public/img/profile_images/' + deleteImage, function (err) {
+	unlink('public/profile_images/' + deleteImage, function (err) {
 		if (err) throw err;
 	});
 }

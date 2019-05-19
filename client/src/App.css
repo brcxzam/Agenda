@@ -1,0 +1,19 @@
+body {
+	background-color: #607d8b;
+}
+
+.imagen {
+	height: 300px;
+	width: 300px;
+	object-fit: cover;
+	object-position: center center;
+}
+
+.imagen-input {
+	height: 300px;
+	width: 300px;
+}
+
+.file-path {
+	display: none;
+}
