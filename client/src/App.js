@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import './App.css'
-import './sass/materialize.scss'
 import Home from './components/home'
-import Register from './components/register'
 import Login from './components/login'
+import Register from './components/register'
 
 class App extends Component {
 	render() {
