@@ -16,6 +16,7 @@ import React from 'react'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 import Grid from '@material-ui/core/Grid'
+import Presentation from './presentation'
 
 const theme = createMuiTheme({
 	palette: {
@@ -235,6 +236,7 @@ class ButtonAppBar extends React.Component {
 						</DialogActions>
 					</Dialog>
 				</div>
+				<Presentation />
 			</MuiThemeProvider>
 		)
 	}
