@@ -1,11 +1,10 @@
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Paper from '@material-ui/core/Paper'
-import { withStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
+import { makeStyles } from '@material-ui/core/styles'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 import TextField from '@material-ui/core/TextField'
@@ -13,47 +12,85 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import Avatar from '@material-ui/core/Avatar'
-import Grid from '@material-ui/core/Grid'
 
-const theme = createMuiTheme({
-	palette: {
-		primary: {
-			light: '#4da2bc',
-			main: '#02738c',
-			dark: '#00475f',
-			contrastText: '#fff',
-		},
-		secondary: {
-			light: '#6bffff',
-			main: '#04daf2',
-			dark: '#00a8bf',
-			contrastText: '#000',
-		},
-	},
-	typography: {
-		useNextVariants: true,
-	},
-})
-
-const styles = {
+const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1,
 	},
-	grow: {
+	title: {
 		flexGrow: 1,
 	},
-	menuButton: {
-		marginLeft: -12,
-		marginRight: 20,
+	button: {
+		marginTop: 10,
+		marginBottom: 5,
 	},
-	bigAvatar: {
-		margin: 0,
-		width: 200,
+	image: {
+		position: 'relative',
 		height: 200,
+		[theme.breakpoints.down('xs')]: {
+			width: '100% !important', // Overrides inline-style
+			height: 100,
+		},
+		'&:hover, &$focusVisible': {
+			zIndex: 1,
+			'& $imageBackdrop': {
+				opacity: 0.15,
+			},
+			'& $imageMarked': {
+				opacity: 0,
+			},
+			'& $imageTitle': {
+				border: '4px solid currentColor',
+			},
+		},
 	},
-}
+	focusVisible: {},
+	imageButton: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		color: theme.palette.common.white,
+	},
+	imageSrc: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		backgroundSize: 'cover',
+		backgroundPosition: 'center 40%',
+	},
+	imageBackdrop: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		backgroundColor: theme.palette.common.black,
+		opacity: 0.4,
+		transition: theme.transitions.create('opacity'),
+	},
+	imageTitle: {
+		position: 'relative',
+		padding: `${theme.spacing(2)}px ${theme.spacing(4)}px ${theme.spacing(
+			1
+		) + 6}px`,
+	},
+	imageMarked: {
+		height: 3,
+		width: 18,
+		backgroundColor: theme.palette.common.white,
+		position: 'absolute',
+		bottom: -2,
+		left: 'calc(50% - 9px)',
+		transition: theme.transitions.create('opacity'),
+	},
+}))
 
 function TabContainer(props) {
 	return (
@@ -67,76 +104,178 @@ TabContainer.propTypes = {
 	children: PropTypes.node.isRequired,
 }
 
-class ButtonAppBar extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = { open: false, value: 0, action: 'Acceder' }
+function ButtonAppBar() {
+	const [open, setOpen] = React.useState(false)
+	const [value, setValue] = React.useState(0)
+	const [profile_image, setProfile_image] = React.useState('default.png')
+	const [save, setSave] = React.useState(false)
+	React.useEffect(elimina)
+
+	function elimina() {
+		window.addEventListener('beforeunload', e => {
+			e.preventDefault()
+			if (profile_image !== 'default.png' && save === false) {
+				fetch('http://localhost:3001/api/upload/delete', {
+					method: 'POST',
+					body: JSON.stringify({
+						deleteImage: profile_image,
+					}),
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				})
+			}
+		})
 	}
 
-	handleClickOpen = () => {
-		this.setState({ open: true })
+	function handleClickOpen() {
+		setOpen(true)
 	}
 
-	handleClose = () => {
-		this.setState({ open: false })
+	function handleClose() {
+		setOpen(false)
 	}
 
-	handleChange = (event, value) => {
-		let action = 'Acceder'
-		if (value === 1) {
-			action = 'Registrarse'
+	function handleChange(event, newValue) {
+		setValue(newValue)
+	}
+
+	function handleSubmitLogin(event) {
+		event.preventDefault()
+		const form = document.getElementById('login')
+		const formData = new FormData(form)
+		const data = Object.fromEntries(formData)
+		const query = {
+			query: 'mutation($data: iLogin){ login(data: $data) }',
+			variables: {
+				data,
+			},
 		}
-		this.setState({ value, action })
+		fetch('http://localhost:3001/api', {
+			method: 'POST',
+			body: JSON.stringify(query),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then(res => res.json())
+			.catch(error => console.error('Error:', error))
+			.then(response => {
+				const { data, errors } = response
+				if (errors) {
+					if (errors[0].message === 'Validation error') {
+						console.log('correo registrado')
+					} else {
+						console.log(errors[0].message)
+					}
+				} else {
+					/**
+					 * TODO: aqui te debe de enviar dentro de la aplicación
+					 */
+					console.log(data.login)
+				}
+			})
 	}
 
-	render() {
-		const { classes } = this.props
-		const { value } = this.state
-		return (
-			<MuiThemeProvider theme={theme}>
-				<div className={classes.root}>
-					<AppBar position="static">
-						<Toolbar>
-							<Typography
-								variant="h6"
-								color="inherit"
-								className={classes.grow}>
-								INNOMBRABLE
-							</Typography>
-							<Button
-								color="inherit"
-								onClick={this.handleClickOpen}>
-								Acceder
-							</Button>
-						</Toolbar>
-					</AppBar>
-				</div>
-				<div>
-					<Dialog
-						open={this.state.open}
-						onClose={this.handleClose}
-						aria-labelledby="form-dialog-title"
-						fullWidth
-						maxWidth="sm">
-						<DialogTitle id="form-dialog-title">
-							<Paper className={classes.root}>
-								<Tabs
-									value={this.state.value}
-									onChange={this.handleChange}
-									indicatorColor="primary"
-									textColor="primary"
-									centered>
-									<Tab label="Acceder" />
-									<Tab label="Registrarse" />
-								</Tabs>
-							</Paper>
-						</DialogTitle>
-						<DialogContent>
+	function handleSubmitSignup(event) {
+		event.preventDefault()
+		const form = document.getElementById('signup')
+		const formData = new FormData(form)
+		if (profile_image !== 'default.png' && save === false) {
+			formData.append('profile_image', profile_image)
+		}
+		let data = Object.fromEntries(formData)
+		if (!data.lastName) {
+			delete data.lastName
+		}
+		const query = {
+			query: 'mutation($data: iUsers){ cUser(data: $data) }',
+			variables: {
+				data,
+			},
+		}
+		fetch('http://localhost:3001/api', {
+			method: 'POST',
+			body: JSON.stringify(query),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then(res => res.json())
+			.catch(error => console.error('Error:', error))
+			.then(response => {
+				const { data, errors } = response
+				if (errors) {
+					if (errors[0].message === 'Validation error') {
+						console.log('correo registrado')
+					} else {
+						console.log(errors[0].message)
+					}
+				} else {
+					/**
+					 * TODO: aqui te debe de enviar dentro de la aplicación
+					 */
+					setSave(true)
+					console.log(data.cUser)
+				}
+			})
+	}
+
+	function uploadImage(event) {
+		let formData = new FormData()
+		if (profile_image !== 'default.png' && save === false) {
+			formData.append('deleteImage', profile_image)
+			console.log('looks good')
+		}
+		formData.append('profile_image', event.target.files[0])
+		fetch('http://localhost:3001/api/upload', {
+			method: 'POST',
+			body: formData,
+		})
+			.then(response => response.json())
+			.catch(error => console.error('Error:', error))
+			.then(response => {
+				setProfile_image(response.profile_image)
+				setSave(false)
+			})
+	}
+
+	const classes = useStyles()
+	return (
+		<div>
+			<div className={classes.root}>
+				<AppBar position="static">
+					<Toolbar>
+						<Typography variant="h6" className={classes.title}>
+							Agenda
+						</Typography>
+						<Button color="inherit" onClick={handleClickOpen}>
+							ACCEDER
+						</Button>
+					</Toolbar>
+				</AppBar>
+			</div>
+			<div>
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="form-dialog-title"
+					fullWidth
+					maxWidth="sm">
+					<DialogContent>
+						<div className={classes.root}>
+							<Tabs
+								value={value}
+								onChange={handleChange}
+								centered>
+								<Tab label="ACCEDER" />
+								<Tab label="REGISTRARSE" />
+							</Tabs>
 							{value === 0 && (
-								<TabContainer>
+								<form onSubmit={handleSubmitLogin} id="login">
 									<TextField
-										id="outlined-email-input"
-										label="Email"
+										id="email"
+										label="Correo Electrónico"
 										className={classes.textField}
 										type="email"
 										name="email"
@@ -144,65 +283,120 @@ class ButtonAppBar extends React.Component {
 										margin="normal"
 										variant="outlined"
 										fullWidth
+										required
 									/>
-
 									<TextField
-										id="outlined-password-input"
-										label="Password"
+										id="password"
+										label="Contraseña"
 										className={classes.textField}
 										type="password"
-										autoComplete="current-password"
+										name="password"
+										autoComplete="password"
 										margin="normal"
 										variant="outlined"
 										fullWidth
+										required
 									/>
-								</TabContainer>
-							)}
-							{value === 1 && (
-								<TabContainer>
-									<input
-										accept="image/*"
-										className={classes.input}
-										style={{ display: 'none' }}
-										id="raised-button-file"
-										multiple
-										type="file"
-									/>
-
 									<Grid
 										container
+										direction="row"
+										justify="flex-end">
+										<Button
+											variant="contained"
+											color="primary"
+											type="submit"
+											className={classes.button}>
+											INICIAR SESIÓN
+										</Button>
+									</Grid>
+								</form>
+							)}
+							{value === 1 && (
+								<form onSubmit={handleSubmitSignup} id="signup">
+									<Grid
+										container
+										direction="row"
 										justify="center"
-										alignItems="center">
-										<label htmlFor="raised-button-file">
-											{/* <Button raised component="span" className={classes.button}>
-                      Upload
-                    </Button> */}
-											<Avatar
-												alt="Remy Sharp"
-												src="https://png.pngtree.com/svg/20170602/0db185fb9c.png"
-												className={classes.bigAvatar}
-											/>
-										</label>
+										style={{ marginTop: 20 }}>
+										<input
+											accept="image/*"
+											className={classes.input}
+											style={{ display: 'none' }}
+											id="raised-button-file"
+											multiple
+											type="file"
+											onChange={uploadImage}
+										/>
+										<ButtonBase
+											focusRipple
+											key="profile_image"
+											className={classes.image}
+											focusVisibleClassName={
+												classes.focusVisible
+											}
+											style={{
+												width: '50%',
+											}}>
+											<label htmlFor="raised-button-file">
+												<span
+													className={classes.imageSrc}
+													style={{
+														backgroundImage: `url(http://localhost:3001/profile_images/${profile_image})`,
+													}}
+												/>
+												<span
+													className={
+														classes.imageBackdrop
+													}
+												/>
+												<span
+													className={
+														classes.imageButton
+													}>
+													<Typography
+														component="span"
+														variant="subtitle1"
+														color="inherit"
+														className={
+															classes.imageTitle
+														}>
+														{'Imagen de perfil'}
+														<span
+															className={
+																classes.imageMarked
+															}
+														/>
+													</Typography>
+												</span>
+											</label>
+										</ButtonBase>
 									</Grid>
 									<TextField
-										id="outlined-name"
+										id="firstName"
 										label="Nombre"
 										className={classes.textField}
+										type="text"
+										name="firstName"
+										autoComplete="firstName"
 										margin="normal"
 										variant="outlined"
 										fullWidth
+										required
 									/>
 									<TextField
-										id="outlined-lastname"
-										label="Apellido/s"
+										id="lastName"
+										label="Apellidos"
 										className={classes.textField}
+										type="text"
+										name="lastName"
+										autoComplete="lastName"
 										margin="normal"
 										variant="outlined"
 										fullWidth
 									/>
 									<TextField
-										id="outlined-email-input"
-										label="Email"
+										id="email"
+										label="Correo Electrónico"
 										className={classes.textField}
 										type="email"
 										name="email"
@@ -210,34 +404,40 @@ class ButtonAppBar extends React.Component {
 										margin="normal"
 										variant="outlined"
 										fullWidth
+										required
 									/>
-
 									<TextField
-										id="outlined-password-input"
-										label="Password"
+										id="password"
+										label="Contraseña"
 										className={classes.textField}
 										type="password"
-										autoComplete="current-password"
+										name="password"
+										autoComplete="password"
 										margin="normal"
 										variant="outlined"
 										fullWidth
+										required
 									/>
-								</TabContainer>
+									<Grid
+										container
+										direction="row"
+										justify="flex-end">
+										<Button
+											variant="contained"
+											color="primary"
+											type="submit"
+											className={classes.button}>
+											REGISTRARSE
+										</Button>
+									</Grid>
+								</form>
 							)}
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={this.handleClose} color="primary">
-								Cancel
-							</Button>
-							<Button onClick={this.handleClose} color="primary">
-								{this.state.action}
-							</Button>
-						</DialogActions>
-					</Dialog>
-				</div>
-			</MuiThemeProvider>
-		)
-	}
+						</div>
+					</DialogContent>
+				</Dialog>
+			</div>
+		</div>
+	)
 }
 
-export default withStyles(styles)(ButtonAppBar)
+export default ButtonAppBar

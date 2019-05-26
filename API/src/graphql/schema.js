@@ -1,4 +1,4 @@
-import { buildSchema } from 'graphql';
+import { buildSchema } from 'graphql'
 
 const schema = buildSchema(`
 	type Query {
@@ -18,7 +18,7 @@ const schema = buildSchema(`
 	}
 
 	type Mutation {
-		login(email: String!, password: String!): String
+		login(data: iLogin): String
 		cUser(data: iUsers): String
 		uUser(data: iUsers): String
 		dUser: String
@@ -118,6 +118,10 @@ const schema = buildSchema(`
 		personalization: Personalizations
 	}
 	
+	input iLogin {
+		email: String!
+		password: String!
+	}
 	input iUsers {
 		firstName: String
 		lastName: String
@@ -185,6 +189,6 @@ const schema = buildSchema(`
 		subject: ID
 		setPersonalization: iPersonalizations
 	}
-`);
+`)
 
-export default schema;
+export default schema
