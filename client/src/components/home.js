@@ -12,6 +12,8 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
 import React from 'react'
+import Presentation from './presentation'
+import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -109,6 +111,7 @@ function ButtonAppBar() {
 	const [value, setValue] = React.useState(0)
 	const [profile_image, setProfile_image] = React.useState('default.png')
 	const [save, setSave] = React.useState(false)
+	const [redirect, setRedirect] = React.useState(false)
 	React.useEffect(elimina)
 
 	function elimina() {
@@ -169,10 +172,8 @@ function ButtonAppBar() {
 						console.log(errors[0].message)
 					}
 				} else {
-					/**
-					 * TODO: aqui te debe de enviar dentro de la aplicación
-					 */
-					console.log(data.login)
+					localStorage.setItem('authToken', data.login)
+					setRedirect(true)
 				}
 			})
 	}
@@ -212,11 +213,9 @@ function ButtonAppBar() {
 						console.log(errors[0].message)
 					}
 				} else {
-					/**
-					 * TODO: aqui te debe de enviar dentro de la aplicación
-					 */
 					setSave(true)
-					console.log(data.cUser)
+					localStorage.setItem('authToken', data.cUser)
+					setRedirect(true)
 				}
 			})
 	}
@@ -243,6 +242,9 @@ function ButtonAppBar() {
 	const classes = useStyles()
 	return (
 		<div>
+			{(redirect === true || localStorage.getItem('authToken')) && (
+				<Redirect to="/lol" />
+			)}
 			<div className={classes.root}>
 				<AppBar position="static">
 					<Toolbar>
@@ -319,7 +321,7 @@ function ButtonAppBar() {
 										justify="center"
 										style={{ marginTop: 20 }}>
 										<input
-											accept="image/*"
+											accept=".png, .jpg, .jpeg"
 											className={classes.input}
 											style={{ display: 'none' }}
 											id="raised-button-file"
@@ -436,6 +438,7 @@ function ButtonAppBar() {
 					</DialogContent>
 				</Dialog>
 			</div>
+			<Presentation />
 		</div>
 	)
 }

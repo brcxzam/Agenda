@@ -1,17 +1,25 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import {
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	Redirect,
+} from 'react-router-dom'
 import Home from './components/home'
-import Login from './components/login'
-import Register from './components/register'
+import Inside from './components/inside'
+import { PrivateRoute } from './components/privateRoute'
+const NoMatch = () => {
+	return <Redirect to="/" />
+}
 
 class App extends Component {
 	render() {
 		return (
 			<Router>
-				<Home />
 				<Switch>
-					<Route path="/registrar" exact component={Register} />
-					<Route path="/acceder" exact component={Login} />
+					<Route path="/" exact component={Home} />
+					<PrivateRoute path="/lol" component={Inside} />
+					<Route component={NoMatch} />
 				</Switch>
 			</Router>
 		)
