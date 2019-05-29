@@ -172,8 +172,10 @@ function ButtonAppBar() {
 						console.log(errors[0].message)
 					}
 				} else {
-					localStorage.setItem('authToken', data.login)
-					setRedirect(true)
+					if (data.login !== 'false') {
+						localStorage.setItem('authToken', data.login)
+						setRedirect(true)
+					}
 				}
 			})
 	}
@@ -242,9 +244,7 @@ function ButtonAppBar() {
 	const classes = useStyles()
 	return (
 		<div>
-			{(redirect === true || localStorage.getItem('authToken')) && (
-				<Redirect to="/lol" />
-			)}
+			{redirect === true && <Redirect to="/" />}
 			<div className={classes.root}>
 				<AppBar position="static">
 					<Toolbar>

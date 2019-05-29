@@ -1,25 +1,24 @@
 import React, { Component } from 'react'
 import {
 	BrowserRouter as Router,
+	Redirect,
 	Route,
 	Switch,
-	Redirect,
 } from 'react-router-dom'
-import Home from './components/home'
-import Inside from './components/inside'
-import { PrivateRoute } from './components/privateRoute'
-const NoMatch = () => {
-	return <Redirect to="/" />
-}
+import { PrivateRoute } from './privateRoute'
+import Agenda from './components/agenda'
 
 class App extends Component {
+	NoMatch() {
+		return <Redirect to="/" />
+	}
+
 	render() {
 		return (
 			<Router>
 				<Switch>
-					<Route path="/" exact component={Home} />
-					<PrivateRoute path="/lol" component={Inside} />
-					<Route component={NoMatch} />
+					<PrivateRoute path="/" exact component={Agenda} />
+					<Route component={this.NoMatch} />
 				</Switch>
 			</Router>
 		)

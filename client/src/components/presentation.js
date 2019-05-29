@@ -16,10 +16,6 @@ import Link from '@material-ui/core/Link'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Container from '@material-ui/core/Container'
-import Markdown from './Markdown'
-import post1 from './blog-post.1.md'
-import post2 from './blog-post.2.md'
-import post3 from './blog-post.3.md'
 
 function MadeWithLove() {
 	return (
@@ -131,8 +127,6 @@ const featuredPosts = [
 			'This is a wider card with supporting text below as a natural lead-in to additional content.',
 	},
 ]
-
-const posts = [post1, post2, post3]
 
 const archives = [
 	'March 2020',
@@ -283,13 +277,6 @@ export default function Blog() {
 								From the Firehose
 							</Typography>
 							<Divider />
-							{posts.map(post => (
-								<Markdown
-									className={classes.markdown}
-									key={post.substring(0, 40)}>
-									{post}
-								</Markdown>
-							))}
 						</Grid>
 						{/* End main content */}
 						{/* Sidebar */}
