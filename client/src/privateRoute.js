@@ -1,6 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
-import Home from './components/home'
+import { Route, Redirect } from 'react-router-dom'
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
@@ -9,7 +8,12 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
 			localStorage.getItem('authToken') ? (
 				<Component {...props} />
 			) : (
-				<Home />
+				<Redirect
+					to={{
+						pathname: '/about',
+						state: { from: props.location },
+					}}
+				/>
 			)
 		}
 	/>

@@ -1,28 +1,31 @@
-import React, { Component } from 'react'
-import {
-	BrowserRouter as Router,
-	Redirect,
-	Route,
-	Switch,
-} from 'react-router-dom'
-import { PrivateRoute } from './privateRoute'
-import Agenda from './components/agenda'
+import React from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+// import { PrivateRoute } from './privateRoute'
+import Home from './components/Home'
+import About from './components/About'
+import Topics from './components/Topics'
 
-class App extends Component {
-	NoMatch() {
-		return <Redirect to="/" />
-	}
-
-	render() {
-		return (
-			<Router>
-				<Switch>
-					<PrivateRoute path="/" exact component={Agenda} />
-					<Route component={this.NoMatch} />
-				</Switch>
-			</Router>
-		)
-	}
+function BasicExample() {
+	return (
+		<Router>
+			<Switch>
+				<Route exact path="/" component={Home} />
+				<Route path="/about" component={About} />
+				<Route path="/topics" component={Topics} />
+				<Route component={NoMatch} />
+			</Switch>
+		</Router>
+	)
 }
 
-export default App
+function NoMatch({ location }) {
+	return (
+		<div>
+			<h3>
+				No match for <code>{location.pathname}</code>
+			</h3>
+		</div>
+	)
+}
+
+export default BasicExample
