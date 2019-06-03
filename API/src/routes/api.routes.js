@@ -6,6 +6,9 @@ import { extname, join } from 'path'
 import uuid from 'uuid/v4'
 import root from '../graphql/root'
 import schema from '../graphql/schema'
+import config from '../graphql/jwt/jwt.config'
+import { User } from './../database/model'
+const jwt = require('express-jwt')
 const router = Router()
 
 const storage = multer.diskStorage({
@@ -34,18 +37,45 @@ router.post(
 
 router.post(
 	'/upload',
+	jwt({ secret: config.secret }),
 	multer({ storage }).single('profile_image'),
-	async ({ body, file }, res) => {
-		if (body.deleteImage) {
-			deleteImg(body)
+	async ({ user, file }, res) => {
+		const id = user.user
+		const { profile_image } = await User.findByPk(id)
+		if (profile_image != 'default.png') {
+			deleteImg({ deleteImage: profile_image })
 		}
+		await User.update(
+			{ profile_image: file.filename },
+			{
+				where: {
+					id,
+				},
+			}
+		)
 		res.json({ profile_image: file.filename })
 	}
 )
 
-router.post('/upload/delete', ({ body }, res) => {
-	deleteImg(body)
-	res.json({ message: true })
-})
+router.post(
+	'/upload/delete',
+	jwt({ secret: config.secret }),
+	async ({ user }, res) => {
+		const id = user.user
+		const { profile_image } = await User.findByPk(id)
+		if (profile_image != 'default.png') {
+			deleteImg({ deleteImage: profile_image })
+		}
+		await User.update(
+			{ profile_image: 'default.png' },
+			{
+				where: {
+					id,
+				},
+			}
+		)
+		res.json({ message: 'default.png' })
+	}
+)
 
 export default router

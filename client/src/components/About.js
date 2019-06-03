@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import SwipeableViews from 'react-swipeable-views'
+import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -87,6 +88,7 @@ function About() {
 		errorPassword: false,
 		messageErrorPassword: '',
 	})
+	const [redirect, setRedirect] = useState(false)
 
 	function handleChange(event, newValue) {
 		setValue(newValue)
@@ -148,8 +150,11 @@ function About() {
 				console.log(errors[0].message)
 			} else {
 				if (data.login !== 'false') {
-					// localStorage.setItem('authToken', data.login)
-					console.log(data.login)
+					/**
+					 * TODO: Acceso a la app
+					 */
+					localStorage.setItem('authToken', data.login)
+					setRedirect(true)
 				} else {
 					setErrorLogIn({
 						errorLogIn: true,
@@ -225,8 +230,11 @@ function About() {
 						break
 				}
 			} else {
-				console.log(data.cUser)
-				// setProfile_Image({ profile_image: 'default.png', save: true })
+				/**
+				 * TODO: Acceso a la app
+				 */
+				localStorage.setItem('authToken', data.cUser)
+				setRedirect(true)
 			}
 		} catch (error) {
 			console.error(error)
@@ -235,6 +243,10 @@ function About() {
 
 	return (
 		<Container maxWidth="xl">
+			{/**
+			 * TODO: Acceso a la app
+			 */}
+			{redirect && <Redirect to="/app" />}
 			<div className={classes.root}>
 				<AppBar position="static">
 					<Toolbar>

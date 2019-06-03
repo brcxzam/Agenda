@@ -24,21 +24,22 @@
     "@babel/polyfill": "^7.4.4",
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "express-graphql": "^0.7.1",
-    "graphql": "^14.2.1",
+    "express-jwt": "^5.3.1",
+    "graphql": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.7.3",
+    "sequelize": "^5.8.7",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
-    "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.4.4",
-    "nodemon": "^1.18.11"
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "nodemon": "^1.19.1"
   }
 }
