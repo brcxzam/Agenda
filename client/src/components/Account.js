@@ -9,6 +9,10 @@ import Grid from '@material-ui/core/Grid'
 import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
 import Typography from '@material-ui/core/Typography'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import HowToReg from '@material-ui/icons/HowToReg'
+import AlternateEmail from '@material-ui/icons/AlternateEmail'
 
 const useStyles = makeStyles(theme => ({
 	textField: {
@@ -342,6 +346,13 @@ function Account(props) {
 					error={errorFirstName}
 					onChange={handleErrorFirstName}
 					helperText={messageErrorFirstName}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<AccountCircle />
+							</InputAdornment>
+						),
+					}}
 				/>
 				<TextField
 					value={lastName}
@@ -356,6 +367,13 @@ function Account(props) {
 					error={errorLastName}
 					onChange={handleErrorLastName}
 					helperText={messageErrorLastName}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<HowToReg />
+							</InputAdornment>
+						),
+					}}
 				/>
 				<TextField
 					value={email}
@@ -371,6 +389,13 @@ function Account(props) {
 					error={errorEmail}
 					onChange={handleErrorEmail}
 					helperText={messageErrorEmail}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<AlternateEmail />
+							</InputAdornment>
+						),
+					}}
 				/>
 				<Grid
 					container
