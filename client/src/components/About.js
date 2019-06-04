@@ -17,6 +17,14 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { Redirect } from 'react-router-dom'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import {
+	AccountCircle,
+	HowToReg,
+	AlternateEmail,
+	Lock,
+	VisibilityOff,
+} from '@material-ui/icons'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -329,6 +337,13 @@ function About() {
 											error={errorLogIn}
 											onChange={handleErrorLogIn}
 											helperText={messageErrorLogIn}
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<AlternateEmail />
+													</InputAdornment>
+												),
+											}}
 										/>
 										<TextField
 											required
@@ -343,6 +358,13 @@ function About() {
 											error={errorLogIn}
 											onChange={handleErrorLogIn}
 											helperText={messageErrorLogIn}
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<VisibilityOff />
+													</InputAdornment>
+												),
+											}}
 										/>
 										<Grid
 											container
@@ -374,6 +396,13 @@ function About() {
 											error={errorFirstName}
 											onChange={handleErrorFirstName}
 											helperText={messageErrorFirstName}
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<AccountCircle />
+													</InputAdornment>
+												),
+											}}
 										/>
 										<TextField
 											id="lastName"
@@ -387,6 +416,13 @@ function About() {
 											error={errorLastName}
 											onChange={handleErrorLastName}
 											helperText={messageErrorLastName}
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<HowToReg />
+													</InputAdornment>
+												),
+											}}
 										/>
 										<TextField
 											required
@@ -401,6 +437,13 @@ function About() {
 											error={errorEmail}
 											onChange={handleErrorEmail}
 											helperText={messageErrorEmail}
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<AlternateEmail />
+													</InputAdornment>
+												),
+											}}
 										/>
 										<TextField
 											required
@@ -415,6 +458,13 @@ function About() {
 											error={errorPassword}
 											onChange={handleErrorPassword}
 											helperText={messageErrorPassword}
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<Lock />
+													</InputAdornment>
+												),
+											}}
 										/>
 										<Grid
 											container
