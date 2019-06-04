@@ -10,7 +10,9 @@ import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
 import Typography from '@material-ui/core/Typography'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import { AccountCircle, HowToReg, AlternateEmail } from '@material-ui/icons'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import HowToReg from '@material-ui/icons/HowToReg'
+import AlternateEmail from '@material-ui/icons/AlternateEmail'
 
 const useStyles = makeStyles(theme => ({
 	textField: {

@@ -18,13 +18,11 @@ import React, { useState } from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { Redirect } from 'react-router-dom'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import {
-	AccountCircle,
-	HowToReg,
-	AlternateEmail,
-	Lock,
-	VisibilityOff,
-} from '@material-ui/icons'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import HowToReg from '@material-ui/icons/HowToReg'
+import AlternateEmail from '@material-ui/icons/AlternateEmail'
+import Lock from '@material-ui/icons/Lock'
+import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
 const useStyles = makeStyles(theme => ({
 	root: {
