@@ -114,7 +114,7 @@ const useStyles = makeStyles(theme => ({
 	footer: {
 		backgroundColor: theme.palette.background.paper,
 		marginTop: theme.spacing(3),
-		color: 'white',
+		// color: 'white',
 		padding: '0 50px',
 
 		// background: 'linear-gradient(45deg, #3D45BA 30%, #2196F3 90%)',

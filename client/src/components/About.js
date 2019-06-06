@@ -22,8 +22,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import HowToReg from '@material-ui/icons/HowToReg'
 import AlternateEmail from '@material-ui/icons/AlternateEmail'
 import Lock from '@material-ui/icons/Lock'
-import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Presentation from './presentation'
+import Personalizar from './personalitation'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -360,7 +360,7 @@ function About() {
 											InputProps={{
 												endAdornment: (
 													<InputAdornment position="end">
-														<VisibilityOff />
+														<Lock />
 													</InputAdornment>
 												),
 											}}
@@ -486,6 +486,7 @@ function About() {
 				</Dialog>
 			</div>
 			<Presentation />
+			<Personalizar />
 		</Container>
 	)
 }
