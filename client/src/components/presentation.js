@@ -1,21 +1,19 @@
-import React from 'react'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import MobileStepper from '@material-ui/core/MobileStepper'
+import Avatar from '@material-ui/core/Avatar'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+import Grid from '@material-ui/core/Grid'
+import GridList from '@material-ui/core/GridList'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
+import IconButton from '@material-ui/core/IconButton'
 import Paper from '@material-ui/core/Paper'
+import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
+import StarBorderIcon from '@material-ui/icons/StarBorder'
+import React from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { autoPlay } from 'react-swipeable-views-utils'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Grid from '@material-ui/core/Grid'
-import Divider from '@material-ui/core/Divider'
-import Container from '@material-ui/core/Container'
-import Fab from '@material-ui/core/Fab'
-import AddIcon from '@material-ui/icons/Add'
-import Icon from '@material-ui/core/Icon'
-import DeleteIcon from '@material-ui/icons/Delete'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
@@ -23,58 +21,69 @@ const tutorialSteps = [
 	{
 		label: 'Disponible en diferentes dispositivos ',
 		imgPath: 'http://localhost:3001/img/sistema.png',
+		content:
+			'Acceda desde su dispositivo móvil, portátil o computadora de escritorio.',
 	},
 	{
 		label: 'Establezca su horario',
 		imgPath: 'http://localhost:3001/img/img2.jpg',
+		content:
+			'OwlTime ayuda a las personas ocupadas como usted a concentrarse en lo que es importante',
 	},
 	{
 		label: 'Ingrese sus actividades tanto academicas como personales',
 		imgPath: 'http://localhost:3001/img/img5.jpg',
+		content:
+			'No deje que sus tareas u actividades lo abrumen, registrelas en una aplicación fácil de usar',
 	},
 	{
 		label: 'Registre sus materias',
 		imgPath: 'http://localhost:3001/img/img4.jpg',
+		content:
+			'Tenga un mayor control de sus actividades escolares, ademas puedes personalizar cada una.',
 	},
 	{
 		label: 'Ingrese sus calificaciones',
 		imgPath: 'http://localhost:3001/img/img3.jpg',
+		content:
+			'Nunca mas tendra que preocuparse por obtener sus calificaciones finales por que owlTime lo hace por usted',
+	},
+]
+
+const tileData = [
+	{
+		img: 'http://localhost:3001/img/principal.png',
+		title: 'Pagina Principal',
+		featured: true,
+	},
+	{
+		img: 'http://localhost:3001/img/Asignaturas2.png',
+		title: 'Mostrar asignaturas',
+		featured: false,
+	},
+	{
+		img: 'http://localhost:3001/img/calificacion.png',
+		title: 'Ingresar calificaciones',
+		featured: false,
+	},
+	{
+		img: 'http://localhost:3001/img/horario2.png',
+		title: 'Establecer su horario',
+		featured: true,
+	},
+	{
+		img: 'http://localhost:3001/img/Mesa de trabajo – 1.png',
+		title: 'Asignar un icono',
+		featured: false,
+	},
+	{
+		img: 'http://localhost:3001/img/Mesa de trabajo – 3.png',
+		title: 'Establecer un color',
+		featured: false,
 	},
 ]
 
 const useStyles = makeStyles(theme => ({
-	root: {
-		maxWidth: 400,
-		flexGrow: 1,
-	},
-	header: {
-		display: 'flex',
-		alignItems: 'center',
-		height: 50,
-		paddingLeft: theme.spacing(4),
-		backgroundColor: theme.palette.background.default,
-	},
-	img: {
-		height: 255,
-		display: 'block',
-		maxWidth: 400,
-		overflow: 'hidden',
-		width: '100%',
-	},
-	toolbar: {
-		borderBottom: `1px solid ${theme.palette.divider}`,
-	},
-	toolbarTitle: {
-		flex: 1,
-	},
-	toolbarSecondary: {
-		justifyContent: 'space-between',
-		overflowX: 'auto',
-	},
-	toolbarLink: {
-		padding: theme.spacing(1),
-		flexShrink: 0,
-	},
 	mainFeaturedPost: {
 		position: 'relative',
 		backgroundColor: theme.palette.grey[800],
@@ -84,6 +93,7 @@ const useStyles = makeStyles(theme => ({
 		backgroundSize: 'cover',
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: 'center',
+		height: 400,
 	},
 	overlay: {
 		position: 'absolute',
@@ -101,281 +111,218 @@ const useStyles = makeStyles(theme => ({
 			paddingRight: 0,
 		},
 	},
-	mainGrid: {
+	footer: {
+		backgroundColor: theme.palette.background.paper,
 		marginTop: theme.spacing(3),
+		color: 'white',
+		padding: '0 50px',
+
+		// background: 'linear-gradient(45deg, #3D45BA 30%, #2196F3 90%)',
+		// border: 0,
+		// borderRadius: 3,
+		// boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+	},
+	gridList: {
+		maxHeight: 430,
+		maxWidth: 650,
+		transform: 'translateZ(0)',
+	},
+	titleBar: {
+		background:
+			'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+			'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+	},
+	icon: {
+		color: 'white',
 	},
 	card: {
-		//display: 200,
-		maxWidth: 345,
+		maxWidth: 380,
+		Height: 300,
 	},
-	cardDetails: {
-		flex: 1,
-	},
-	cardMedia: {
-		height: 140,
-	},
-	markdown: {
-		...theme.typography.body2,
-		padding: theme.spacing(3, 0),
-	},
-	sidebarAboutBox: {
-		padding: theme.spacing(2),
-		backgroundColor: theme.palette.grey[200],
-	},
-	sidebarSection: {
-		marginTop: theme.spacing(3),
-	},
-	footer: {
-		//	backgroundColor: theme.palette.background.paper,
-		//marginTop: theme.spacing(8),
-		//padding: theme.spacing(6, 0),
-
-		background: 'linear-gradient(45deg, #3D45BA 30%, #2196F3 90%)',
-		border: 0,
-		borderRadius: 3,
-		boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-		color: 'white',
-		height: 40,
-		padding: '0 50px',
-	},
-	media: {
-		height: 250,
-	},
-	fab: {
-		margin: theme.spacing(1),
-	},
-	extendedIcon: {
-		marginRight: theme.spacing(1),
-	},
-	fab2: {
-		margin: theme.spacing(1),
-		backgroundColor: '#48C9B0',
+	bigAvatar: {
+		margin: 10,
+		width: 130,
+		height: 130,
 	},
 }))
 
 function SwipeableTextMobileStepper() {
 	const classes = useStyles()
-	const theme = useTheme()
-	const [activeStep, setActiveStep] = React.useState(0)
-	const maxSteps = tutorialSteps.length
-
-	function handleNext() {
-		setActiveStep(prevActiveStep => prevActiveStep + 1)
-	}
-
-	function handleBack() {
-		setActiveStep(prevActiveStep => prevActiveStep - 1)
-	}
-
-	function handleStepChange(step) {
-		setActiveStep(step)
-	}
-
 	return (
 		<React.Fragment>
-			<CssBaseline />
-			<Container maxWidth="lg">
+			<br />
+			<main>
+				<Grid item xs={12}>
+					<AutoPlaySwipeableViews>
+						{tutorialSteps.map((step, index) => (
+							<div key={step.label}>
+								<Paper
+									className={classes.mainFeaturedPost}
+									style={{
+										backgroundImage: `url(${step.imgPath})`,
+									}}>
+									<div className={classes.overlay} />
+									<Grid container>
+										<Grid item xs={5}>
+											<div
+												className={
+													classes.mainFeaturedPostContent
+												}>
+												<Typography
+													variant="h3"
+													color="inherit"
+													gutterBottom>
+													{step.label}
+												</Typography>
+												<Typography
+													variant="h6"
+													color="inherit"
+													gutterBottom>
+													{step.content}
+												</Typography>
+											</div>
+										</Grid>
+									</Grid>
+								</Paper>
+							</div>
+						))}
+					</AutoPlaySwipeableViews>
+				</Grid>
+
+				<Grid item xs={12} md={12} align="center">
+					<Typography variant="h5" align="center" color="primary">
+						¡Planificar tu dia es cuestión de segundos!
+					</Typography>
+				</Grid>
 				<br />
-				<main>
-					<Paper className={classes.mainFeaturedPost}>
-						{/* Increase the priority of the hero background image */}
-						{
-							<img
-								style={{ display: 'none' }}
-								src="http://localhost:3001/img/sistema.png"
-								alt="background"
-							/>
-						}
-						<div className={classes.overlay} />
-						<Grid container>
-							<Grid item md={5}>
-								<div
-									className={classes.mainFeaturedPostContent}>
-									<Typography
-										variant="h3"
-										color="inherit"
-										gutterBottom>
-										La administración que tus actividades
-										necesitan
-									</Typography>
-									<Typography
-										variant="h5"
-										color="inherit"
-										paragraph>
-										OwlTime es una agenda escolar capaz de
-										evaluar la prioridad de las actividades,
-										de una manera interactiva y muy
-										intuitiva con el usuario.
-									</Typography>
-								</div>
-							</Grid>
-						</Grid>
-					</Paper>
-					<Grid item xs={12}>
-						<Paper
-							elevation={0}
-							className={classes.sidebarAboutBox}>
+				<Grid container spacing={2}>
+					<Grid item xs={12} sm={7}>
+						<GridList className={classes.gridList}>
+							{tileData.map(tile => (
+								<GridListTile
+									key={tile.img}
+									cols={tile.featured ? 2 : 1}
+									rows={tile.featured ? 2 : 1}>
+									<img src={tile.img} alt={tile.title} />
+									<GridListTileBar
+										title={tile.title}
+										titlePosition="top"
+										actionIcon={
+											<IconButton
+												aria-label={`star ${
+													tile.title
+												}`}
+												className={classes.icon}>
+												<StarBorderIcon />
+											</IconButton>
+										}
+										actionPosition="left"
+										className={classes.titleBar}
+									/>
+								</GridListTile>
+							))}
+						</GridList>
+					</Grid>
+					<Grid item xs={12} sm={1} />
+					<Grid item xs={12} sm={4}>
+						<Grid item xs={12} md={10} align="center">
 							<Typography
-								variant="h6"
+								variant="h5"
 								align="center"
-								gutterBottom>
-								¡Organiza cualquier cosa en cualquier lugar y a
-								cualquier hora!
+								color="secondary">
+								Organiza cualquier cosa en cualquier lugar y a
+								cualquier hora
 							</Typography>
+							<br />
 							<Typography align="center">
 								Donde sea que esté, lleve su lista de tareas con
-								usted. Acceda a OwlTime desde su dispositivo
-								móvil, portátil o computadora de escritorio. Sus
-								tareas se sincronizan automáticamente en todos
-								sus dispositivos, lo que le brinda el máximo
-								control, haciendo que su lista de tareas esté
-								accesible en todas partes.
+								usted, ya que sus tareas se sincronizan
+								automáticamente en todos sus dispositivos, lo
+								que le brinda el máximo control, haciendo que su
+								lista de tareas esté accesible en todas partes.
 							</Typography>
-						</Paper>
+							<Avatar
+								alt="Icon"
+								src="http://localhost:3001/profile_images/default.png"
+								className={classes.bigAvatar}
+							/>
+						</Grid>
 					</Grid>
-					<Grid container spacing={5} className={classes.mainGrid}>
-						{/* Main content */}
-						<Grid item xs={12} md={8}>
-							<Typography
-								variant="h6"
-								align="center"
-								gutterBottom>
-								Mantente organizado y facilita tu vida
-							</Typography>
-							<Divider />
-							<Typography
-								variant="body1"
-								align="justify"
-								gutterBottom>
-								No deje que sus tareas u actividades lo abrumen,
-								registrelas en una aplicación fácil de usar,
-								agregando recordatorios para que nunca olvide
-								nada. Agregue recordatorios unicos, diarios,
-								semanalmente, mensualmente o anualmente.
-							</Typography>
-							<div align="center">
-								<Fab
-									color="primary"
-									aria-label="Add"
-									className={classes.fab}>
-									<AddIcon />
-								</Fab>
-								<Fab aria-label="Edit" className={classes.fab2}>
-									<Icon>edit_icon</Icon>
-								</Fab>
-								<Fab
-									color="secondary"
-									aria-label="Delete"
-									className={classes.fab}>
-									<DeleteIcon />
-								</Fab>
-							</div>
-							<br />
-							<Paper
-								elevation={0}
-								className={classes.sidebarAboutBox}>
-								<Typography
-									variant="h6"
-									align="center"
-									gutterBottom>
-									Recuerda que...
+					<Grid item xs={12} sm={4}>
+						<Card className={classes.card}>
+							<CardMedia
+								component="img"
+								height="200"
+								image="http://localhost:3001/img/evento2.jpg"
+								title="Crear evento"
+							/>
+							<CardContent>
+								<Typography variant="h6" component="h2">
+									Crear un evento
 								</Typography>
 								<Typography
-									variant="body1"
-									align="justify"
-									gutterBottom>
-									OwlTime ayuda a las personas ocupadas como
-									usted a concentrarse en lo que es
-									importante, ademas de mostrarle
-									recordatorios ¡puede registrar sus materias
-									y llevar un control de sus calificaciones!
-									Nunca mas tendra que preocuparse por obtener
-									tus calificaciones finales por que owlTime
-									lo hace por usted.
+									variant="body2"
+									color="textSecondary"
+									component="p">
+									Agregue recordatorios unicos, diarios,
+									semanalmente, mensualmente o anualmente.
 								</Typography>
-							</Paper>
-						</Grid>
-						<Grid item xs={12} md={4}>
-							<div className={classes.root}>
-								<Paper
-									square
-									elevation={0}
-									className={classes.header}>
-									<Typography>
-										{tutorialSteps[activeStep].label}
-									</Typography>
-								</Paper>
-								<AutoPlaySwipeableViews
-									axis={
-										theme.direction === 'rtl'
-											? 'x-reverse'
-											: 'x'
-									}
-									index={activeStep}
-									onChangeIndex={handleStepChange}
-									enableMouseEvents>
-									{tutorialSteps.map((step, index) => (
-										<div key={step.label}>
-											{Math.abs(activeStep - index) <=
-											2 ? (
-												<img
-													className={classes.img}
-													src={step.imgPath}
-													alt={step.label}
-												/>
-											) : null}
-										</div>
-									))}
-								</AutoPlaySwipeableViews>
-								<MobileStepper
-									steps={maxSteps}
-									position="static"
-									variant="text"
-									activeStep={activeStep}
-									nextButton={
-										<Button
-											size="small"
-											onClick={handleNext}
-											disabled={
-												activeStep === maxSteps - 1
-											}>
-											Next
-											{theme.direction === 'rtl' ? (
-												<KeyboardArrowLeft />
-											) : (
-												<KeyboardArrowRight />
-											)}
-										</Button>
-									}
-									backButton={
-										<Button
-											size="small"
-											onClick={handleBack}
-											disabled={activeStep === 0}>
-											{theme.direction === 'rtl' ? (
-												<KeyboardArrowRight />
-											) : (
-												<KeyboardArrowLeft />
-											)}
-											Back
-										</Button>
-									}
-								/>
-							</div>
-						</Grid>
-						{/* End sidebar */}
+							</CardContent>
+						</Card>
 					</Grid>
-				</main>
-			</Container>
-			{/* Footer */}
-			<br />
+					<Grid item xs={12} sm={4}>
+						<Card className={classes.card}>
+							<CardMedia
+								component="img"
+								height="200"
+								image="http://localhost:3001/img/work.jpg"
+								title="Datos academicos"
+							/>
+							<CardContent>
+								<Typography variant="h6" component="h2">
+									Ingresar datos academicos
+								</Typography>
+								<Typography
+									variant="body2"
+									color="textSecondary"
+									component="p">
+									Determina la calificacion maxima, la
+									aprobatoria, asi como la cantidad de
+									parciales
+								</Typography>
+							</CardContent>
+						</Card>
+					</Grid>
+					<Grid item xs={12} sm={4}>
+						<Card className={classes.card}>
+							<CardMedia
+								component="img"
+								height="200"
+								image="http://localhost:3001/img/evento1.jpg"
+								title="Preferenciass"
+							/>
+							<CardContent>
+								<Typography variant="h6" component="h2">
+									Modificar preferencias
+								</Typography>
+								<Typography
+									variant="body2"
+									color="textSecondary"
+									component="p">
+									Configura cada una de las preferencias a tu
+									manera, personalizando cada una de ellas.
+								</Typography>
+							</CardContent>
+						</Card>
+					</Grid>
+				</Grid>
+			</main>
+
 			<footer className={classes.footer}>
-				<Container maxWidth="xl">
-					<Typography variant="subtitle2" align="center">
-						Proyecto Integrador
-						<br /> 2019
-					</Typography>
-				</Container>
+				<Typography variant="subtitle2" align="center">
+					Proyecto Integrador
+					<br /> 2019
+				</Typography>
 			</footer>
 		</React.Fragment>
 	)

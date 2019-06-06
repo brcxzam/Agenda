@@ -23,6 +23,7 @@ import HowToReg from '@material-ui/icons/HowToReg'
 import AlternateEmail from '@material-ui/icons/AlternateEmail'
 import Lock from '@material-ui/icons/Lock'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
+import Presentation from './presentation'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -484,6 +485,7 @@ function About() {
 					</div>
 				</Dialog>
 			</div>
+			<Presentation />
 		</Container>
 	)
 }
