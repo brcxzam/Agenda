@@ -156,14 +156,17 @@ Academic_data.init(
 		partials: {
 			type: INTEGER.UNSIGNED,
 			allowNull: false,
+			defaultValue: 4,
 		},
 		maximum: {
 			type: INTEGER.UNSIGNED,
 			allowNull: false,
+			defaultValue: 100,
 		},
 		aproving: {
 			type: INTEGER.UNSIGNED,
 			allowNull: false,
+			defaultValue: 70,
 		},
 		final_score: {
 			type: DOUBLE.UNSIGNED,

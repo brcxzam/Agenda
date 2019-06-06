@@ -20,6 +20,7 @@ import {
 import Account from './Account'
 import Moment from 'react-moment'
 import Preferences from './Preferences'
+import Main from './Main'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -210,22 +211,15 @@ function Home({ match }) {
 						/>
 					)}
 				/>
-				<Route path={`${match.path}/:topicId`} component={Topic} />
 				<Route
 					exact
 					path={match.path}
-					render={() => <h3>Please select a topic.</h3>}
+					render={() => (
+						<Main onChangeProfileImage={handleChangeProfileImage} />
+					)}
 				/>
 			</SwitchRoute>
 		</Container>
-	)
-}
-
-function Topic({ match }) {
-	return (
-		<div>
-			<h3>{match.params.topicId}</h3>
-		</div>
 	)
 }
 

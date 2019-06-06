@@ -57,7 +57,7 @@ const schema = buildSchema(`
 		wednesday: Boolean
 		thursday: Boolean
 		friday: Boolean
-		saturday: String
+		saturday: Boolean
 		sunday: Boolean
 	}
 	type AcademicData {
