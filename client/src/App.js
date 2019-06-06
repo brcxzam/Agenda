@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import About from './components/About'
-import Home from './components/home'
+import Home from './components/Home'
 import { PrivateRoute } from './privateRoute'
 import { PublicRoute } from './publicRoute'
 

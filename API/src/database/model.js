@@ -1,12 +1,4 @@
-import {
-	Model,
-	STRING,
-	INTEGER,
-	DOUBLE,
-	DATEONLY,
-	BOOLEAN,
-	TIME,
-} from 'sequelize'
+import { Model, STRING, INTEGER, DOUBLE, DATE, BOOLEAN, TIME } from 'sequelize'
 import sequelize from './connection'
 
 class User extends Model {}
@@ -383,12 +375,12 @@ Event.init(
 			},
 		},
 		date: {
-			type: DATEONLY,
+			type: DATE,
 			allowNull: false,
 		},
 		time: {
 			type: TIME,
-			allowNull: false,
+			// allowNull: false,
 		},
 		repeat: {
 			type: STRING,
