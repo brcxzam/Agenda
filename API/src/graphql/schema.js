@@ -106,10 +106,11 @@ const schema = buildSchema(`
 		id: ID
 		icon: String
 	}
+	scalar DateTime
 	type Events {
 		id: ID
 		title: String
-		date: String
+		date: DateTime
 		time: String
 		repeat: String
 		priority: String
