@@ -5,22 +5,20 @@ import Home from './components/Home'
 import { PrivateRoute } from './privateRoute'
 import { PublicRoute } from './publicRoute'
 
-// import theme from './theme/theme'
-// import { ThemeProvider } from '@material-ui/styles'
+import theme from './theme/theme'
+import { ThemeProvider } from '@material-ui/styles'
 
 function App() {
 	return (
-		// <ThemeProvider theme={theme}>
-
-		<Router>
-			<Switch>
-				<PublicRoute exact path="/" component={About} />
-				<PrivateRoute path="/app" component={Home} />
-				<PublicRoute component={NoMatch} />
-			</Switch>
-		</Router>
-
-		// </ThemeProvider>
+		<ThemeProvider theme={theme}>
+			<Router>
+				<Switch>
+					<PublicRoute exact path="/" component={About} />
+					<PrivateRoute path="/app" component={Home} />
+					<PublicRoute component={NoMatch} />
+				</Switch>
+			</Router>
+		</ThemeProvider>
 	)
 }
 

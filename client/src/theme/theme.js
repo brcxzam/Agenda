@@ -1,10 +1,9 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
 const palette = {
-	primary: { main: '#0C0C0C' },
-	secondary: { main: '#1EBAED' },
-	background: { paper: '#9399A5', default: '#F2F2F2' },
+	primary: { main: '#37848c' },
+	secondary: { main: '#ffb925' },
 }
-const themeName = 'Cod Gray Picton Blue Rattlesnake'
+const themeName = 'Paradiso My Sin Snakes'
 
 export default createMuiTheme({ palette, themeName })
