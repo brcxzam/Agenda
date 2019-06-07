@@ -50,88 +50,6 @@ User.init(
 	}
 )
 
-class Notification extends Model {}
-Notification.init(
-	{
-		user: {
-			type: INTEGER,
-			primaryKey: true,
-			references: {
-				model: User,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-		morning: {
-			type: TIME,
-			defaultValue: '08:00:00',
-		},
-		afternoon: {
-			type: TIME,
-			defaultValue: '14:00:00',
-		},
-		night: {
-			type: TIME,
-			defaultValue: '20:00:00',
-		},
-	},
-	{
-		modelName: 'Notification',
-		timestamps: false,
-		sequelize,
-	}
-)
-
-class Day extends Model {} //<---
-Day.init(
-	{
-		user: {
-			type: INTEGER,
-			primaryKey: true,
-			references: {
-				model: User,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-		monday: {
-			type: BOOLEAN,
-			defaultValue: true,
-		},
-		tuesday: {
-			type: BOOLEAN,
-			defaultValue: true,
-		},
-		wednesday: {
-			type: BOOLEAN,
-			defaultValue: true,
-		},
-		thursday: {
-			type: BOOLEAN,
-			defaultValue: true,
-		},
-		friday: {
-			type: BOOLEAN,
-			defaultValue: true,
-		},
-		saturday: {
-			type: BOOLEAN,
-			defaultValue: false,
-		},
-		sunday: {
-			type: BOOLEAN,
-			defaultValue: false,
-		},
-	},
-	{
-		modelName: 'Day',
-		timestamps: false,
-		sequelize,
-	}
-)
-
 class Academic_data extends Model {}
 Academic_data.init(
 	{
@@ -200,36 +118,6 @@ Percentage.init(
 	}
 )
 
-class Color extends Model {} //<---
-Color.init(
-	{
-		color: {
-			type: STRING,
-			allowNull: false,
-		},
-	},
-	{
-		modelName: 'Color',
-		timestamps: false,
-		sequelize,
-	}
-)
-
-class Icon extends Model {} //<---
-Icon.init(
-	{
-		icon: {
-			type: STRING,
-			allowNull: false,
-		},
-	},
-	{
-		modelName: 'Icon',
-		timestamps: false,
-		sequelize,
-	}
-)
-
 class Subject extends Model {}
 Subject.init(
 	{
@@ -253,46 +141,6 @@ Subject.init(
 	},
 	{
 		modelName: 'Subject',
-		timestamps: false,
-		sequelize,
-	}
-)
-
-class Personalization extends Model {} //<---
-Personalization.init(
-	{
-		icon: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Icon,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-		color: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Color,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-		subject: {
-			type: INTEGER,
-			references: {
-				model: Subject,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-	},
-	{
-		modelName: 'Personalization',
 		timestamps: false,
 		sequelize,
 	}
@@ -332,38 +180,6 @@ Partial.init(
 	}
 )
 
-class Schedule extends Model {}
-Schedule.init(
-	{
-		start: {
-			type: TIME,
-			allowNull: false,
-		},
-		finish: {
-			type: TIME,
-			allowNull: false,
-		},
-		day: {
-			type: STRING,
-		},
-		subject: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Subject,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-	},
-	{
-		modelName: 'Schedule',
-		timestamps: false,
-		sequelize,
-	}
-)
-
 class Event extends Model {}
 Event.init(
 	{
@@ -378,17 +194,9 @@ Event.init(
 			type: DATE,
 			allowNull: false,
 		},
-		time: {
-			type: TIME,
-			// allowNull: false,
-		},
 		repeat: {
 			type: STRING,
 			defaultValue: 'No repetir',
-		},
-		priority: {
-			type: STRING,
-			defaultValue: 'Ninguna',
 		},
 		school: {
 			type: BOOLEAN,
@@ -399,15 +207,6 @@ Event.init(
 			allowNull: false,
 			references: {
 				model: User,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-		personalization: {
-			type: INTEGER,
-			references: {
-				model: Personalization,
 				key: 'id',
 			},
 			onUpdate: 'CASCADE',
@@ -430,18 +229,4 @@ Event.init(
 	}
 )
 
-export {
-	Notification,
-	Day,
-	User,
-	Academic_data,
-	Percentage,
-	Partial,
-	Color,
-	Icon,
-	Subject,
-	Personalization,
-	Schedule,
-	Event,
-	sequelize,
-}
+export { User, Academic_data, Percentage, Partial, Subject, Event, sequelize }
