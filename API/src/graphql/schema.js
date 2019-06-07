@@ -77,7 +77,7 @@ const schema = buildSchema(`
 		id: ID
 		name: String
 		user: ID
-		schedules: [Schedules]
+		score: String
 	}
 	type Schedules {
 		id: ID
