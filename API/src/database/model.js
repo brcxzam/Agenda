@@ -50,74 +50,6 @@ User.init(
 	}
 )
 
-class Academic_data extends Model {}
-Academic_data.init(
-	{
-		user: {
-			type: INTEGER,
-			primaryKey: true,
-			references: {
-				model: User,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-		partials: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false,
-			defaultValue: 4,
-		},
-		maximum: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false,
-			defaultValue: 100,
-		},
-		aproving: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false,
-			defaultValue: 70,
-		},
-		final_score: {
-			type: DOUBLE.UNSIGNED,
-		},
-	},
-	{
-		modelName: 'Academic_data',
-		timestamps: false,
-		sequelize,
-	}
-)
-
-class Percentage extends Model {}
-Percentage.init(
-	{
-		partial: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false,
-		},
-		percent: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false,
-		},
-		academic: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Academic_data,
-				key: 'user',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
-	},
-	{
-		modelName: 'Percentage',
-		timestamps: false,
-		sequelize,
-	}
-)
-
 class Subject extends Model {}
 Subject.init(
 	{
@@ -146,25 +78,12 @@ Subject.init(
 	}
 )
 
-class Partial extends Model {}
-Partial.init(
+class Score extends Model {}
+Score.init(
 	{
-		obtained: {
-			type: DOUBLE.UNSIGNED,
-		},
-		percent: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Percentage,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE',
-		},
 		subject: {
 			type: INTEGER,
-			allowNull: false,
+			primaryKey: true,
 			references: {
 				model: Subject,
 				key: 'id',
@@ -172,9 +91,24 @@ Partial.init(
 			onUpdate: 'CASCADE',
 			onDelete: 'CASCADE',
 		},
+		advance1: {
+			type: DOUBLE,
+		},
+		advance2: {
+			type: DOUBLE,
+		},
+		advance3: {
+			type: DOUBLE,
+		},
+		advance4: {
+			type: DOUBLE,
+		},
+		final_score: {
+			type: DOUBLE,
+		},
 	},
 	{
-		modelName: 'Partial',
+		modelName: 'Score',
 		timestamps: false,
 		sequelize,
 	}
@@ -229,4 +163,4 @@ Event.init(
 	}
 )
 
-export { User, Academic_data, Percentage, Partial, Subject, Event, sequelize }
+export { User, Subject, Score, Event, sequelize }
