@@ -1,4 +1,4 @@
-import { Model, STRING, INTEGER, DOUBLE, DATE, BOOLEAN, TIME } from 'sequelize'
+import { BOOLEAN, DATE, DOUBLE, INTEGER, Model, STRING } from 'sequelize'
 import sequelize from './connection'
 
 class User extends Model {}
@@ -93,18 +93,23 @@ Score.init(
 		},
 		advance1: {
 			type: DOUBLE,
+			defaultValue: 0,
 		},
 		advance2: {
 			type: DOUBLE,
+			defaultValue: 0,
 		},
 		advance3: {
 			type: DOUBLE,
+			defaultValue: 0,
 		},
 		advance4: {
 			type: DOUBLE,
+			defaultValue: 0,
 		},
 		final_score: {
 			type: DOUBLE,
+			defaultValue: 0,
 		},
 	},
 	{

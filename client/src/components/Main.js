@@ -63,7 +63,8 @@ function Main() {
 	const [API] = useState('http://localhost:3001/api')
 	const [token] = useState(localStorage.getItem('authToken'))
 	useEffect(() => {
-		getSubjects(API, token)
+		// getSubjects(API, token)
+		console.log(token)
 	}, [API, token])
 	const [open, setOpen] = React.useState({
 		subject: false,

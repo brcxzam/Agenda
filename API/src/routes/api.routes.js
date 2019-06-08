@@ -4,9 +4,9 @@ import { unlink } from 'fs'
 import multer from 'multer'
 import { extname, join } from 'path'
 import uuid from 'uuid/v4'
+import config from '../graphql/jwt/jwt.config'
 import root from '../graphql/root'
 import schema from '../graphql/schema'
-import config from '../graphql/jwt/jwt.config'
 import { User } from './../database/model'
 const jwt = require('express-jwt')
 const router = Router()

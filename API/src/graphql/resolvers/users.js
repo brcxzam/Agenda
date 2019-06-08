@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { Academic_data, Percentage, User } from '../../database/model'
+import { User } from '../../database/model'
 import config from '../jwt/jwt.config'
 import verify from '../jwt/verify'
 const saltRounds = 10
@@ -19,12 +19,6 @@ export default {
 		const { password } = data
 		data.password = await encrypt(password)
 		const user = await User.create(data)
-		const { id } = user
-		await Academic_data.create({ user: id })
-		await Percentage.create({ partial: 1, percent: 20, academic: id })
-		await Percentage.create({ partial: 2, percent: 20, academic: id })
-		await Percentage.create({ partial: 3, percent: 20, academic: id })
-		await Percentage.create({ partial: 4, percent: 40, academic: id })
 		const token = jwt.sign({ user: user.id }, config.secret)
 		return token
 	},

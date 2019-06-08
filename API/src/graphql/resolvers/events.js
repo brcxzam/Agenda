@@ -6,41 +6,22 @@ export default {
 	DateTime: GraphQLDateTime,
 	cEvent: async ({ data }, { request }) => {
 		const user = verify(request)
-		const { setPersonalization, subject } = data
-		let personalization
-		if (setPersonalization) {
-			personalization = await Personalization.create(setPersonalization)
-			data.personalization = personalization.id
-		}
 		data.user = user
 		const event = await Event.create(data)
-		if (personalization) {
-			event.personalization = personalization
-		}
-		if (subject) {
-			const rSubject = await Subject.findByPk(subject)
-			event.subject = rSubject
-		}
 		return event
 	},
 	events: async (_, { request }) => {
-		const id = verify(request)
+		const user = verify(request)
 		const events = await Event.findAll({
 			where: {
-				user: id,
+				user,
 			},
 		})
 		let cont = 0
 		for await (let data of events) {
 			const subject = await Subject.findByPk(data.subject)
-			const personalization = await Personalization.findByPk(
-				data.personalization
-			)
 			if (subject) {
 				events[cont++].subject = subject
-			}
-			if (personalization) {
-				events[cont++].personalization = personalization
 			}
 		}
 		return events
@@ -49,11 +30,7 @@ export default {
 		verify(request)
 		const event = await Event.findByPk(id)
 		const subject = await Subject.findByPk(event.subject)
-		const personalization = await Personalization.findByPk(
-			event.personalization
-		)
 		event.subject = subject
-		event.personalization = personalization
 		return event
 	},
 	uEvent: async ({ id, data }, { request }) => {
@@ -63,13 +40,6 @@ export default {
 				id,
 			},
 		})
-		if (data.setPersonalization) {
-			await Personalization.update(data.setPersonalization, {
-				where: {
-					id: data.setPersonalization.id,
-				},
-			})
-		}
 		return 'done'
 	},
 	dEvent: async ({ id }, { request }) => {
