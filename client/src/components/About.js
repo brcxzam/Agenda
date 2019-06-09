@@ -22,7 +22,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import HowToReg from '@material-ui/icons/HowToReg'
 import AlternateEmail from '@material-ui/icons/AlternateEmail'
 import Lock from '@material-ui/icons/Lock'
-import Presentation from './presentation'
+import Presentation from './Presentation'
+import configAPI from './../API'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -64,7 +65,7 @@ function About() {
 	const theme = useTheme()
 	const [open, setOpen] = useState(false)
 	const [value, setValue] = useState(0)
-	const [API] = React.useState('http://localhost:3001/api')
+	const [API] = useState(configAPI.API)
 	const [{ errorLogIn, messageErrorLogIn }, setErrorLogIn] = useState({
 		errorLogIn: false,
 		messageErrorLogIn: '',
@@ -156,10 +157,7 @@ function About() {
 				console.log(errors[0].message)
 			} else {
 				if (data.login !== 'false') {
-					/**
-					 * TODO: Acceso a la app
-					 */
-					localStorage.setItem('authToken', data.login)
+					localStorage.setItem(configAPI.tokenItem, data.login)
 					setRedirect(true)
 				} else {
 					setErrorLogIn({
@@ -236,10 +234,7 @@ function About() {
 						break
 				}
 			} else {
-				/**
-				 * TODO: Acceso a la app
-				 */
-				localStorage.setItem('authToken', data.cUser)
+				localStorage.setItem(configAPI.tokenItem, data.cUser)
 				setRedirect(true)
 			}
 		} catch (error) {
@@ -249,9 +244,6 @@ function About() {
 
 	return (
 		<Container maxWidth="xl">
-			{/**
-			 * TODO: Acceso a la app
-			 */}
 			{redirect && <Redirect to="/app" />}
 			<div className={classes.root}>
 				<AppBar position="static">
@@ -263,7 +255,9 @@ function About() {
 							aria-label="Icon">
 							<Avatar
 								alt="Icon"
-								src="http://localhost:3001/profile_images/default.png"
+								src={`${
+									configAPI.staticFiles
+								}/profile_images/default.png`}
 								className={classes.avatar}
 							/>
 						</IconButton>
@@ -314,7 +308,9 @@ function About() {
 										alignItems="center">
 										<Avatar
 											alt="Icon"
-											src="http://localhost:3001/profile_images/default.png"
+											src={`${
+												configAPI.staticFiles
+											}/profile_images/default.png`}
 											className={classes.bigAvatar}
 										/>
 									</Grid>

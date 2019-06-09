@@ -16,11 +16,12 @@ import {
 	Link as RouterLink,
 	Route,
 	Switch as SwitchRoute,
+	Redirect,
 } from 'react-router-dom'
 import Account from './Account'
 import Moment from 'react-moment'
-import Preferences from './Preferences'
 import Main from './Main'
+import configAPI from './../API'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -33,24 +34,25 @@ const useStyles = makeStyles(theme => ({
 	title: {
 		flexGrow: 1,
 	},
+	avatar: {
+		backgroundColor: theme.palette.secondary.main,
+	},
 }))
 
 function Home({ match }) {
 	const classes = useStyles()
 	const [open, setOpen] = useState(false)
 	const anchorRef = useRef(null)
-	const [token] = useState(localStorage.getItem('authToken'))
-	const [API] = useState('http://localhost:3001/api')
-	const [images] = useState('http://localhost:3001/profile_images/')
+	const [token] = useState(localStorage.getItem(configAPI.tokenItem))
+	const [API] = useState(configAPI.API)
+	const [images] = useState(`${configAPI.staticFiles}/profile_images/`)
 	const [{ firstName, profile_image }, setUser] = useState({
 		firstName: '',
 		profile_image: '',
 	})
-	const [color, setColor] = useState('')
 
 	useEffect(() => {
 		getUser(API, token, images)
-		setColor(generateColor)
 	}, [API, token, images])
 
 	function handleToggle() {
@@ -65,22 +67,12 @@ function Home({ match }) {
 		if (anchorRef.current && anchorRef.current.contains(event.target)) {
 			return
 		}
-
 		setOpen(false)
 	}
 
 	function handleLogOut() {
 		setOpen(false)
-		localStorage.removeItem('authToken')
-	}
-
-	function generateColor() {
-		return (
-			'#' +
-			Math.random()
-				.toString(16)
-				.substr(-6)
-		)
+		localStorage.removeItem(configAPI.tokenItem)
 	}
 
 	async function getUser(API, token, images) {
@@ -121,7 +113,9 @@ function Home({ match }) {
 							to={match.path}>
 							<Avatar
 								alt="Remy Sharp"
-								src="http://localhost:3001/profile_images/default.png"
+								src={`${
+									configAPI.staticFiles
+								}/profile_images/default.png`}
 								className={classes.avatar}
 							/>
 						</IconButton>
@@ -143,7 +137,6 @@ function Home({ match }) {
 							<Avatar
 								alt="Remy Sharp"
 								src={profile_image}
-								style={{ backgroundColor: color }}
 								className={classes.avatar}>
 								{firstName[0]}
 							</Avatar>
@@ -169,12 +162,6 @@ function Home({ match }) {
 							<Paper id="menu-list-grow">
 								<ClickAwayListener onClickAway={handleClose}>
 									<MenuList>
-										<MenuItem
-											component={RouterLink}
-											to={`${match.url}/preferences`}
-											onClick={handleClose}>
-											Preferencias
-										</MenuItem>
 										<MenuItem
 											component={RouterLink}
 											to={`${match.url}/account`}
@@ -204,20 +191,13 @@ function Home({ match }) {
 					)}
 				/>
 				<Route
-					path={`${match.path}/preferences`}
-					render={() => (
-						<Preferences
-							onChangeProfileImage={handleChangeProfileImage}
-						/>
-					)}
-				/>
-				<Route
 					exact
 					path={match.path}
 					render={() => (
 						<Main onChangeProfileImage={handleChangeProfileImage} />
 					)}
 				/>
+				<Route render={() => <Redirect to={match.path} />} />
 			</SwitchRoute>
 		</Container>
 	)

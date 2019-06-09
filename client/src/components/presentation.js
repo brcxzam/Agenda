@@ -14,37 +14,38 @@ import StarBorderIcon from '@material-ui/icons/StarBorder'
 import React from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { autoPlay } from 'react-swipeable-views-utils'
+import configAPI from './../API'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const tutorialSteps = [
 	{
 		label: 'Disponible en diferentes dispositivos ',
-		imgPath: 'http://localhost:3001/img/sistema.png',
+		imgPath: `${configAPI.staticFiles}/img/sistema.png`,
 		content:
 			'Acceda desde su dispositivo móvil, portátil o computadora de escritorio.',
 	},
 	{
 		label: 'Establezca su horario',
-		imgPath: 'http://localhost:3001/img/img2.jpg',
+		imgPath: `${configAPI.staticFiles}/img/img2.jpg`,
 		content:
 			'OwlTime ayuda a las personas ocupadas como usted a concentrarse en lo que es importante',
 	},
 	{
 		label: 'Ingrese sus actividades tanto academicas como personales',
-		imgPath: 'http://localhost:3001/img/img5.jpg',
+		imgPath: `${configAPI.staticFiles}/img/img5.jpg`,
 		content:
 			'No deje que sus tareas u actividades lo abrumen, registrelas en una aplicación fácil de usar',
 	},
 	{
 		label: 'Registre sus materias',
-		imgPath: 'http://localhost:3001/img/img4.jpg',
+		imgPath: `${configAPI.staticFiles}/img/img4.jpg`,
 		content:
 			'Tenga un mayor control de sus actividades escolares, ademas puedes personalizar cada una.',
 	},
 	{
 		label: 'Ingrese sus calificaciones',
-		imgPath: 'http://localhost:3001/img/img3.jpg',
+		imgPath: `${configAPI.staticFiles}/img/img3.jpg`,
 		content:
 			'Nunca mas tendra que preocuparse por obtener sus calificaciones finales por que owlTime lo hace por usted',
 	},
@@ -52,32 +53,32 @@ const tutorialSteps = [
 
 const tileData = [
 	{
-		img: 'http://localhost:3001/img/principal.png',
+		img: `${configAPI.staticFiles}/img/principal.png`,
 		title: 'Pagina Principal',
 		featured: true,
 	},
 	{
-		img: 'http://localhost:3001/img/Asignaturas2.png',
+		img: `${configAPI.staticFiles}/img/Asignaturas2.png`,
 		title: 'Mostrar asignaturas',
 		featured: false,
 	},
 	{
-		img: 'http://localhost:3001/img/calificacion.png',
+		img: `${configAPI.staticFiles}/img/calificacion.png`,
 		title: 'Ingresar calificaciones',
 		featured: false,
 	},
 	{
-		img: 'http://localhost:3001/img/horario2.png',
+		img: `${configAPI.staticFiles}/img/horario2.png`,
 		title: 'Establecer su horario',
 		featured: true,
 	},
 	{
-		img: 'http://localhost:3001/img/Mesa de trabajo – 1.png',
+		img: `${configAPI.staticFiles}/img/Mesa de trabajo – 1.png`,
 		title: 'Asignar un icono',
 		featured: false,
 	},
 	{
-		img: 'http://localhost:3001/img/Mesa de trabajo – 3.png',
+		img: `${configAPI.staticFiles}/img/Mesa de trabajo – 3.png`,
 		title: 'Establecer un color',
 		featured: false,
 	},
@@ -89,7 +90,7 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor: theme.palette.grey[800],
 		color: theme.palette.common.white,
 		marginBottom: theme.spacing(4),
-		backgroundImage: 'url(http://localhost:3001/img/work.jpg)',
+		backgroundImage: `url(${configAPI.staticFiles}/img/work.jpg)`,
 		backgroundSize: 'cover',
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: 'center',
@@ -243,7 +244,9 @@ function SwipeableTextMobileStepper() {
 							</Typography>
 							<Avatar
 								alt="Icon"
-								src="http://localhost:3001/profile_images/default.png"
+								src={`${
+									configAPI.staticFiles
+								}/profile_images/default.png`}
 								className={classes.bigAvatar}
 							/>
 						</Grid>
@@ -253,7 +256,9 @@ function SwipeableTextMobileStepper() {
 							<CardMedia
 								component="img"
 								height="200"
-								image="http://localhost:3001/img/evento2.jpg"
+								image={`${
+									configAPI.staticFiles
+								}/img/evento2.jpg`}
 								title="Crear evento"
 							/>
 							<CardContent>
@@ -275,7 +280,7 @@ function SwipeableTextMobileStepper() {
 							<CardMedia
 								component="img"
 								height="200"
-								image="http://localhost:3001/img/work.jpg"
+								image={`${configAPI.staticFiles}/img/work.jpg`}
 								title="Datos academicos"
 							/>
 							<CardContent>
@@ -298,7 +303,9 @@ function SwipeableTextMobileStepper() {
 							<CardMedia
 								component="img"
 								height="200"
-								image="http://localhost:3001/img/evento1.jpg"
+								image={`${
+									configAPI.staticFiles
+								}/img/evento1.jpg`}
 								title="Preferenciass"
 							/>
 							<CardContent>

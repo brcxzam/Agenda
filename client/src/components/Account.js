@@ -1,18 +1,20 @@
-import green from '@material-ui/core/colors/green'
-import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import green from '@material-ui/core/colors/green'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import clsx from 'clsx'
-import React, { useEffect, useState } from 'react'
-import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Snackbar from '@material-ui/core/Snackbar'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
 import AccountCircle from '@material-ui/icons/AccountCircle'
-import HowToReg from '@material-ui/icons/HowToReg'
 import AlternateEmail from '@material-ui/icons/AlternateEmail'
+import CloseIcon from '@material-ui/icons/Close'
+import HowToReg from '@material-ui/icons/HowToReg'
+import React, { useEffect, useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import configAPI from './../API'
 
 const useStyles = makeStyles(theme => ({
 	textField: {
@@ -66,15 +68,15 @@ function Account(props) {
 	// Estilos del componente
 	const classes = useStyles()
 	// Estados
-	const [API] = useState('http://localhost:3001/api')
-	const [images] = useState('http://localhost:3001/profile_images/')
+	const [API] = useState(configAPI.API)
+	const [images] = useState(`${configAPI.staticFiles}/profile_images/`)
 	const [{ firstName, lastName, email, profile_image }, setUser] = useState({
 		firstName: '',
 		lastName: '',
 		email: '',
 		profile_image: '',
 	})
-	const [token] = useState(localStorage.getItem('authToken'))
+	const [token] = useState(localStorage.getItem(configAPI.tokenItem))
 	const [
 		{ errorFirstName, messageErrorFirstName },
 		setErrorFirstName,
@@ -93,18 +95,19 @@ function Account(props) {
 		errorEmail: false,
 		messageErrorEmail: '',
 	})
-	const [loading, setLoading] = useState(false)
-	const [success, setSuccess] = useState(false)
-	const [successUpdate, setSuccessUpdate] = useState('')
+	const [open, setOpen] = React.useState(false)
 	// Hooks
-	const buttonClassname = clsx({
-		[classes.buttonSuccess]: success,
-	})
-
 	useEffect(() => {
 		getUser(API, token, images)
 	}, [API, token, images])
 	// Handles
+	function handleClose(event, reason) {
+		if (reason === 'clickaway') {
+			return
+		}
+
+		setOpen(false)
+	}
 	async function getUser(API, token, images) {
 		try {
 			const query = JSON.stringify({
@@ -131,8 +134,6 @@ function Account(props) {
 	}
 
 	async function handleUpdateUser(event) {
-		setSuccess(false)
-		setLoading(true)
 		event.preventDefault()
 		const formData = new FormData(event.target)
 		const data = Object.fromEntries(formData)
@@ -185,21 +186,20 @@ function Account(props) {
 						break
 
 					default:
-						console.log(errors[0].message)
+						console.error(errors[0].message)
 						break
 				}
 			} else {
 				/**
 				 * TODO: Mensaje de edición exitosa
 				 */
-				if (data.uUser === 'done')
-					setSuccessUpdate('Cambios realizados')
+				if (data.uUser === 'done') {
+					setOpen(true)
+				}
 			}
 		} catch (error) {
 			console.error(error)
 		}
-		setSuccess(true)
-		setLoading(false)
 	}
 
 	function handleErrorFirstName(event) {
@@ -210,8 +210,6 @@ function Account(props) {
 			email,
 			profile_image,
 		})
-		setSuccess(false)
-		setSuccessUpdate('')
 	}
 
 	function handleErrorLastName(event) {
@@ -222,8 +220,6 @@ function Account(props) {
 			email,
 			profile_image,
 		})
-		setSuccess(false)
-		setSuccessUpdate('')
 	}
 
 	function handleErrorEmail(event) {
@@ -234,8 +230,6 @@ function Account(props) {
 			email: event.target.value,
 			profile_image,
 		})
-		setSuccess(false)
-		setSuccessUpdate('')
 	}
 
 	async function handleProfileImage(event) {
@@ -265,8 +259,6 @@ function Account(props) {
 	}
 
 	async function handleDeleteImage() {
-		setSuccess(false)
-		setLoading(true)
 		try {
 			const res = await fetch('http://localhost:3001/api/upload/delete', {
 				method: 'POST',
@@ -286,8 +278,6 @@ function Account(props) {
 		} catch (error) {
 			console.error(error)
 		}
-		setSuccess(true)
-		setLoading(false)
 	}
 
 	return (
@@ -316,17 +306,9 @@ function Account(props) {
 						<Button
 							variant="outlined"
 							color="primary"
-							className={buttonClassname}
-							disabled={loading}
 							onClick={handleDeleteImage}>
 							ELIMINAR
 						</Button>
-						{loading && (
-							<CircularProgress
-								size={24}
-								className={classes.buttonProgress}
-							/>
-						)}
 					</div>
 				</div>
 			</Grid>
@@ -403,31 +385,47 @@ function Account(props) {
 					justify="flex-end"
 					alignItems="center">
 					<div className={classes.root}>
-						<Typography
-							variant="h6"
-							align="center"
-							color="secondary">
-							{successUpdate}
-						</Typography>
 						<div className={classes.wrapper}>
 							<Button
 								type="submit"
+								color="primary"
+								component={RouterLink}
+								to="/app">
+								Cancelar
+							</Button>
+							<Button
+								type="submit"
 								variant="contained"
-								color="secondary"
-								className={buttonClassname}
-								disabled={loading}>
+								color="secondary">
 								Guardar
 							</Button>
-							{loading && (
-								<CircularProgress
-									size={24}
-									className={classes.buttonProgress}
-								/>
-							)}
 						</div>
 					</div>
 				</Grid>
 			</form>
+			<Snackbar
+				anchorOrigin={{
+					vertical: 'bottom',
+					horizontal: 'left',
+				}}
+				open={open}
+				autoHideDuration={6000}
+				onClose={handleClose}
+				ContentProps={{
+					'aria-describedby': 'message-id',
+				}}
+				message={<span id="message-id">Cambios realizados</span>}
+				action={[
+					<IconButton
+						key="close"
+						aria-label="Close"
+						color="inherit"
+						className={classes.close}
+						onClick={handleClose}>
+						<CloseIcon />
+					</IconButton>,
+				]}
+			/>
 		</Container>
 	)
 }

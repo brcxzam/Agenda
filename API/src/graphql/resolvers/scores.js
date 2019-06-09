@@ -1,4 +1,4 @@
-import { Score } from './../../database/model'
+import { Score, Subject } from './../../database/model'
 import verify from '../jwt/verify'
 
 export default {
@@ -10,5 +10,20 @@ export default {
 			},
 		})
 		return 'done'
+	},
+	scores: async (_, { request }) => {
+		const user = verify(request)
+		const subjects = await Subject.findAll({
+			where: {
+				user,
+			},
+		})
+		let conn = 0
+		let scores = []
+		for await (let subject of subjects) {
+			const score = await Score.findByPk(subject.id)
+			scores[conn++] = score
+		}
+		return scores
 	},
 }

@@ -18,6 +18,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import MenuItem from '@material-ui/core/MenuItem'
+import configAPI from './../API'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -39,37 +40,38 @@ const useStyles = makeStyles(theme => ({
  * TODO: Modificar el arreglo para calificaciónes por parcial
  */
 
-const currencies = [
+const advances = [
 	{
-		value: 'USD',
-		label: '$',
+		value: 'advance1',
+		label: 'Primer parcial: 20%',
 	},
 	{
-		value: 'EUR',
-		label: '€',
+		value: 'advance2',
+		label: 'Segundo parcial: 20%',
 	},
 	{
-		value: 'BTC',
-		label: '฿',
+		value: 'advance3',
+		label: 'Tercer parcial: 20%',
 	},
 	{
-		value: 'JPY',
-		label: '¥',
+		value: 'advance4',
+		label: 'Cuarto parcial: 40%',
 	},
 ]
 
 function Main() {
 	const classes = useStyles()
-	const [API] = useState('http://localhost:3001/api')
-	const [token] = useState(localStorage.getItem('authToken'))
+	const [API] = useState(configAPI.API)
+	const [token] = useState(localStorage.getItem(configAPI.tokenItem))
 	useEffect(() => {
-		// getSubjects(API, token)
-		console.log(token)
+		getSubjects(API, token)
+		getScores(API, token)
 	}, [API, token])
 	const [open, setOpen] = React.useState({
 		subject: false,
 		snackbar: false,
 		partials: false,
+		event: false,
 	})
 	/**
 	 * Subjects
@@ -101,7 +103,7 @@ function Main() {
 	async function getSubjects(API, token) {
 		try {
 			const query = JSON.stringify({
-				query: '{ subjects { id name score } }',
+				query: '{ subjects { id name final_score } }',
 			})
 			const res = await fetch(API, {
 				method: 'POST',
@@ -174,11 +176,11 @@ function Main() {
 			})
 			const response = await res.json()
 			const { dSubject } = response.data
-			if (dSubject === 'Done') {
+			if (dSubject === 'done') {
 				getSubjects(API, token)
 				setOpen({ ...open, snackbar: false })
 			} else {
-				console.log(response)
+				console.error(response)
 			}
 		} catch (error) {
 			console.error(error)
@@ -188,7 +190,7 @@ function Main() {
 		try {
 			const query = JSON.stringify({
 				query:
-					'mutation($data: iSubjects) { cSubject(data: $data) {id name score} }',
+					'mutation($data: iSubjects) { cSubject(data: $data) {id name final_score} }',
 				variables: {
 					data: {
 						name: nameSubject,
@@ -233,11 +235,11 @@ function Main() {
 			})
 			const response = await res.json()
 			const { uSubject } = response.data
-			if (uSubject === 'Done') {
+			if (uSubject === 'done') {
 				getSubjects(API, token)
 				setOpen({ ...open, subject: false })
 			} else {
-				console.log(response)
+				console.error(response)
 			}
 		} catch (error) {
 			console.error(error)
@@ -250,28 +252,233 @@ function Main() {
 			updateSubject()
 		}
 	}
+	/**
+	 * Scores
+	 */
+	const [scores, setScores] = useState([])
+	const [values, setValues] = useState({
+		advance: 'advance1',
+		score: 0,
+		index: 0,
+		update: false,
+		subject: 0,
+	})
+	const [errorScore, setErrorScore] = useState({
+		error: false,
+		text: '',
+	})
+	useEffect(() => {
+		if (subjects) {
+			const found = scores.find(function(element) {
+				return element.subject === subjects[values.index].id
+			})
+			if (found) {
+				if (values.advance === 'advance1' && !values.update) {
+					setValues({ ...values, score: found.advance1 })
+				} else if (values.advance === 'advance2' && !values.update) {
+					setValues({ ...values, score: found.advance2 })
+				} else if (values.advance === 'advance3' && !values.update) {
+					setValues({ ...values, score: found.advance3 })
+				} else if (values.advance === 'advance4' && !values.update) {
+					setValues({ ...values, score: found.advance4 })
+				}
+			}
+		}
+	}, [values, scores, subjects])
+	useEffect(() => {
+		setErrorScore({
+			error: false,
+			text: '',
+		})
+		if (values.score > 40 && values.advance === 'advance4') {
+			setErrorScore({
+				error: true,
+				text: 'La calificación debe ser porcentual',
+			})
+		} else if (values.score > 20 && values.advance !== 'advance4') {
+			setErrorScore({
+				error: true,
+				text: 'La calificación debe ser porcentual',
+			})
+		}
+	}, [values])
+	async function getScores(API, token) {
+		try {
+			const query = JSON.stringify({
+				query:
+					'{ scores { subject advance1 advance2 advance3 advance4 final_score } }',
+			})
+			const res = await fetch(API, {
+				method: 'POST',
+				body: query,
+				headers: {
+					'Content-Type': 'application/json',
+					authorization: token,
+				},
+			})
+			const response = await res.json()
+			const { scores } = response.data
+			setScores(scores)
+		} catch (error) {
+			console.error(error)
+		}
+	}
 	function handleClosePartials() {
 		setOpen({ ...open, partials: false })
 	}
-	function handleOpenPartials() {
+	function handleOpenPartials(index) {
+		setValues({ ...values, index, subject: subjects[index].id })
 		setOpen({ ...open, partials: true })
 	}
-	/**
-	 * TODO: Calificaciones por parcial
-	 */
-	const [values, setValues] = React.useState({
-		name: 'Cat in the Hat',
-		age: '',
-		multiline: 'Controlled',
-		currency: 'EUR',
-	})
-
 	const handleChange = name => event => {
-		setValues({ ...values, [name]: event.target.value })
+		setValues({ ...values, [name]: event.target.value, update: false })
+	}
+	async function handleUpdatePartials() {
+		if (!errorScore.error) {
+			try {
+				let data = {}
+				if (values.advance === 'advance1') {
+					data = { advance1: parseFloat(values.score) }
+				} else if (values.advance === 'advance2') {
+					data = { advance2: parseFloat(values.score) }
+				} else if (values.advance === 'advance3') {
+					data = { advance3: parseFloat(values.score) }
+				} else if (values.advance === 'advance4') {
+					data = { advance4: parseFloat(values.score) }
+				}
+				const query = JSON.stringify({
+					query:
+						'mutation($id: ID, $data: iScores){ uScore(id: $id, data: $data) }',
+					variables: {
+						data,
+						id: values.subject,
+					},
+				})
+				const res = await fetch(API, {
+					method: 'POST',
+					body: query,
+					headers: {
+						'Content-Type': 'application/json',
+						authorization: token,
+					},
+				})
+				const response = await res.json()
+				const { uScore } = response.data
+				if (uScore === 'done') {
+					getSubjects(API, token)
+					getScores(API, token)
+					setOpen({ ...open, partials: false })
+				} else {
+					console.error(response)
+				}
+			} catch (error) {
+				console.error(error)
+			}
+		}
+	}
+	function handleScoreSubject(event) {
+		setValues({ ...values, score: event.target.value, update: true })
+	}
+	/**
+	 * Events
+	 * TODO: Hacer todo
+	 */
+	const [events, setEvents] = useState([])
+	const [actionEvent, setActionEvent] = useState({
+		action: 'create',
+		title: 'Nuevo evento',
+		id: 0,
+	})
+	function handleCloseEvent() {
+		setOpen({ ...open, event: false })
+	}
+	function handleActionEvent() {
+		if (actionSubject.action === 'create' && !errorSubject.error) {
+			createSubject()
+		} else if (actionSubject.action === 'update' && !errorSubject.error) {
+			updateSubject()
+		}
 	}
 	return (
 		<Container fixed className={classes.root}>
 			<Grid container spacing={10}>
+				<Grid item xs={6}>
+					<Paper elevation={10} className={classes.paper}>
+						<Grid
+							container
+							direction="row"
+							justify="space-between"
+							alignItems="center">
+							<Typography variant="h6">Eventos</Typography>
+							<Fab
+								onClick={handleCreateSubject}
+								size="small"
+								color="secondary"
+								aria-label="Add">
+								<Add />
+							</Fab>
+						</Grid>
+					</Paper>
+					{events.length ? (
+						events.map((event, index) => (
+							<Paper
+								key={event.id}
+								className={classes.paper}
+								square>
+								<Grid container alignItems="center">
+									<Grid
+										onClick={() => {
+											handleDeleteSubject(index)
+										}}
+										item
+										xs={2}
+										className={classes.fakeButton}
+										style={{ textAlign: 'center' }}>
+										<Icon fontSize="inherit" color="error">
+											<DeleteForever />
+										</Icon>
+									</Grid>
+									<Grid
+										onClick={() => {
+											handleUpdateSubject(index)
+										}}
+										item
+										xs={8}
+										className={classes.fakeButton}>
+										<Typography
+											variant="subtitle1"
+											align="left">
+											{event.name}
+										</Typography>
+									</Grid>
+									<Grid
+										onClick={() => {
+											handleOpenPartials(index)
+										}}
+										item
+										xs={2}
+										className={classes.fakeButton}>
+										<Typography
+											variant="subtitle2"
+											align="center"
+											color="textSecondary">
+											{event.final_score}/100
+										</Typography>
+									</Grid>
+								</Grid>
+							</Paper>
+						))
+					) : (
+						<Paper className={classes.paper} square>
+							<Typography
+								variant="subtitle1"
+								align="center"
+								color="textSecondary">
+								Aún no has registrado eventos
+							</Typography>
+						</Paper>
+					)}
+				</Grid>
 				<Grid item xs={6}>
 					<Paper elevation={10} className={classes.paper}>
 						<Grid
@@ -322,7 +529,9 @@ function Main() {
 										</Typography>
 									</Grid>
 									<Grid
-										onClick={handleOpenPartials}
+										onClick={() => {
+											handleOpenPartials(index)
+										}}
 										item
 										xs={2}
 										className={classes.fakeButton}>
@@ -330,7 +539,7 @@ function Main() {
 											variant="subtitle2"
 											align="center"
 											color="textSecondary">
-											{subject.score}
+											{subject.final_score}/100
 										</Typography>
 									</Grid>
 								</Grid>
@@ -425,17 +634,17 @@ function Main() {
 						select
 						label="Select"
 						className={classes.textField}
-						value={values.currency}
-						onChange={handleChange('currency')}
+						value={values.advance}
+						onChange={handleChange('advance')}
 						SelectProps={{
 							MenuProps: {
 								className: classes.menu,
 							},
 						}}
-						helperText="Please select your currency"
+						helperText="Selecciona el parcial"
 						margin="normal"
 						variant="outlined">
-						{currencies.map(option => (
+						{advances.map(option => (
 							<MenuItem key={option.value} value={option.value}>
 								{option.label}
 							</MenuItem>
@@ -448,6 +657,35 @@ function Main() {
 						type="text"
 						variant="outlined"
 						fullWidth
+						value={values.score}
+						onChange={handleScoreSubject}
+						error={errorScore.error}
+						helperText={errorScore.text}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClosePartials} color="primary">
+						Cancel
+					</Button>
+					<Button onClick={handleUpdatePartials} color="primary">
+						Aceptar
+					</Button>
+				</DialogActions>
+			</Dialog>
+			<Dialog
+				open={open.event}
+				onClose={handleCloseEvent}
+				aria-labelledby="cuSubject">
+				<DialogTitle id="cuSubject">{actionEvent.title}</DialogTitle>
+				<DialogContent>
+					<TextField
+						autoFocus
+						margin="dense"
+						id="name"
+						label="Nombre"
+						type="text"
+						variant="outlined"
+						fullWidth
 						value={nameSubject}
 						onChange={handleNameSubject}
 						error={errorSubject.error}
@@ -455,10 +693,10 @@ function Main() {
 					/>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClosePartials} color="primary">
+					<Button onClick={handleCloseEvent} color="primary">
 						Cancel
 					</Button>
-					<Button onClick={handleClosePartials} color="primary">
+					<Button onClick={handleActionEvent} color="primary">
 						Aceptar
 					</Button>
 				</DialogActions>

@@ -5,6 +5,7 @@ const schema = buildSchema(`
 		user: Users
 		subjects: [Subjects]
 		subject(id: ID): Subjects
+		scores: [Scores]
 		events: [Events]
 		event(id: ID): Events
 	}
@@ -34,6 +35,14 @@ const schema = buildSchema(`
 		id: ID
 		name: String
 		user: ID
+		final_score: Float
+	}
+	type Scores {
+		subject: ID
+		advance1: Float
+		advance2: Float
+		advance3: Float
+		advance4: Float
 		final_score: Float
 	}
 	scalar DateTime
