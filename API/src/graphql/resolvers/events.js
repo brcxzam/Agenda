@@ -16,13 +16,15 @@ export default {
 			where: {
 				user,
 			},
+			order: [['date', 'ASC']],
 		})
 		let cont = 0
 		for await (let data of events) {
 			const subject = await Subject.findByPk(data.subject)
 			if (subject) {
-				events[cont++].subject = subject
+				events[cont].subject = subject
 			}
+			cont++
 		}
 		return events
 	},

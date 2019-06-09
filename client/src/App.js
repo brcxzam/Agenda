@@ -1,12 +1,15 @@
+import { ThemeProvider } from '@material-ui/styles'
+import dayjs from 'dayjs'
+import 'dayjs/locale/es'
 import React from 'react'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import About from './components/About'
 import Home from './components/Home'
 import { PrivateRoute } from './privateRoute'
 import { PublicRoute } from './publicRoute'
-
 import theme from './theme/theme'
-import { ThemeProvider } from '@material-ui/styles'
+
+dayjs.locale('es')
 
 function App() {
 	return (

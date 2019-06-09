@@ -52,7 +52,7 @@ const schema = buildSchema(`
 		date: DateTime
 		repeat: String
 		school: String
-		subject: ID
+		subject: Subjects
 	}
 	
 	input iLogin {

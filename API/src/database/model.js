@@ -135,7 +135,7 @@ Event.init(
 		},
 		repeat: {
 			type: STRING,
-			defaultValue: 'No repetir',
+			defaultValue: 'no_repeat',
 		},
 		school: {
 			type: BOOLEAN,

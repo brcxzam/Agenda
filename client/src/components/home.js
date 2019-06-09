@@ -1,7 +1,7 @@
-import Avatar from '@material-ui/core/Avatar'
-import Container from '@material-ui/core/Container'
 import AppBar from '@material-ui/core/AppBar'
+import Avatar from '@material-ui/core/Avatar'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Container from '@material-ui/core/Container'
 import Grow from '@material-ui/core/Grow'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -11,17 +11,17 @@ import Popper from '@material-ui/core/Popper'
 import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import React, { useState, useRef, useEffect } from 'react'
+import dayjs from 'dayjs'
+import React, { useEffect, useRef, useState } from 'react'
 import {
 	Link as RouterLink,
+	Redirect,
 	Route,
 	Switch as SwitchRoute,
-	Redirect,
 } from 'react-router-dom'
-import Account from './Account'
-import Moment from 'react-moment'
-import Main from './Main'
 import configAPI from './../API'
+import Account from './Account'
+import Main from './Main'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -50,6 +50,21 @@ function Home({ match }) {
 		firstName: '',
 		profile_image: '',
 	})
+	const [date, setDate] = useState(
+		dayjs().format('dddd, MMMM D, YYYY h:mm:ss A')
+	)
+	useEffect(() => {
+		const timerID = setInterval(() => {
+			tick()
+		}, 1000)
+		return () => {
+			clearInterval(timerID)
+		}
+	})
+
+	function tick() {
+		setDate(dayjs().format('dddd, MMMM D, YYYY h:mm:ss A'))
+	}
 
 	useEffect(() => {
 		getUser(API, token, images)
@@ -123,7 +138,7 @@ function Home({ match }) {
 							variant="h6"
 							className={classes.title}
 							align="center">
-							<Moment local format="MMMM YYYY, D" />
+							{date}
 						</Typography>
 						<IconButton
 							edge="start"

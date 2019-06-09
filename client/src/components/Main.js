@@ -12,13 +12,19 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Add from '@material-ui/icons/Add'
-import DeleteForever from '@material-ui/icons/DeleteForever'
 import React, { useEffect, useState } from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import MenuItem from '@material-ui/core/MenuItem'
 import configAPI from './../API'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DayjsUtils from '@date-io/dayjs'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
+import dayjs from 'dayjs'
+import Today from '@material-ui/icons/Today'
+import Clear from '@material-ui/icons/Clear'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -66,12 +72,14 @@ function Main() {
 	useEffect(() => {
 		getSubjects(API, token)
 		getScores(API, token)
+		getEvents(API, token)
 	}, [API, token])
 	const [open, setOpen] = React.useState({
 		subject: false,
 		snackbar: false,
 		partials: false,
 		event: false,
+		snackbarEvent: false,
 	})
 	/**
 	 * Subjects
@@ -155,7 +163,6 @@ function Main() {
 		if (reason === 'clickaway') {
 			return
 		}
-
 		setOpen({ ...open, snackbar: false })
 	}
 	async function deleteSubject() {
@@ -269,20 +276,31 @@ function Main() {
 	})
 	useEffect(() => {
 		if (subjects) {
-			const found = scores.find(function(element) {
-				return element.subject === subjects[values.index].id
-			})
-			if (found) {
-				if (values.advance === 'advance1' && !values.update) {
-					setValues({ ...values, score: found.advance1 })
-				} else if (values.advance === 'advance2' && !values.update) {
-					setValues({ ...values, score: found.advance2 })
-				} else if (values.advance === 'advance3' && !values.update) {
-					setValues({ ...values, score: found.advance3 })
-				} else if (values.advance === 'advance4' && !values.update) {
-					setValues({ ...values, score: found.advance4 })
+			try {
+				const found = scores.find(function(element) {
+					return element.subject === subjects[values.index].id
+				})
+				if (found) {
+					if (values.advance === 'advance1' && !values.update) {
+						setValues({ ...values, score: found.advance1 })
+					} else if (
+						values.advance === 'advance2' &&
+						!values.update
+					) {
+						setValues({ ...values, score: found.advance2 })
+					} else if (
+						values.advance === 'advance3' &&
+						!values.update
+					) {
+						setValues({ ...values, score: found.advance3 })
+					} else if (
+						values.advance === 'advance4' &&
+						!values.update
+					) {
+						setValues({ ...values, score: found.advance4 })
+					}
 				}
-			}
+			} catch {}
 		}
 	}, [values, scores, subjects])
 	useEffect(() => {
@@ -381,7 +399,7 @@ function Main() {
 	}
 	/**
 	 * Events
-	 * TODO: Hacer todo
+	 * TODO: Hacer UD
 	 */
 	const [events, setEvents] = useState([])
 	const [actionEvent, setActionEvent] = useState({
@@ -389,209 +407,652 @@ function Main() {
 		title: 'Nuevo evento',
 		id: 0,
 	})
+	const [selectedDate, handleDateChange] = useState()
+	const [event, setEvent] = useState({
+		title: '',
+		date: '',
+		school: false,
+		subject: 0,
+	})
+	const [errorTitle, setErrorTitle] = useState({
+		error: false,
+		text: '',
+	})
+	const [errorDate, setErrorDate] = useState({
+		error: false,
+		text: '',
+	})
+	const [errorSubjectE, setErrorSubjectE] = useState({
+		error: false,
+		text: '',
+	})
+	useEffect(() => {
+		setEvent({
+			...event,
+			date: dayjs(selectedDate).format('YYYY-MM-DD HH:mm:ss'),
+		})
+	}, [selectedDate, event])
+	useEffect(() => {
+		setErrorTitle({
+			error: false,
+			text: '',
+		})
+		if (!event.title) {
+			setErrorTitle({
+				error: true,
+				text: 'Titulo invalido',
+			})
+		}
+	}, [event.title])
+	useEffect(() => {
+		setErrorDate({
+			error: false,
+			text: '',
+		})
+		if (!selectedDate) {
+			setErrorDate({
+				error: true,
+				text: 'Fecha y Hora invalidas',
+			})
+		}
+	}, [selectedDate])
+	useEffect(() => {
+		setErrorSubjectE({
+			error: false,
+			text: '',
+		})
+		if (event.school && event.subject === 0) {
+			setErrorSubjectE({
+				error: true,
+				text: 'Selecciona la asignatura',
+			})
+		}
+	}, [event.school, event.subject])
+	async function getEvents(API, token) {
+		try {
+			const query = JSON.stringify({
+				query:
+					'{ events{ id title date repeat school subject{id name} } }',
+			})
+			const res = await fetch(API, {
+				method: 'POST',
+				body: query,
+				headers: {
+					'Content-Type': 'application/json',
+					authorization: token,
+				},
+			})
+			const response = await res.json()
+			const { events } = response.data
+			setEvents(events)
+		} catch (error) {
+			console.error(error)
+		}
+	}
 	function handleCloseEvent() {
 		setOpen({ ...open, event: false })
 	}
 	function handleActionEvent() {
-		if (actionSubject.action === 'create' && !errorSubject.error) {
-			createSubject()
-		} else if (actionSubject.action === 'update' && !errorSubject.error) {
-			updateSubject()
+		if (
+			actionEvent.action === 'create' &&
+			!errorTitle.error &&
+			!errorDate.error &&
+			!errorSubjectE.error
+		) {
+			createEvent()
+		} else if (
+			actionEvent.action === 'update' &&
+			!errorTitle.error &&
+			!errorDate.error &&
+			!errorSubjectE.error
+		) {
+			updateEvent()
+		}
+	}
+	async function createEvent() {
+		try {
+			const eventD = Object.assign({}, event)
+			if (!eventD.school) {
+				delete eventD.school
+				delete eventD.subject
+			} else {
+				eventD.school = 'true'
+			}
+			const query = JSON.stringify({
+				query: 'mutation($data: iEvents){ cEvent(data: $data){ id } }',
+				variables: {
+					data: eventD,
+				},
+			})
+			const res = await fetch(API, {
+				method: 'POST',
+				body: query,
+				headers: {
+					'Content-Type': 'application/json',
+					authorization: token,
+				},
+			})
+			const response = await res.json()
+			const { cEvent } = response.data
+			if (cEvent) {
+				getEvents(API, token)
+				setOpen({ ...open, event: false })
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
+	/**
+	 * TODO: Update Event
+	 */
+	async function updateEvent() {
+		try {
+			const eventD = Object.assign({}, event)
+			if (!eventD.school) {
+				delete eventD.school
+				delete eventD.subject
+			} else {
+				eventD.school = 'true'
+			}
+			const query = JSON.stringify({
+				query:
+					'mutation($id: ID, $data: iEvents){ uEvent(id: $id, data: $data) }',
+				variables: {
+					id: actionEvent.id,
+					data: eventD,
+				},
+			})
+			const res = await fetch(API, {
+				method: 'POST',
+				body: query,
+				headers: {
+					'Content-Type': 'application/json',
+					authorization: token,
+				},
+			})
+			const response = await res.json()
+			const { uEvent } = response.data
+			if (uEvent === 'done') {
+				getEvents(API, token)
+				setOpen({ ...open, event: false })
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
+	function handleCreateEvent() {
+		setActionEvent({
+			action: 'create',
+			title: 'Nuevo Evento',
+			id: 0,
+		})
+		setOpen({ ...open, event: true })
+	}
+	function handleUpdateEvent(index) {
+		setActionEvent({
+			action: 'update',
+			title: 'Editar Evento',
+			id: events[index].id,
+		})
+		const school = events[index].school === 'true'
+		console.log(events[index].date)
+		console.log(
+			dayjs(events[index].date).format('dddd, MMMM D, YYYY h:mm A')
+		)
+
+		let subject = 0
+		if (events[index].subject) {
+			subject = events[index].subject.id
+		}
+		setEvent({
+			title: events[index].title,
+			date: '',
+			school,
+			subject,
+		})
+		handleDateChange(dayjs(events[index].date))
+		setOpen({ ...open, event: true })
+	}
+	const handleChangeEvent = name => e => {
+		if (name === 'school') {
+			if (e.target.checked) {
+				setEvent({ ...event, [name]: e.target.checked })
+			} else {
+				setEvent({ ...event, [name]: e.target.checked, subject: 0 })
+			}
+		} else {
+			setEvent({ ...event, [name]: e.target.value })
+		}
+	}
+	function handleDeleteEvent(index) {
+		setActionEvent({
+			action: 'delete',
+			title: events[index].title,
+			id: events[index].id,
+		})
+		setOpen({ ...open, snackbarEvent: true })
+	}
+	async function deleteEvent() {
+		try {
+			const query = JSON.stringify({
+				query: 'mutation($id: ID){ dEvent(id: $id) }',
+				variables: {
+					id: actionEvent.id,
+				},
+			})
+			const res = await fetch(API, {
+				method: 'POST',
+				body: query,
+				headers: {
+					'Content-Type': 'application/json',
+					authorization: token,
+				},
+			})
+			const response = await res.json()
+			const { dEvent } = response.data
+			if (dEvent === 'done') {
+				getEvents(API, token)
+				setOpen({ ...open, snackbarEvent: false })
+			} else {
+				console.error(response)
+			}
+		} catch (error) {
+			console.error(error)
 		}
 	}
 	return (
-		<Container fixed className={classes.root}>
-			<Grid container spacing={10}>
-				<Grid item xs={6}>
-					<Paper elevation={10} className={classes.paper}>
-						<Grid
-							container
-							direction="row"
-							justify="space-between"
-							alignItems="center">
-							<Typography variant="h6">Eventos</Typography>
-							<Fab
-								onClick={handleCreateSubject}
-								size="small"
-								color="secondary"
-								aria-label="Add">
-								<Add />
-							</Fab>
-						</Grid>
-					</Paper>
-					{events.length ? (
-						events.map((event, index) => (
-							<Paper
-								key={event.id}
-								className={classes.paper}
-								square>
-								<Grid container alignItems="center">
-									<Grid
-										onClick={() => {
-											handleDeleteSubject(index)
-										}}
-										item
-										xs={2}
-										className={classes.fakeButton}
-										style={{ textAlign: 'center' }}>
-										<Icon fontSize="inherit" color="error">
-											<DeleteForever />
-										</Icon>
-									</Grid>
-									<Grid
-										onClick={() => {
-											handleUpdateSubject(index)
-										}}
-										item
-										xs={8}
-										className={classes.fakeButton}>
-										<Typography
-											variant="subtitle1"
-											align="left">
-											{event.name}
-										</Typography>
-									</Grid>
-									<Grid
-										onClick={() => {
-											handleOpenPartials(index)
-										}}
-										item
-										xs={2}
-										className={classes.fakeButton}>
-										<Typography
-											variant="subtitle2"
-											align="center"
-											color="textSecondary">
-											{event.final_score}/100
-										</Typography>
-									</Grid>
-								</Grid>
-							</Paper>
-						))
-					) : (
-						<Paper className={classes.paper} square>
-							<Typography
-								variant="subtitle1"
-								align="center"
-								color="textSecondary">
-								Aún no has registrado eventos
-							</Typography>
+		<MuiPickersUtilsProvider utils={DayjsUtils}>
+			<Container fixed className={classes.root}>
+				<Grid container spacing={10}>
+					<Grid item xs={6}>
+						<Paper elevation={10} className={classes.paper}>
+							<Grid
+								container
+								direction="row"
+								justify="space-between"
+								alignItems="center">
+								<Typography variant="h6">Eventos</Typography>
+								<Fab
+									onClick={handleCreateEvent}
+									size="small"
+									color="secondary"
+									aria-label="Add">
+									<Add />
+								</Fab>
+							</Grid>
 						</Paper>
-					)}
-				</Grid>
-				<Grid item xs={6}>
-					<Paper elevation={10} className={classes.paper}>
-						<Grid
-							container
-							direction="row"
-							justify="space-between"
-							alignItems="center">
-							<Typography variant="h6">Asignaturas</Typography>
-							<Fab
-								onClick={handleCreateSubject}
-								size="small"
-								color="secondary"
-								aria-label="Add">
-								<Add />
-							</Fab>
-						</Grid>
-					</Paper>
-					{subjects.length ? (
-						subjects.map((subject, index) => (
-							<Paper
-								key={subject.id}
-								className={classes.paper}
-								square>
-								<Grid container alignItems="center">
-									<Grid
-										onClick={() => {
-											handleDeleteSubject(index)
-										}}
-										item
-										xs={2}
-										className={classes.fakeButton}
-										style={{ textAlign: 'center' }}>
-										<Icon fontSize="inherit" color="error">
-											<DeleteForever />
-										</Icon>
+						{events.length ? (
+							events.map((event, index) => (
+								<Paper
+									key={event.id}
+									className={classes.paper}
+									square>
+									<Grid container alignItems="center">
+										<Grid item xs={12}>
+											<Typography
+												variant="subtitle2"
+												align="center">
+												{dayjs(event.date).format(
+													'dddd, MMMM D, YYYY h:mm A'
+												)}
+											</Typography>
+										</Grid>
+										<Grid
+											item
+											xs={2}
+											className={classes.fakeButton}
+											style={{ textAlign: 'center' }}>
+											<Icon
+												fontSize="inherit"
+												color="secondary">
+												<Today />
+											</Icon>
+										</Grid>
+										<Grid
+											onClick={() => {
+												handleUpdateEvent(index)
+											}}
+											item
+											xs={6}
+											className={classes.fakeButton}>
+											<Typography
+												variant="subtitle1"
+												align="left">
+												{event.title}
+											</Typography>
+										</Grid>
+										<Grid
+											onClick={() => {
+												handleOpenPartials(index)
+											}}
+											item
+											xs={2}
+											className={classes.fakeButton}>
+											{event.subject && (
+												<Typography
+													variant="subtitle1"
+													align="center"
+													color="primary">
+													{event.subject.name}
+												</Typography>
+											)}
+										</Grid>
+										<Grid
+											onClick={() => {
+												handleDeleteEvent(index)
+											}}
+											item
+											xs={2}
+											className={classes.fakeButton}
+											style={{ textAlign: 'center' }}>
+											<Icon
+												fontSize="inherit"
+												color="error">
+												<Clear />
+											</Icon>
+										</Grid>
 									</Grid>
-									<Grid
-										onClick={() => {
-											handleUpdateSubject(index)
-										}}
-										item
-										xs={8}
-										className={classes.fakeButton}>
-										<Typography
-											variant="subtitle1"
-											align="left">
-											{subject.name}
-										</Typography>
-									</Grid>
-									<Grid
-										onClick={() => {
-											handleOpenPartials(index)
-										}}
-										item
-										xs={2}
-										className={classes.fakeButton}>
-										<Typography
-											variant="subtitle2"
-											align="center"
-											color="textSecondary">
-											{subject.final_score}/100
-										</Typography>
-									</Grid>
-								</Grid>
+								</Paper>
+							))
+						) : (
+							<Paper className={classes.paper} square>
+								<Typography
+									variant="subtitle1"
+									align="center"
+									color="textSecondary">
+									Aún no has registrado eventos
+								</Typography>
 							</Paper>
-						))
-					) : (
-						<Paper className={classes.paper} square>
-							<Typography
-								variant="subtitle1"
-								align="center"
-								color="textSecondary">
-								Aún no has registrado asignaturas
-							</Typography>
+						)}
+					</Grid>
+					<Grid item xs={6}>
+						<Paper elevation={10} className={classes.paper}>
+							<Grid
+								container
+								direction="row"
+								justify="space-between"
+								alignItems="center">
+								<Typography variant="h6">
+									Asignaturas
+								</Typography>
+								<Fab
+									onClick={handleCreateSubject}
+									size="small"
+									color="secondary"
+									aria-label="Add">
+									<Add />
+								</Fab>
+							</Grid>
 						</Paper>
-					)}
+						{subjects.length ? (
+							subjects.map((subject, index) => (
+								<Paper
+									key={subject.id}
+									className={classes.paper}
+									square>
+									<Grid container alignItems="center">
+										<Grid
+											onClick={() => {
+												handleDeleteSubject(index)
+											}}
+											item
+											xs={2}
+											className={classes.fakeButton}
+											style={{ textAlign: 'center' }}>
+											<Icon
+												fontSize="inherit"
+												color="error">
+												<Clear />
+											</Icon>
+										</Grid>
+										<Grid
+											onClick={() => {
+												handleUpdateSubject(index)
+											}}
+											item
+											xs={8}
+											className={classes.fakeButton}>
+											<Typography
+												variant="subtitle1"
+												align="left">
+												{subject.name}
+											</Typography>
+										</Grid>
+										<Grid
+											onClick={() => {
+												handleOpenPartials(index)
+											}}
+											item
+											xs={2}
+											className={classes.fakeButton}>
+											<Typography
+												variant="subtitle2"
+												align="center"
+												color="textSecondary">
+												{subject.final_score}/100
+											</Typography>
+										</Grid>
+									</Grid>
+								</Paper>
+							))
+						) : (
+							<Paper className={classes.paper} square>
+								<Typography
+									variant="subtitle1"
+									align="center"
+									color="textSecondary">
+									Aún no has registrado asignaturas
+								</Typography>
+							</Paper>
+						)}
+					</Grid>
 				</Grid>
-			</Grid>
-			<Dialog
-				open={open.subject}
-				onClose={handleCloseSubject}
-				aria-labelledby="cuSubject">
-				<DialogTitle id="cuSubject">{actionSubject.title}</DialogTitle>
-				<DialogContent>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="name"
-						label="Nombre"
-						type="text"
-						variant="outlined"
-						fullWidth
-						value={nameSubject}
-						onChange={handleNameSubject}
-						error={errorSubject.error}
-						helperText={errorSubject.text}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleCloseSubject} color="primary">
-						Cancel
-					</Button>
-					<Button onClick={handleActionSubject} color="primary">
-						Aceptar
-					</Button>
-				</DialogActions>
-			</Dialog>
+				<Dialog
+					open={open.subject}
+					onClose={handleCloseSubject}
+					aria-labelledby="cuSubject">
+					<DialogTitle id="cuSubject">
+						{actionSubject.title}
+					</DialogTitle>
+					<DialogContent>
+						<TextField
+							autoFocus
+							margin="dense"
+							id="name"
+							label="Nombre"
+							type="text"
+							variant="outlined"
+							fullWidth
+							value={nameSubject}
+							onChange={handleNameSubject}
+							error={errorSubject.error}
+							helperText={errorSubject.text}
+						/>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleCloseSubject} color="primary">
+							Cancel
+						</Button>
+						<Button onClick={handleActionSubject} color="primary">
+							Aceptar
+						</Button>
+					</DialogActions>
+				</Dialog>
+				<Snackbar
+					anchorOrigin={{
+						vertical: 'bottom',
+						horizontal: 'left',
+					}}
+					open={open.snackbar}
+					autoHideDuration={6000}
+					onClose={handleClose}
+					ContentProps={{
+						'aria-describedby': 'message-id',
+					}}
+					message={
+						<span id="message-id">
+							¿Eliminar Asignatura? {actionSubject.title}
+						</span>
+					}
+					action={[
+						<Button
+							key="accept"
+							color="secondary"
+							size="small"
+							onClick={deleteSubject}>
+							Eliminar
+						</Button>,
+						<IconButton
+							key="close"
+							aria-label="Close"
+							color="inherit"
+							className={classes.close}
+							onClick={handleClose}>
+							<CloseIcon />
+						</IconButton>,
+					]}
+				/>
+				<Dialog
+					open={open.partials}
+					onClose={handleClosePartials}
+					aria-labelledby="cuSubject">
+					<DialogTitle id="cuSubject">
+						Calificaciónes por parcial
+					</DialogTitle>
+					<DialogContent>
+						<TextField
+							fullWidth
+							id="outlined-select-currency"
+							select
+							label="Select"
+							className={classes.textField}
+							value={values.advance}
+							onChange={handleChange('advance')}
+							SelectProps={{
+								MenuProps: {
+									className: classes.menu,
+								},
+							}}
+							helperText="Selecciona el parcial"
+							margin="normal"
+							variant="outlined">
+							{advances.map(option => (
+								<MenuItem
+									key={option.value}
+									value={option.value}>
+									{option.label}
+								</MenuItem>
+							))}
+						</TextField>
+						<TextField
+							margin="dense"
+							id="obtained"
+							label="Calificación"
+							type="text"
+							variant="outlined"
+							fullWidth
+							value={values.score}
+							onChange={handleScoreSubject}
+							error={errorScore.error}
+							helperText={errorScore.text}
+						/>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClosePartials} color="primary">
+							Cancel
+						</Button>
+						<Button onClick={handleUpdatePartials} color="primary">
+							Aceptar
+						</Button>
+					</DialogActions>
+				</Dialog>
+				<Dialog
+					open={open.event}
+					onClose={handleCloseEvent}
+					aria-labelledby="cuSubject">
+					<DialogTitle id="cuSubject">
+						{actionEvent.title}
+					</DialogTitle>
+					<DialogContent>
+						<TextField
+							autoFocus
+							margin="dense"
+							id="title"
+							label="Titulo"
+							type="text"
+							variant="outlined"
+							fullWidth
+							value={event.title}
+							onChange={handleChangeEvent('title')}
+							error={errorTitle.error}
+							helperText={errorTitle.text}
+						/>
+						<DateTimePicker
+							value={selectedDate}
+							onChange={handleDateChange}
+							format="dddd, MMMM D, YYYY h:mm A"
+							inputVariant="outlined"
+							margin="dense"
+							label="Fecha y Hora"
+							fullWidth
+							disablePast
+							error={errorDate.error}
+							helperText={errorDate.text}
+						/>
+						{event.school && (
+							<TextField
+								fullWidth
+								id="outlined-select-currency"
+								select
+								label="Asignatura"
+								className={classes.textField}
+								value={event.subject}
+								onChange={handleChangeEvent('subject')}
+								SelectProps={{
+									MenuProps: {
+										className: classes.menu,
+									},
+								}}
+								helperText={errorSubjectE.text}
+								error={errorSubjectE.error}
+								margin="normal"
+								variant="outlined">
+								{subjects.map(option => (
+									<MenuItem key={option.id} value={option.id}>
+										{option.name}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
+					</DialogContent>
+					<DialogActions>
+						{subjects.length > 0 && (
+							<FormControlLabel
+								control={
+									<Switch
+										checked={event.school}
+										onChange={handleChangeEvent('school')}
+										value="school"
+									/>
+								}
+								label="Evento escolar"
+							/>
+						)}
+						<Button onClick={handleCloseEvent} color="primary">
+							Cancel
+						</Button>
+						<Button onClick={handleActionEvent} color="primary">
+							Aceptar
+						</Button>
+					</DialogActions>
+				</Dialog>
+			</Container>
 			<Snackbar
 				anchorOrigin={{
 					vertical: 'bottom',
 					horizontal: 'left',
 				}}
-				open={open.snackbar}
+				open={open.snackbarEvent}
 				autoHideDuration={6000}
 				onClose={handleClose}
 				ContentProps={{
@@ -599,7 +1060,7 @@ function Main() {
 				}}
 				message={
 					<span id="message-id">
-						¿Eliminar Asignatura? {actionSubject.title}
+						¿Eliminar Evento? {actionEvent.title}
 					</span>
 				}
 				action={[
@@ -607,7 +1068,7 @@ function Main() {
 						key="accept"
 						color="secondary"
 						size="small"
-						onClick={deleteSubject}>
+						onClick={deleteEvent}>
 						Eliminar
 					</Button>,
 					<IconButton
@@ -620,88 +1081,7 @@ function Main() {
 					</IconButton>,
 				]}
 			/>
-			<Dialog
-				open={open.partials}
-				onClose={handleClosePartials}
-				aria-labelledby="cuSubject">
-				<DialogTitle id="cuSubject">
-					Calificaciónes por parcial
-				</DialogTitle>
-				<DialogContent>
-					<TextField
-						fullWidth
-						id="outlined-select-currency"
-						select
-						label="Select"
-						className={classes.textField}
-						value={values.advance}
-						onChange={handleChange('advance')}
-						SelectProps={{
-							MenuProps: {
-								className: classes.menu,
-							},
-						}}
-						helperText="Selecciona el parcial"
-						margin="normal"
-						variant="outlined">
-						{advances.map(option => (
-							<MenuItem key={option.value} value={option.value}>
-								{option.label}
-							</MenuItem>
-						))}
-					</TextField>
-					<TextField
-						margin="dense"
-						id="obtained"
-						label="Calificación"
-						type="text"
-						variant="outlined"
-						fullWidth
-						value={values.score}
-						onChange={handleScoreSubject}
-						error={errorScore.error}
-						helperText={errorScore.text}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClosePartials} color="primary">
-						Cancel
-					</Button>
-					<Button onClick={handleUpdatePartials} color="primary">
-						Aceptar
-					</Button>
-				</DialogActions>
-			</Dialog>
-			<Dialog
-				open={open.event}
-				onClose={handleCloseEvent}
-				aria-labelledby="cuSubject">
-				<DialogTitle id="cuSubject">{actionEvent.title}</DialogTitle>
-				<DialogContent>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="name"
-						label="Nombre"
-						type="text"
-						variant="outlined"
-						fullWidth
-						value={nameSubject}
-						onChange={handleNameSubject}
-						error={errorSubject.error}
-						helperText={errorSubject.text}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleCloseEvent} color="primary">
-						Cancel
-					</Button>
-					<Button onClick={handleActionEvent} color="primary">
-						Aceptar
-					</Button>
-				</DialogActions>
-			</Dialog>
-		</Container>
+		</MuiPickersUtilsProvider>
 	)
 }
 
