@@ -15,8 +15,7 @@ export default {
 		return event
 	},
 	events: async (_, { request }) => {
-		// const user = verify(request)
-		const user = 1
+		const user = verify(request)
 		await sequelize.query(
 			'DELETE FROM events WHERE date < CURRENT_TIMESTAMP()'
 		)
