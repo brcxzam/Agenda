@@ -3,14 +3,9 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Grid from '@material-ui/core/Grid'
-import GridList from '@material-ui/core/GridList'
-import GridListTile from '@material-ui/core/GridListTile'
-import GridListTileBar from '@material-ui/core/GridListTileBar'
-import IconButton from '@material-ui/core/IconButton'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import StarBorderIcon from '@material-ui/icons/StarBorder'
 import React from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { autoPlay } from 'react-swipeable-views-utils'
@@ -26,12 +21,6 @@ const tutorialSteps = [
 			'Acceda desde su dispositivo móvil, portátil o computadora de escritorio.',
 	},
 	{
-		label: 'Establezca su horario',
-		imgPath: `${configAPI.staticFiles}/img/img2.jpg`,
-		content:
-			'OwlTime ayuda a las personas ocupadas como usted a concentrarse en lo que es importante',
-	},
-	{
 		label: 'Ingrese sus actividades tanto academicas como personales',
 		imgPath: `${configAPI.staticFiles}/img/img5.jpg`,
 		content:
@@ -41,46 +30,13 @@ const tutorialSteps = [
 		label: 'Registre sus materias',
 		imgPath: `${configAPI.staticFiles}/img/img4.jpg`,
 		content:
-			'Tenga un mayor control de sus actividades escolares, ademas puedes personalizar cada una.',
+			'OwlTime ayuda a las personas ocupadas como usted a concentrarse en lo que es importante',
 	},
 	{
 		label: 'Ingrese sus calificaciones',
 		imgPath: `${configAPI.staticFiles}/img/img3.jpg`,
 		content:
-			'Nunca mas tendra que preocuparse por obtener sus calificaciones finales por que owlTime lo hace por usted',
-	},
-]
-
-const tileData = [
-	{
-		img: `${configAPI.staticFiles}/img/principal.png`,
-		title: 'Pagina Principal',
-		featured: true,
-	},
-	{
-		img: `${configAPI.staticFiles}/img/Asignaturas2.png`,
-		title: 'Mostrar asignaturas',
-		featured: false,
-	},
-	{
-		img: `${configAPI.staticFiles}/img/calificacion.png`,
-		title: 'Ingresar calificaciones',
-		featured: false,
-	},
-	{
-		img: `${configAPI.staticFiles}/img/horario2.png`,
-		title: 'Establecer su horario',
-		featured: true,
-	},
-	{
-		img: `${configAPI.staticFiles}/img/Mesa de trabajo – 1.png`,
-		title: 'Asignar un icono',
-		featured: false,
-	},
-	{
-		img: `${configAPI.staticFiles}/img/Mesa de trabajo – 3.png`,
-		title: 'Establecer un color',
-		featured: false,
+			'Nunca mas tendra que preocuparse por obtener sus calificaciones finales de cada materia, por que owlTime lo hace por usted',
 	},
 ]
 
@@ -113,20 +69,10 @@ const useStyles = makeStyles(theme => ({
 		},
 	},
 	footer: {
-		backgroundColor: theme.palette.background.paper,
 		marginTop: theme.spacing(3),
-		// color: 'white',
+		color: 'white',
 		padding: '0 50px',
-
-		// background: 'linear-gradient(45deg, #3D45BA 30%, #2196F3 90%)',
-		// border: 0,
-		// borderRadius: 3,
-		// boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-	},
-	gridList: {
-		maxHeight: 430,
-		maxWidth: 650,
-		transform: 'translateZ(0)',
+		backgroundColor: '#37848c',
 	},
 	titleBar: {
 		background:
@@ -137,13 +83,17 @@ const useStyles = makeStyles(theme => ({
 		color: 'white',
 	},
 	card: {
-		maxWidth: 380,
+		maxWidth: 600,
 		Height: 300,
 	},
 	bigAvatar: {
 		margin: 10,
 		width: 130,
 		height: 130,
+	},
+	sidebarAboutBox: {
+		padding: theme.spacing(2),
+		backgroundColor: theme.palette.grey[200],
 	},
 }))
 
@@ -189,114 +139,44 @@ function SwipeableTextMobileStepper() {
 						))}
 					</AutoPlaySwipeableViews>
 				</Grid>
-
-				<Grid item xs={12} md={12} align="center">
-					<Typography variant="h5" align="center" color="primary">
-						¡Planificar tu dia es cuestión de segundos!
-					</Typography>
-				</Grid>
-				<br />
 				<Grid container spacing={2}>
-					<Grid item xs={12} sm={7}>
-						<GridList className={classes.gridList}>
-							{tileData.map(tile => (
-								<GridListTile
-									key={tile.img}
-									cols={tile.featured ? 2 : 1}
-									rows={tile.featured ? 2 : 1}>
-									<img src={tile.img} alt={tile.title} />
-									<GridListTileBar
-										title={tile.title}
-										titlePosition="top"
-										actionIcon={
-											<IconButton
-												aria-label={`star ${
-													tile.title
-												}`}
-												className={classes.icon}>
-												<StarBorderIcon />
-											</IconButton>
-										}
-										actionPosition="left"
-										className={classes.titleBar}
+					<Grid item xs={12} md={12} align="center">
+						<Paper
+							elevation={0}
+							className={classes.sidebarAboutBox}>
+							<Grid item xs={12} md={12}>
+								<Typography
+									variant="h5"
+									align="center"
+									color="secondary">
+									Organiza cualquier cosa en cualquier lugar y
+									a cualquier hora
+								</Typography>
+								<br />
+								<Typography align="center">
+									Donde sea que esté, lleve su lista de tareas
+									con usted, ya que sus tareas se sincronizan
+									automáticamente en todos sus dispositivos,
+									lo que le brinda el máximo control, haciendo
+									que su lista de tareas esté accesible en
+									todas partes.
+								</Typography>
+								<Grid item xs={12} md={12} align="center">
+									<Avatar
+										alt="Icon"
+										src={`${
+											configAPI.staticFiles
+										}/profile_images/default.png`}
+										className={classes.bigAvatar}
 									/>
-								</GridListTile>
-							))}
-						</GridList>
+								</Grid>
+							</Grid>
+						</Paper>
 					</Grid>
-					<Grid item xs={12} sm={1} />
-					<Grid item xs={12} sm={4}>
-						<Grid item xs={12} md={10} align="center">
-							<Typography
-								variant="h5"
-								align="center"
-								color="secondary">
-								Organiza cualquier cosa en cualquier lugar y a
-								cualquier hora
-							</Typography>
-							<br />
-							<Typography align="center">
-								Donde sea que esté, lleve su lista de tareas con
-								usted, ya que sus tareas se sincronizan
-								automáticamente en todos sus dispositivos, lo
-								que le brinda el máximo control, haciendo que su
-								lista de tareas esté accesible en todas partes.
-							</Typography>
-							<Avatar
-								alt="Icon"
-								src={`${
-									configAPI.staticFiles
-								}/profile_images/default.png`}
-								className={classes.bigAvatar}
-							/>
-						</Grid>
-					</Grid>
-					<Grid item xs={12} sm={4}>
-						<Card className={classes.card}>
-							<CardMedia
-								component="img"
-								height="200"
-								image={`${
-									configAPI.staticFiles
-								}/img/evento2.jpg`}
-								title="Crear evento"
-							/>
-							<CardContent>
-								<Typography variant="h6" component="h2">
-									Crear un evento
-								</Typography>
-								<Typography
-									variant="body2"
-									color="textSecondary"
-									component="p">
-									Agregue recordatorios unicos, diarios,
-									semanalmente, mensualmente o anualmente.
-								</Typography>
-							</CardContent>
-						</Card>
-					</Grid>
-					<Grid item xs={12} sm={4}>
-						<Card className={classes.card}>
-							<CardMedia
-								component="img"
-								height="200"
-								image={`${configAPI.staticFiles}/img/work.jpg`}
-								title="Datos academicos"
-							/>
-							<CardContent>
-								<Typography variant="h6" component="h2">
-									Ingresar datos academicos
-								</Typography>
-								<Typography
-									variant="body2"
-									color="textSecondary"
-									component="p">
-									Determina la calificacion maxima, la
-									aprobatoria, asi como la cantidad de
-									parciales
-								</Typography>
-							</CardContent>
-						</Card>
+					<Grid item xs={12} md={12} align="center">
+						<Typography variant="h5" align="center" color="primary">
+							¡Planificar tu dia es cuestión de segundos!
+						</Typography>
 					</Grid>
 					<Grid item xs={12} sm={4}>
 						<Card className={classes.card}>
@@ -310,15 +190,63 @@ function SwipeableTextMobileStepper() {
 							/>
 							<CardContent>
 								<Typography variant="h6" component="h2">
-									Modificar preferencias
+									Registre una materia
 								</Typography>
-								<Typography
+								{/* <Typography
 									variant="body2"
 									color="textSecondary"
 									component="p">
-									Configura cada una de las preferencias a tu
-									manera, personalizando cada una de ellas.
+									Registre cada una de ellas, para tener una
+									mayor organización y descripción de sus
+									actividades.
+								</Typography> */}
+							</CardContent>
+						</Card>
+					</Grid>
+					<Grid item xs={12} sm={4}>
+						<Card className={classes.card}>
+							<CardMedia
+								component="img"
+								height="200"
+								image={`${
+									configAPI.staticFiles
+								}/img/evento2.jpg`}
+								title="Crear evento"
+							/>
+							<CardContent>
+								<Typography variant="h6" component="h2">
+									Cree un evento
 								</Typography>
+								{/* <Typography
+									variant="body2"
+									color="textSecondary"
+									component="p">
+									Agregue recordatorios unicos, diarios,
+									semanalmente, mensualmente o anualmente.
+								</Typography> */}
+							</CardContent>
+						</Card>
+					</Grid>
+					<Grid item xs={12} sm={4}>
+						<Card className={classes.card}>
+							<CardMedia
+								component="img"
+								height="200"
+								image={`${configAPI.staticFiles}/img/work.jpg`}
+								title="Datos academicos"
+							/>
+							<CardContent>
+								<Typography variant="h6" component="h2">
+									Introduzca sus calificaciones
+								</Typography>
+								{/* <Typography
+									variant="body2"
+									color="textSecondary"
+									component="p">
+									Determina la calificacion maxima, la
+									aprobatoria, asi como la cantidad de
+									parciales
+								</Typography> */}
 							</CardContent>
 						</Card>
 					</Grid>

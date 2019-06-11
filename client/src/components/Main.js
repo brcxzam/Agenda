@@ -1,3 +1,4 @@
+import DayjsUtils from '@date-io/dayjs'
 import { Icon } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
@@ -6,25 +7,29 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Fab from '@material-ui/core/Fab'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import MenuItem from '@material-ui/core/MenuItem'
 import Paper from '@material-ui/core/Paper'
+import Snackbar from '@material-ui/core/Snackbar'
 import { makeStyles } from '@material-ui/core/styles'
+import Switch from '@material-ui/core/Switch'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Add from '@material-ui/icons/Add'
-import React, { useEffect, useState } from 'react'
-import Snackbar from '@material-ui/core/Snackbar'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
-import MenuItem from '@material-ui/core/MenuItem'
-import configAPI from './../API'
-import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DayjsUtils from '@date-io/dayjs'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Switch from '@material-ui/core/Switch'
-import dayjs from 'dayjs'
-import Today from '@material-ui/icons/Today'
+import Alarma from '@material-ui/icons/Alarm'
+import Mark from '@material-ui/icons/BookmarkBorder'
 import Clear from '@material-ui/icons/Clear'
+import CloseIcon from '@material-ui/icons/Close'
+import School from '@material-ui/icons/School'
+import Today from '@material-ui/icons/Today'
+import Score from '@material-ui/icons/Book'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import dayjs from 'dayjs'
+import React, { useEffect, useState } from 'react'
+import configAPI from './../API'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -104,7 +109,7 @@ function Main() {
 		} else {
 			setErrorSubject({
 				error: true,
-				text: 'Nombre invalido',
+				text: 'Nombre inválido',
 			})
 		}
 	}, [nameSubject])
@@ -440,7 +445,7 @@ function Main() {
 		if (!event.title) {
 			setErrorTitle({
 				error: true,
-				text: 'Titulo invalido',
+				text: 'Título inválido',
 			})
 		}
 	}, [event.title])
@@ -452,7 +457,7 @@ function Main() {
 		if (!selectedDate) {
 			setErrorDate({
 				error: true,
-				text: 'Fecha y Hora invalidas',
+				text: 'Fecha y Hora inválidas',
 			})
 		}
 	}, [selectedDate])
@@ -867,6 +872,13 @@ function Main() {
 							onChange={handleNameSubject}
 							error={errorSubject.error}
 							helperText={errorSubject.text}
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<School />
+									</InputAdornment>
+								),
+							}}
 						/>
 					</DialogContent>
 					<DialogActions>
@@ -955,6 +967,13 @@ function Main() {
 							onChange={handleScoreSubject}
 							error={errorScore.error}
 							helperText={errorScore.text}
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<Score />
+									</InputAdornment>
+								),
+							}}
 						/>
 					</DialogContent>
 					<DialogActions>
@@ -978,7 +997,7 @@ function Main() {
 							autoFocus
 							margin="dense"
 							id="title"
-							label="Titulo"
+							label="Título"
 							type="text"
 							variant="outlined"
 							fullWidth
@@ -986,6 +1005,13 @@ function Main() {
 							onChange={handleChangeEvent('title')}
 							error={errorTitle.error}
 							helperText={errorTitle.text}
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<Mark />
+									</InputAdornment>
+								),
+							}}
 						/>
 						<DateTimePicker
 							value={selectedDate}
@@ -998,6 +1024,13 @@ function Main() {
 							disablePast
 							error={errorDate.error}
 							helperText={errorDate.text}
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<Alarma />
+									</InputAdornment>
+								),
+							}}
 						/>
 						{event.school && (
 							<TextField
