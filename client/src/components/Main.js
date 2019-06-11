@@ -168,7 +168,7 @@ function Main() {
 		if (reason === 'clickaway') {
 			return
 		}
-		setOpen({ ...open, snackbar: false })
+		setOpen({ ...open, snackbar: false, snackbarEvent: false })
 	}
 	async function deleteSubject() {
 		try {
@@ -190,6 +190,7 @@ function Main() {
 			const { dSubject } = response.data
 			if (dSubject === 'done') {
 				getSubjects(API, token)
+				getEvents(API, token)
 				setOpen({ ...open, snackbar: false })
 			} else {
 				console.error(response)
@@ -249,6 +250,7 @@ function Main() {
 			const { uSubject } = response.data
 			if (uSubject === 'done') {
 				getSubjects(API, token)
+				getEvents(API, token)
 				setOpen({ ...open, subject: false })
 			} else {
 				console.error(response)
@@ -554,8 +556,8 @@ function Main() {
 		try {
 			const eventD = Object.assign({}, event)
 			if (!eventD.school) {
-				delete eventD.school
-				delete eventD.subject
+				eventD.school = null
+				eventD.subject = null
 			} else {
 				eventD.school = 'true'
 			}
@@ -705,7 +707,6 @@ function Main() {
 										<Grid
 											item
 											xs={2}
-											className={classes.fakeButton}
 											style={{ textAlign: 'center' }}>
 											<Icon
 												fontSize="inherit"
@@ -726,13 +727,7 @@ function Main() {
 												{event.title}
 											</Typography>
 										</Grid>
-										<Grid
-											onClick={() => {
-												handleOpenPartials(index)
-											}}
-											item
-											xs={2}
-											className={classes.fakeButton}>
+										<Grid item xs={2}>
 											{event.subject && (
 												<Typography
 													variant="subtitle1"

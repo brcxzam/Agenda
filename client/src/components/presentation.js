@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import React from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { autoPlay } from 'react-swipeable-views-utils'
-import configAPI from './../API'
+import configAPI from '../API'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
