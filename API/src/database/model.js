@@ -133,10 +133,6 @@ Event.init(
 			type: DATE,
 			allowNull: false,
 		},
-		repeat: {
-			type: STRING,
-			defaultValue: 'no_repeat',
-		},
 		school: {
 			type: BOOLEAN,
 			defaultValue: false,

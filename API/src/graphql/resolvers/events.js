@@ -1,6 +1,10 @@
-import { Event, Personalization, Subject } from '../../database/model'
-import verify from '../jwt/verify'
 import GraphQLDateTime from 'graphql-type-datetime'
+import Sequelize from 'sequelize'
+import { Event, Subject } from '../../database/model'
+import verify from '../jwt/verify'
+import sequelize from './../../database/connection'
+
+const Op = Sequelize.Op
 
 export default {
 	DateTime: GraphQLDateTime,
@@ -11,7 +15,11 @@ export default {
 		return event
 	},
 	events: async (_, { request }) => {
-		const user = verify(request)
+		// const user = verify(request)
+		const user = 1
+		await sequelize.query(
+			'DELETE FROM events WHERE date < CURRENT_TIMESTAMP()'
+		)
 		const events = await Event.findAll({
 			where: {
 				user,
