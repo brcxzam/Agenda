@@ -8,6 +8,11 @@ const sequelize = new Sequelize('mysql://root:@localhost:3306/agenda', {
 		idle: 10000,
 	},
 	logging: false,
+	dialectOptions: {
+		dateStrings: true,
+		typeCast: true,
+	},
+	timezone: '-05:00',
 })
 
 async function connection() {

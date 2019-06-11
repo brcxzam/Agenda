@@ -47,10 +47,6 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-/**
- * TODO: Modificar el arreglo para calificaciónes por parcial
- */
-
 const advances = [
 	{
 		value: 'advance1',
@@ -406,7 +402,6 @@ function Main() {
 	}
 	/**
 	 * Events
-	 * TODO: Hacer UD
 	 */
 	const [events, setEvents] = useState([])
 	const [actionEvent, setActionEvent] = useState({
@@ -549,9 +544,6 @@ function Main() {
 			console.error(error)
 		}
 	}
-	/**
-	 * TODO: Update Event
-	 */
 	async function updateEvent() {
 		try {
 			const eventD = Object.assign({}, event)
@@ -602,11 +594,6 @@ function Main() {
 			id: events[index].id,
 		})
 		const school = events[index].school === 'true'
-		console.log(events[index].date)
-		console.log(
-			dayjs(events[index].date).format('dddd, MMMM D, YYYY h:mm A')
-		)
-
 		let subject = 0
 		if (events[index].subject) {
 			subject = events[index].subject.id
