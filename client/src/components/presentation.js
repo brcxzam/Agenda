@@ -91,9 +91,9 @@ const useStyles = makeStyles(theme => ({
 		width: 130,
 		height: 130,
 	},
-	sidebarAboutBox: {
-		padding: theme.spacing(2),
-		backgroundColor: theme.palette.grey[200],
+	paper: {
+		padding: theme.spacing(2, 1),
+		margin: 10,
 	},
 }))
 
@@ -141,9 +141,7 @@ function SwipeableTextMobileStepper() {
 				</Grid>
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={12} align="center">
-						<Paper
-							elevation={0}
-							className={classes.sidebarAboutBox}>
+						<Paper elevation={0} className={classes.paper}>
 							<Grid item xs={12} md={12}>
 								<Typography
 									variant="h5"
