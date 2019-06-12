@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              * TODO: validación de datos a travez de la API
              */
             Toast.makeText(getApplicationContext(),"signin", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getApplicationContext(), Events.class);
+            startActivity(intent);
         }
     }
 
