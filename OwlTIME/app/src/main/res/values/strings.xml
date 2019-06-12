@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">OwlTIME</string>
+    <string name="welcome">Bienvenido!</string>
+    <string name="start">Por favor ingrese sus datos</string>
+
+    <string name="btnSignUp">REGISTRARSE</string>
+    <string name="btnSignIn">ACCEDER</string>
+
+    <string name="titleSignUp">Registrarse</string>
+    <!-- Formulario Registrarse y Cuenta -->
+    <string name="firstName">Nombre</string>
+    <string name="lastName">Apellidos</string>
+    <string name="email">Correo Electrónico</string>
+    <string name="password">Contraseña</string>
 </resources>

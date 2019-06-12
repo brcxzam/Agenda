@@ -9,7 +9,7 @@ app.set('port', process.env.PORT || 3001)
 
 //Middlewares
 app.use(cors())
-app.use(morgan('dev'))
+app.use(morgan('tiny'))
 app.use(json())
 app.use(urlencoded({ extended: false }))
 
