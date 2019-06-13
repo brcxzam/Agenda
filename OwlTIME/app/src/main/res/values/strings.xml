@@ -12,4 +12,15 @@
     <string name="lastName">Apellidos</string>
     <string name="email">Correo Electrónico</string>
     <string name="password">Contraseña</string>
+    <string name="title_activity_navigation">Navigation</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <!-- Navegación -->
+    <string name="events">Eventos</string>
+    <string name="subjects">Asignaturas</string>
+    <string name="account">Cuenta</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
