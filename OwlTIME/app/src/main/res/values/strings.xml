@@ -22,5 +22,11 @@
     <string name="account">Cuenta</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_event">Crear Evento</string>
+    <string name="title">Título</string>
+    <string name="date_time">Fecha y Hora</string>
+    <string name="subject">Asignatura</string>
+    <string name="event_school">Evento escolar</string>
+    <string name="btnCreate">CREAR</string>
+
 </resources>
