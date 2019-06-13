@@ -3,6 +3,7 @@
     <string name="welcome">Bienvenido!</string>
     <string name="start">Por favor ingrese sus datos</string>
 
+    <string name="btnSave">GUARDAR</string>
     <string name="btnSignUp">REGISTRARSE</string>
     <string name="btnSignIn">ACCEDER</string>
 
@@ -13,9 +14,9 @@
     <string name="email">Correo Electrónico</string>
     <string name="password">Contraseña</string>
     <string name="title_activity_navigation">Navigation</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_events">Eventos</string>
+    <string name="title_subjects">Asignaturas</string>
+    <string name="title_account">Cuenta</string>
     <!-- Navegación -->
     <string name="events">Eventos</string>
     <string name="subjects">Asignaturas</string>
@@ -28,5 +29,8 @@
     <string name="subject">Asignatura</string>
     <string name="event_school">Evento escolar</string>
     <string name="btnCreate">CREAR</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

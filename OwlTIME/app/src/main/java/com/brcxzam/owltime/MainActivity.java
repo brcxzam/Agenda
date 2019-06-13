@@ -33,7 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(getApplicationContext(),Navigation.class));
+        if (new Token(getApplicationContext()).getStatus()){
+            startActivity(new Intent(getApplicationContext(),Navigation.class));
+            this.finish();
+        }
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -93,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Token token = new Token(getApplicationContext());
                                 token.setStatus(true);
                                 token.setToken(response.getJSONObject("data").get("login").toString());
+                                startActivity(new Intent(getApplicationContext(),Navigation.class));
                                 progressBar.setVisibility(View.INVISIBLE);
+                                finish();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

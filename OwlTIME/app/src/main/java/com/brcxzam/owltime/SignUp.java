@@ -2,6 +2,7 @@ package com.brcxzam.owltime;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -109,7 +110,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                     Token token = new Token(getApplicationContext());
                                     token.setStatus(true);
                                     token.setToken(response.getJSONObject("data").get("cUser").toString());
+                                    startActivity(new Intent(getApplicationContext(),Navigation.class));
                                     progressBar.setVisibility(View.INVISIBLE);
+                                    finish();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
