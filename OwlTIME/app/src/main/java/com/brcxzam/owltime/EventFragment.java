@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.lang.reflect.Array;
 import java.util.Calendar;
 
 
@@ -40,7 +41,7 @@ public class EventFragment extends Fragment implements DatePickerDialog.OnDateSe
         edDate = (TextInputEditText) view.findViewById(R.id.edDate);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.menu_item, SUBJECTS);
-        AutoCompleteTextView editTextFilledExposedDropdown = view.findViewById(R.id.filled_exposed_dropdown);
+        AutoCompleteTextView editTextFilledExposedDropdown = view.findViewById(R.id.acSubjects);
         editTextFilledExposedDropdown.setAdapter(adapter);
 
         edDate.setOnClickListener(new View.OnClickListener() {

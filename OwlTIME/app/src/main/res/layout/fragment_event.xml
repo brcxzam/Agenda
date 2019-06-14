@@ -59,14 +59,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:startIconDrawable="@drawable/abc_vector_test"
             android:hint="@string/subject">
 
             <AutoCompleteTextView
-                android:id="@+id/filled_exposed_dropdown"
+                android:id="@+id/acSubjects"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"/>
