@@ -16,9 +16,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -49,7 +51,7 @@ public class SubjectFragment extends Fragment {
     RecyclerView recycler;
     SwipeRefreshLayout refreshLayout;
     LayoutInflater inflater;
-    String[] SUBJECTS = new String[] {"Primer parcial: 20%", "Segundo parcial: 20%", "Tercer parcial: 20%", "Cuarto parcial: 40%"};
+    String[] COUNTRIES = new String[] {"Item 1", "Item 2", "Item 3", "Item 4"};
 
     public SubjectFragment() {
         // Required empty public constructor
@@ -168,19 +170,71 @@ public class SubjectFragment extends Fragment {
                             });
                             recycler.setAdapter(adapterDatos);
                             adapterDatos.setOnItemClickListener(new AdapterDatos.OnItemClickListener() {
-                                final View dialogView = inflater.inflate(R.layout.dialog_final_score, null);
                                 @Override
-                                public void onUpdateScore(int position) {
-                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.menu_item, SUBJECTS);
-                                    AutoCompleteTextView editTextFilledExposedDropdown = dialogView.findViewById(R.id.acSubjects);
-                                    editTextFilledExposedDropdown.setAdapter(adapter);
-                                    new MaterialAlertDialogBuilder(getContext())
-                                            .setTitle("Title")
-                                            //.setMessage(String.valueOf(listDatos.get(position).getFinal_score()))
-                                            .setView(dialogView)
-                                            .setPositiveButton("Ok", null)
-                                            .show();
-                                }
+                                public void onUpdateScore(final int position) {
+                                    final View dialogView = inflater.inflate(R.layout.dialog_final_score, null);
+                                    final EditText advance1 = dialogView.findViewById(R.id.advance1);
+                                    final EditText advance2 = dialogView.findViewById(R.id.advance2);
+                                    final EditText advance3 = dialogView.findViewById(R.id.advance3);
+                                    final EditText advance4 = dialogView.findViewById(R.id.advance4);
+
+                                        String url = new Connection().api;
+
+                                        JSONObject sendQuery = new JSONObject();
+                                        try {
+                                            JSONObject variables = new JSONObject();
+                                            variables.put("id", listDatos.get(position).getId());
+                                            JSONObject query = new JSONObject();
+                                            query.put("query", "query($id: ID){ scoresSubject(id: $id) { subject advance1 advance2 advance3 advance4 final_score } }");
+                                            query.put("variables", variables);
+                                            sendQuery = query;
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                                                (Request.Method.POST, url, sendQuery, new Response.Listener<JSONObject>() {
+
+                                                    @Override
+                                                    public void onResponse(JSONObject response) {
+                                                        try {
+                                                            JSONObject data = response.getJSONObject("data").getJSONObject("scoresSubject");
+                                                            advance1.setText(data.get("advance1").toString());
+                                                            advance2.setText(data.get("advance2").toString());
+                                                            advance3.setText(data.get("advance3").toString());
+                                                            advance4.setText(data.get("advance4").toString());
+                                                            new MaterialAlertDialogBuilder(getContext())
+                                                                    .setTitle("Calificaciónes")
+                                                                    .setView(dialogView)
+                                                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            updateScore(listDatos.get(position).getId(), Float.parseFloat(advance1.getText().toString()),Float.parseFloat(advance2.getText().toString()),Float.parseFloat(advance3.getText().toString()),Float.parseFloat(advance4.getText().toString()));
+                                                                        }
+                                                                    })
+                                                                    .show();
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                }, new Response.ErrorListener() {
+
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        Toast.makeText(v.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                        {
+                                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                                HashMap<String, String> headers = new HashMap<>();
+                                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                                headers.put("authorization", new Token(v.getContext()).getToken());
+                                                return headers;
+                                            }
+                                        };
+                                        MySingleton.getInstance(v.getContext()).addToRequestQueue(jsonObjectRequest);
+                                    }
+
                             });
                             refreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
@@ -331,6 +385,61 @@ public class SubjectFragment extends Fragment {
                         try {
                             JSONObject data = response.getJSONObject("data");
                             if (data.getString("uSubject").equals("done")){
+                                getSubjects();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(v.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+        {
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("authorization", new Token(v.getContext()).getToken());
+                return headers;
+            }
+        };
+        MySingleton.getInstance(v.getContext()).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void updateScore(int id, float advance1, float advance2, float advance3,float advance4) {
+        //progressBar.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(true);
+        String url = new Connection().api;
+
+        JSONObject sendQuery = new JSONObject();
+        try {
+            JSONObject data = new JSONObject();
+            data.put("advance1", advance1);
+            data.put("advance2", advance2);
+            data.put("advance3", advance3);
+            data.put("advance4", advance4);
+            JSONObject variables = new JSONObject();
+            variables.put("data", data);
+            variables.put("id", id);
+            JSONObject query = new JSONObject();
+            query.put("query", "mutation($id: ID, $data: iScores){ uScore(id: $id, data: $data) }");
+            query.put("variables", variables);
+            sendQuery = query;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, sendQuery, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject data = response.getJSONObject("data");
+                            if (data.getString("uScore").equals("done")){
                                 getSubjects();
                             }
                         } catch (JSONException e) {

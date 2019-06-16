@@ -14,15 +14,11 @@
     <string name="email">Correo Electrónico</string>
     <string name="password">Contraseña</string>
     <string name="title_activity_navigation">Navigation</string>
-    <string name="title_events">Eventos</string>
-    <string name="title_subjects">Asignaturas</string>
-    <string name="title_account">Cuenta</string>
     <!-- Navegación -->
     <string name="events">Eventos</string>
     <string name="subjects">Asignaturas</string>
     <string name="account">Cuenta</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="create_event">Crear Evento</string>
     <string name="title">Título</string>
     <string name="date_time">Fecha y Hora</string>
@@ -30,7 +26,11 @@
     <string name="event_school">Evento escolar</string>
     <string name="btnCreate">CREAR</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="nameSubject">Nombre</string>
+
+    <string name="advance1">Primer parcial: 20%</string>
+    <string name="advance2">Segundo parcial: 20%</string>
+    <string name="advance3">Tercer parcial: 20%</string>
+    <string name="advance4">Cuarto parcial: 40%</string>
 
 </resources>

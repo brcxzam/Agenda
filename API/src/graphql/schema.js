@@ -6,6 +6,7 @@ const schema = buildSchema(`
 		subjects: [Subjects]
 		subject(id: ID): Subjects
 		scores: [Scores]
+		scoresSubject(id: ID): Scores
 		events: [Events]
 		event(id: ID): Events
 	}

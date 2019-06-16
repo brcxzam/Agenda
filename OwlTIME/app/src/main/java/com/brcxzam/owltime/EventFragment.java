@@ -23,7 +23,7 @@ import java.lang.reflect.Array;
 import java.util.Calendar;
 
 
-public class EventFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class EventFragment extends Fragment {
 
     TextInputEditText edDate;
 
@@ -38,49 +38,49 @@ public class EventFragment extends Fragment implements DatePickerDialog.OnDateSe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_event, container, false);
 
-        edDate = (TextInputEditText) view.findViewById(R.id.edDate);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.menu_item, SUBJECTS);
-        AutoCompleteTextView editTextFilledExposedDropdown = view.findViewById(R.id.acSubjects);
-        editTextFilledExposedDropdown.setAdapter(adapter);
-
-        edDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar c= Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), EventFragment.this, year, month, day);
-                datePickerDialog.show();
-            }
-        });
+//        edDate = (TextInputEditText) view.findViewById(R.id.edDate);
+//
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.menu_item, SUBJECTS);
+//        AutoCompleteTextView editTextFilledExposedDropdown = view.findViewById(R.id.acSubjects);
+//        editTextFilledExposedDropdown.setAdapter(adapter);
+//
+//        edDate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Calendar c= Calendar.getInstance();
+//                year = c.get(Calendar.YEAR);
+//                month = c.get(Calendar.MONTH);
+//                day = c.get(Calendar.DAY_OF_MONTH);
+//
+//                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), EventFragment.this, year, month, day);
+//                datePickerDialog.show();
+//            }
+//        });
 
         return view;
     }
 
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        yearFinal = year;
-        monthFinal = month +1;
-        dayFinal = dayOfMonth;
-
-        Calendar c = Calendar.getInstance();
-        hour = c.get(Calendar.HOUR_OF_DAY);
-        minute = c.get(Calendar.MINUTE);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), EventFragment.this, hour, minute, DateFormat.is24HourFormat(getActivity()));
-        timePickerDialog.show();
-    }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-        hourFinal = hourOfDay;
-        minuteFinal = minute;
-
-        edDate.setText(yearFinal + "-" + monthFinal + "-" + dayFinal + " " + hourFinal + ":" + minuteFinal);
-
-    }
+//    @Override
+//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//        yearFinal = year;
+//        monthFinal = month +1;
+//        dayFinal = dayOfMonth;
+//
+//        Calendar c = Calendar.getInstance();
+//        hour = c.get(Calendar.HOUR_OF_DAY);
+//        minute = c.get(Calendar.MINUTE);
+//
+//        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), EventFragment.this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+//        timePickerDialog.show();
+//    }
+//
+//    @Override
+//    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//
+//        hourFinal = hourOfDay;
+//        minuteFinal = minute;
+//
+//        edDate.setText(yearFinal + "-" + monthFinal + "-" + dayFinal + " " + hourFinal + ":" + minuteFinal);
+//
+//    }
 }

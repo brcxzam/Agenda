@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     Context ctx;
     ImageButton imageView;
-    ProgressBar progressBar;
+    SwipeRefreshLayout refreshLayout;
     TextInputEditText firstName, lastName, email, password;
     Button update;
     View v;
@@ -63,11 +64,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
          v = inflater.inflate(R.layout.fragment_account, container, false);
+        refreshLayout = v.findViewById(R.id.refresh);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUser();
+            }
+        });
         imageView = v.findViewById(R.id.imageView);
         imageView.setOnClickListener(this);
         ctx = v.getContext();
-        progressBar = v.findViewById(R.id.indeterminateBar);
-        getUser();
 
         firstName = v.findViewById(R.id.firstName);
         lastName = v.findViewById(R.id.lastName);
@@ -76,6 +82,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         update = v.findViewById(R.id.update);
         update.setOnClickListener(this);
+
+        getUser();
 
         return v;
     }
@@ -95,7 +103,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        progressBar.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(true);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == Activity.RESULT_OK && data != null){
             Uri imageUri = data.getData();
@@ -134,7 +142,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         try {
                             JSONObject obj = new JSONObject(new String(response.data));
                             Picasso.get().load(new Connection().staticFiles + obj.get("profile_image").toString()).into(imageView);
-                            progressBar.setVisibility(View.INVISIBLE);
+                            refreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -170,7 +178,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     }
 
     public void getUser() {
-        progressBar.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(true);
         String url = new Connection().api;
 
         JSONObject sendQuery = new JSONObject();
@@ -195,7 +203,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                             }
                             email.setText(data.get("email").toString());
                             Picasso.get().load(new Connection().staticFiles + data.get("profile_image").toString()).into(imageView);
-                            progressBar.setVisibility(View.INVISIBLE);
+                            refreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -219,7 +227,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     }
 
     public void updateUser() {
-        progressBar.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(true);
         final Validation validation = new Validation();
         String firstNameT = this.firstName.getText().toString();
         String lastNameT = this.lastName.getText().toString();
@@ -266,11 +274,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                 if (!response.isNull("errors")){
                                     if (response.getJSONArray("errors").getJSONObject(0).get("message").equals("Validation error")) {
                                         validation.isValidEmail((EditText) v.findViewById(R.id.email));
-                                        progressBar.setVisibility(View.INVISIBLE);
+                                        refreshLayout.setRefreshing(false);
                                     }
                                 } else {
                                     if (response.getJSONObject("data").get("uUser").toString().equals("done")){
-                                        progressBar.setVisibility(View.INVISIBLE);
+                                        refreshLayout.setRefreshing(false);
                                     }
 
                                 }
@@ -295,7 +303,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             };
             MySingleton.getInstance(ctx).addToRequestQueue(jsonObjectRequest);
         } else {
-            progressBar.setVisibility(View.INVISIBLE);
+            refreshLayout.setRefreshing(false);
         }
     }
 }

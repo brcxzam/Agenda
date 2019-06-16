@@ -26,4 +26,9 @@ export default {
 		}
 		return scores
 	},
+	scoresSubject: async ({ id }, { request }) => {
+		verify(request)
+		const score = await Score.findByPk(id)
+		return score
+	},
 }
