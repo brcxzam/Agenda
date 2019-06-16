@@ -13,16 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        android:screenOrientation="portrait">
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".Navigation"
             android:label="@string/title_activity_navigation"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".SignUp" />
+            android:name=".SignUp"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".MainActivity">
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

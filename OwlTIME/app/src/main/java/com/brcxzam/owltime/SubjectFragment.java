@@ -4,6 +4,7 @@ package com.brcxzam.owltime;
 import android.graphics.Canvas;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -101,6 +102,22 @@ public class SubjectFragment extends Fragment {
                                 listDatos.add(new Subjects(Integer.parseInt(datos.get("id").toString()),datos.getString("name"), (float) datos.getDouble("final_score")));
                             }
                             final AdapterDatos adapterDatos = new AdapterDatos(listDatos);
+                            final SwipeController swipeController = new SwipeController(new SwipeControllerActions() {
+                                @Override
+                                public void onRightClicked(int position) {
+                                    adapterDatos.listDatos.remove(position);
+                                    adapterDatos.notifyItemRemoved(position);
+                                    adapterDatos.notifyItemRangeChanged(position, adapterDatos.getItemCount());
+                                }
+                            });
+                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+                            itemTouchhelper.attachToRecyclerView(recycler);
+                            recycler.addItemDecoration(new RecyclerView.ItemDecoration() {
+                                @Override
+                                public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                                    swipeController.onDraw(c);
+                                }
+                            });
                             recycler.setAdapter(adapterDatos);
                             refreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
