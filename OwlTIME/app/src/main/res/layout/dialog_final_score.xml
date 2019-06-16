@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/subject">
+
+        <AutoCompleteTextView
+            android:id="@+id/acSubjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

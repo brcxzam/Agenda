@@ -1,5 +1,6 @@
 package com.brcxzam.owltime;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -33,8 +34,11 @@ public class SwipeController extends ItemTouchHelper.Callback {
 
     private static final float buttonWidth = 300;
 
-    public SwipeController(SwipeControllerActions buttonsActions) {
+    private Context context;
+
+    public SwipeController(SwipeControllerActions buttonsActions, Context context) {
         this.buttonsActions = buttonsActions;
+        this.context = context;
     }
 
     @Override
@@ -156,14 +160,14 @@ public class SwipeController extends ItemTouchHelper.Callback {
         Paint p = new Paint();
 
         RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
-        p.setColor(Color.BLUE);
+        p.setColor(context.getResources().getColor(R.color.primaryColor, null));
         c.drawRoundRect(leftButton, corners, corners, p);
-        drawText("EDIT", c, leftButton, p);
+        drawText("Editar", c, leftButton, p);
 
         RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-        p.setColor(Color.RED);
+        p.setColor(context.getResources().getColor(R.color.primaryLightColor, null));
         c.drawRoundRect(rightButton, corners, corners, p);
-        drawText("DELETE", c, rightButton, p);
+        drawText("Eliminar", c, rightButton, p);
 
         buttonInstance = null;
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
@@ -174,7 +178,7 @@ public class SwipeController extends ItemTouchHelper.Callback {
     }
 
     private void drawText(String text, Canvas c, RectF button, Paint p) {
-        float textSize = 40;
+        float textSize =45;
         p.setColor(Color.WHITE);
         p.setAntiAlias(true);
         p.setTextSize(textSize);

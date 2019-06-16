@@ -14,6 +14,16 @@ public class AdapterDatos extends RecyclerView.Adapter<AdapterDatos.ViewHolderDa
 
     ArrayList<Subjects> listDatos;
 
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onUpdateScore(int position);
+    }
+
+    public void setOnItemClickListener (OnItemClickListener listener) {
+        this.mListener = listener;
+    }
+
     public AdapterDatos(ArrayList<Subjects> listDatos) {
         this.listDatos = listDatos;
     }
@@ -23,8 +33,9 @@ public class AdapterDatos extends RecyclerView.Adapter<AdapterDatos.ViewHolderDa
     public ViewHolderDatos onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list,null,false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0,16,0,0);
         view.setLayoutParams(lp);
-        return new ViewHolderDatos(view);
+        return new ViewHolderDatos(view, mListener);
     }
 
     @Override
@@ -42,10 +53,22 @@ public class AdapterDatos extends RecyclerView.Adapter<AdapterDatos.ViewHolderDa
 
         TextView name, final_score;
 
-        public ViewHolderDatos(@NonNull View itemView) {
+        public ViewHolderDatos(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             final_score = itemView.findViewById(R.id.final_score);
+
+            final_score.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onUpdateScore(position);
+                        }
+                    }
+                }
+            });
         }
 
     }
