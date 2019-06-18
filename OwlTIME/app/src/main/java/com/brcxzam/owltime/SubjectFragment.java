@@ -1,7 +1,5 @@
 package com.brcxzam.owltime;
 
-
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -16,11 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -30,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +44,6 @@ public class SubjectFragment extends Fragment {
     RecyclerView recycler;
     SwipeRefreshLayout refreshLayout;
     LayoutInflater inflater;
-    String[] COUNTRIES = new String[] {"Item 1", "Item 2", "Item 3", "Item 4"};
 
     public SubjectFragment() {
         // Required empty public constructor

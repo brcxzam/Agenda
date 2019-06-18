@@ -3,6 +3,7 @@ package com.brcxzam.owltime;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -29,8 +30,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -51,19 +55,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     ImageButton imageView;
     SwipeRefreshLayout refreshLayout;
     TextInputEditText firstName, lastName, email, password;
-    Button update;
+    TextInputLayout iPassword, iLastName;
+    Button update, btnCancel;
     View v;
+    Boolean isFABOpen = false;
+    FloatingActionButton fab1, fab2, fab;
 
     public AccountFragment() {
         // Required empty public constructor
 
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-         v = inflater.inflate(R.layout.fragment_account, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.fragment_account, container, false);
         refreshLayout = v.findViewById(R.id.refresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -75,6 +80,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         imageView.setOnClickListener(this);
         ctx = v.getContext();
 
+        iPassword = v.findViewById(R.id.iPassword);
+        iLastName = v.findViewById(R.id.iLastName);
+
         firstName = v.findViewById(R.id.firstName);
         lastName = v.findViewById(R.id.lastName);
         email = v.findViewById(R.id.email);
@@ -82,10 +90,47 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         update = v.findViewById(R.id.update);
         update.setOnClickListener(this);
+        btnCancel = v.findViewById(R.id.cancel_button);
+        btnCancel.setOnClickListener(this);
+
+        fab = v.findViewById(R.id.fab);
+        fab.setOnClickListener(this);
+        fab1 = v.findViewById(R.id.fab1);
+        fab1.setOnClickListener(this);
+        fab2 = v.findViewById(R.id.fab2);
+        fab2.setOnClickListener(this);
 
         getUser();
+        enableInput(false, View.GONE);
 
         return v;
+    }
+
+    private void showFABMenu(){
+        isFABOpen=true;
+        fab1.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
+        fab2.animate().translationY(-getResources().getDimension(R.dimen.standard_105));
+        fab.setImageResource(R.drawable.ic_close);
+    }
+
+    private void closeFABMenu(){
+        isFABOpen=false;
+        fab1.animate().translationY(0);
+        fab2.animate().translationY(0);
+        fab.setImageResource(R.drawable.round_perm_identity_24);
+    }
+
+    private void  enableInput(Boolean enable, int visibility ) {
+        firstName.setEnabled(enable);
+        if (lastName.getText().toString().isEmpty()){
+            iLastName.setVisibility(visibility);
+        } else  {
+            lastName.setEnabled(enable);
+        }
+        email.setEnabled(enable);
+        iPassword.setVisibility(visibility);
+        update.setVisibility(visibility);
+        btnCancel.setVisibility(visibility);
     }
 
     @Override
@@ -97,6 +142,37 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.update:
                 updateUser();
+                break;
+            case R.id.fab:
+                if(!isFABOpen){
+                    showFABMenu();
+                }else{
+                    closeFABMenu();
+                }
+                break;
+            case R.id.fab1:
+                enableInput(true, View.VISIBLE);
+                closeFABMenu();
+                break;
+            case R.id.fab2:
+                new MaterialAlertDialogBuilder(getContext())
+                        .setTitle("Cerrar Sesión")
+                        .setMessage("¿Quieres salir?")
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Token token = new Token(getContext());
+                                token.setStatus(false);
+                                token.setToken("");
+                                startActivity(new Intent(getContext(), MainActivity.class));
+                                getActivity().finish();
+                            }
+                        })
+                        .show();
+                closeFABMenu();
+                break;
+            case R.id.cancel_button:
+                enableInput(false, View.GONE);
                 break;
         }
     }
@@ -278,6 +354,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                     }
                                 } else {
                                     if (response.getJSONObject("data").get("uUser").toString().equals("done")){
+                                        enableInput(false, View.GONE);
                                         refreshLayout.setRefreshing(false);
                                     }
 

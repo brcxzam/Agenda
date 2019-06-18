@@ -4,6 +4,7 @@
     <string name="start">Por favor ingrese sus datos</string>
 
     <string name="btnSave">GUARDAR</string>
+    <string name="btnCancel">CANCELAR</string>
     <string name="btnSignUp">REGISTRARSE</string>
     <string name="btnSignIn">ACCEDER</string>
 
@@ -19,18 +20,17 @@
     <string name="subjects">Asignaturas</string>
     <string name="account">Cuenta</string>
 
-    <string name="create_event">Crear Evento</string>
-    <string name="title">Título</string>
-    <string name="date_time">Fecha y Hora</string>
-    <string name="subject">Asignatura</string>
-    <string name="event_school">Evento escolar</string>
-    <string name="btnCreate">CREAR</string>
-
     <string name="nameSubject">Nombre</string>
 
     <string name="advance1">Primer parcial: 20%</string>
     <string name="advance2">Segundo parcial: 20%</string>
     <string name="advance3">Tercer parcial: 20%</string>
     <string name="advance4">Cuarto parcial: 40%</string>
+
+    <string name="title">Titulo</string>
+    <string name="date">Fecha y Hora</string>
+    <string name="subject">Asignatura</string>
+    <string name="school">Escolar</string>
+
 
 </resources>
