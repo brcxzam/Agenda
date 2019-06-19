@@ -37,6 +37,9 @@ const useStyles = makeStyles(theme => ({
 	avatar: {
 		backgroundColor: theme.palette.secondary.main,
 	},
+	color: {
+		backgroundColor: '#0f1822',
+	},
 }))
 
 function Home({ match }) {
@@ -117,7 +120,7 @@ function Home({ match }) {
 	return (
 		<Container maxWidth="xl">
 			<div className={classes.root}>
-				<AppBar position="static">
+				<AppBar position="static" className={classes.color}>
 					<Toolbar>
 						<IconButton
 							edge="start"
