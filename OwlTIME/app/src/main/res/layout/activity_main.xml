@@ -44,6 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:hint="@string/email"
+        app:startIconDrawable="@drawable/ic_round_alternate_email"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -62,6 +63,7 @@
         android:layout_marginTop="20dp"
         android:hint="@string/password"
         app:endIconMode="password_toggle"
+        app:startIconDrawable="@drawable/ic_https_black_24dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
