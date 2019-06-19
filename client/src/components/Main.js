@@ -517,8 +517,6 @@ function Main() {
 			if (!eventD.school) {
 				delete eventD.school
 				delete eventD.subject
-			} else {
-				eventD.school = 'true'
 			}
 			const query = JSON.stringify({
 				query: 'mutation($data: iEvents){ cEvent(data: $data){ id } }',
@@ -550,8 +548,6 @@ function Main() {
 			if (!eventD.school) {
 				eventD.school = null
 				eventD.subject = null
-			} else {
-				eventD.school = 'true'
 			}
 			const query = JSON.stringify({
 				query:

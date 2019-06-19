@@ -1,5 +1,7 @@
 package com.brcxzam.owltime;
 
+import androidx.annotation.NonNull;
+
 public class Subjects {
 
     private int id;
@@ -34,5 +36,11 @@ public class Subjects {
 
     public void setFinal_score(float final_score) {
         this.final_score = final_score;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

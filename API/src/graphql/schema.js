@@ -81,7 +81,7 @@ const schema = buildSchema(`
 		title: String
 		date: String
 		repeat: String
-		school: String
+		school: Boolean
 		subject: ID
 	}
 `)

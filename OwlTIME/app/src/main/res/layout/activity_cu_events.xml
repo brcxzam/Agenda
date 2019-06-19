@@ -7,7 +7,6 @@
     tools:context=".CU_Events"
     android:padding="16dp">
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/iTitle"
         android:layout_width="match_parent"
@@ -44,22 +43,11 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/iSubject"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+    <Spinner
+        android:id="@+id/subject"
+        android:layout_below="@+id/iDate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:startIconDrawable="@drawable/abc_vector_test"
-        android:hint="@string/subject"
-        android:layout_below="@+id/iDate">
-
-        <AutoCompleteTextView
-            android:id="@+id/acSubjects"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/school"
@@ -68,20 +56,20 @@
         android:checked="true"
         android:text="@string/school"
         android:textSize="18sp"
-        android:layout_below="@+id/iSubject"
+        android:layout_below="@+id/subject"
         android:padding="16dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/school"
-        android:gravity="center">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button"
-            android:text="@string/btnSave" />
-    </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_below="@+id/school"-->
+        <!--android:gravity="center">-->
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--style="@style/Widget.MaterialComponents.Button"-->
+            <!--android:text="@string/btnSave" />-->
+    <!--</LinearLayout>-->
 
 </RelativeLayout>

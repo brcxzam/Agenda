@@ -101,7 +101,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         fab2.setOnClickListener(this);
 
         getUser();
-        enableInput(false, View.GONE);
 
         return v;
     }
@@ -125,6 +124,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         if (lastName.getText().toString().isEmpty()){
             iLastName.setVisibility(visibility);
         } else  {
+            iLastName.setVisibility(View.VISIBLE);
             lastName.setEnabled(enable);
         }
         email.setEnabled(enable);
@@ -279,6 +279,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                             }
                             email.setText(data.get("email").toString());
                             Picasso.get().load(new Connection().staticFiles + data.get("profile_image").toString()).into(imageView);
+                            enableInput(false, View.GONE);
                             refreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
