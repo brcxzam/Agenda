@@ -44,6 +44,15 @@ var _default = {
     }
 
     return scores;
+  },
+  scoresSubject: async ({
+    id
+  }, {
+    request
+  }) => {
+    (0, _verify.default)(request);
+    const score = await _model.Score.findByPk(id);
+    return score;
   }
 };
 exports.default = _default;
