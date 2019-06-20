@@ -67,7 +67,7 @@ public class SubjectFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 final View dialogView = inflater.inflate(R.layout.dialog_subject, null);
-                new MaterialAlertDialogBuilder(getContext())
+                new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                         .setTitle("Asignatura")
                         .setView(dialogView)
                         .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
@@ -120,7 +120,7 @@ public class SubjectFragment extends Fragment {
                             final SwipeController swipeController = new SwipeController(new SwipeControllerActions() {
                                 @Override
                                 public void onRightClicked(final int position) {
-                                    new MaterialAlertDialogBuilder(getContext())
+                                    new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                                             .setTitle("Eliminar Asignatura")
                                             .setMessage("¿Eliminar Asignatura?\n"+listDatos.get(position).getName())
                                             .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
@@ -137,7 +137,7 @@ public class SubjectFragment extends Fragment {
                                     final View dialogView = inflater.inflate(R.layout.dialog_subject, null);
                                     final EditText nameSubject = dialogView.findViewById(R.id.nameSubject);
                                     nameSubject.setText(listDatos.get(position).getName());
-                                    new MaterialAlertDialogBuilder(getContext())
+                                    new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                                             .setTitle("Editar Asignatura")
                                             .setView(dialogView)
                                             .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
@@ -195,7 +195,7 @@ public class SubjectFragment extends Fragment {
                                                             advance2.setText(data.get("advance2").toString());
                                                             advance3.setText(data.get("advance3").toString());
                                                             advance4.setText(data.get("advance4").toString());
-                                                            new MaterialAlertDialogBuilder(getContext())
+                                                            new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                                                                     .setTitle("Calificaciónes")
                                                                     .setView(dialogView)
                                                                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {

@@ -155,7 +155,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 closeFABMenu();
                 break;
             case R.id.fab2:
-                new MaterialAlertDialogBuilder(getContext())
+                new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                         .setTitle("Cerrar Sesión")
                         .setMessage("¿Quieres salir?")
                         .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {

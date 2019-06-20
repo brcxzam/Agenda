@@ -180,7 +180,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        new MaterialAlertDialogBuilder(getContext())
+        new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                 .setTitle("Evento")
                 .setView(dialogView)
                 .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
@@ -286,7 +286,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                             final SwipeController swipeController = new SwipeController(new SwipeControllerActions() {
                                 @Override
                                 public void onRightClicked(final int position) {
-                                    new MaterialAlertDialogBuilder(getContext())
+                                    new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                                             .setTitle("Eliminar Evento")
                                             .setMessage("¿Eliminar Evento?\n"+listDatos.get(position).getTitle())
                                             .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
@@ -303,7 +303,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                                     final View dialogView = inflater.inflate(R.layout.dialog_subject, null);
                                     final EditText nameSubject = dialogView.findViewById(R.id.nameSubject);
                                     //nameSubject.setText(listDatos.get(position).getName());
-                                    new MaterialAlertDialogBuilder(getContext())
+                                    new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                                             .setTitle("Editar Asignatura")
                                             .setView(dialogView)
                                             .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
