@@ -22,10 +22,14 @@
 
     <string name="nameSubject">Nombre</string>
 
-    <string name="advance1">Primer parcial: 20%</string>
-    <string name="advance2">Segundo parcial: 20%</string>
-    <string name="advance3">Tercer parcial: 20%</string>
-    <string name="advance4">Cuarto parcial: 40%</string>
+    <string name="score">Calificación</string>
+
+    <string-array name="advances">
+        <item>Primer parcial: 20%</item>
+        <item>Segundo parcial: 20%</item>
+        <item>Tercer parcial: 20%</item>
+        <item>Cuarto parcial: 40%</item>
+    </string-array>
 
     <string name="title">Titulo</string>
     <string name="date">Fecha y Hora</string>

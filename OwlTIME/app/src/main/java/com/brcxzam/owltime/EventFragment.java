@@ -330,12 +330,6 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                             listDatos = new ArrayList<>();
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                             format.setTimeZone(TimeZone.getTimeZone("GMT"));
-//                            JSONObject datos = data.getJSONObject(0);
-//                            String myStrDate = datos.getString("date");
-//                            Date date = format.parse(myStrDate);
-//                            Calendar c= Calendar.getInstance();
-//                            c.setTime(date);
-//                            startAlarm(c);
                             for (int i = 0; i < data.length(); i++){
                                 JSONObject datos = data.getJSONObject(i);
                                 String myStrDate = datos.getString("date");

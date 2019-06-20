@@ -14,7 +14,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -44,6 +47,8 @@ public class SubjectFragment extends Fragment {
     RecyclerView recycler;
     SwipeRefreshLayout refreshLayout;
     LayoutInflater inflater;
+
+    String advance;
 
     public SubjectFragment() {
         // Required empty public constructor
@@ -165,10 +170,16 @@ public class SubjectFragment extends Fragment {
                                 @Override
                                 public void onUpdateScore(final int position) {
                                     final View dialogView = inflater.inflate(R.layout.dialog_final_score, null);
-                                    final EditText advance1 = dialogView.findViewById(R.id.advance1);
-                                    final EditText advance2 = dialogView.findViewById(R.id.advance2);
-                                    final EditText advance3 = dialogView.findViewById(R.id.advance3);
-                                    final EditText advance4 = dialogView.findViewById(R.id.advance4);
+                                    final Spinner spinner = (Spinner) dialogView.findViewById(R.id.advance);
+                                    // Create an ArrayAdapter using the string array and a default spinner layout
+                                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                                            R.array.advances, android.R.layout.simple_spinner_item);
+                                    // Specify the layout to use when the list of choices appears
+                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    // Apply the adapter to the spinner
+                                    spinner.setAdapter(adapter);
+
+                                    final EditText score = dialogView.findViewById(R.id.score);
 
                                         String url = new Connection().api;
 
@@ -191,17 +202,45 @@ public class SubjectFragment extends Fragment {
                                                     public void onResponse(JSONObject response) {
                                                         try {
                                                             JSONObject data = response.getJSONObject("data").getJSONObject("scoresSubject");
-                                                            advance1.setText(data.get("advance1").toString());
-                                                            advance2.setText(data.get("advance2").toString());
-                                                            advance3.setText(data.get("advance3").toString());
-                                                            advance4.setText(data.get("advance4").toString());
+                                                            final String advance1 = data.get("advance1").toString();
+                                                            final String advance2 = data.get("advance2").toString();
+                                                            final String advance3 = data.get("advance3").toString();
+                                                            final String advance4 = data.get("advance4").toString();
+                                                            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                @Override
+                                                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                                    switch (position){
+                                                                        case 0:
+                                                                            advance = "advance1";
+                                                                            score.setText(advance1);
+                                                                            break;
+                                                                        case 1:
+                                                                            advance = "advance2";
+                                                                            score.setText(advance2);
+                                                                            break;
+                                                                        case 2:
+                                                                            advance = "advance3";
+                                                                            score.setText(advance3);
+                                                                            break;
+                                                                        case 3:
+                                                                            advance = "advance4";
+                                                                            score.setText(advance4);
+                                                                            break;
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                                                }
+                                                            });
                                                             new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                                                                     .setTitle("Calificaciónes")
                                                                     .setView(dialogView)
                                                                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                                         @Override
                                                                         public void onClick(DialogInterface dialog, int which) {
-                                                                            updateScore(listDatos.get(position).getId(), Float.parseFloat(advance1.getText().toString()),Float.parseFloat(advance2.getText().toString()),Float.parseFloat(advance3.getText().toString()),Float.parseFloat(advance4.getText().toString()));
+                                                                            updateScore(listDatos.get(position).getId(),advance, (float) Float.valueOf(score.getText().toString()));
                                                                         }
                                                                     })
                                                                     .show();
@@ -401,7 +440,7 @@ public class SubjectFragment extends Fragment {
         MySingleton.getInstance(v.getContext()).addToRequestQueue(jsonObjectRequest);
     }
 
-    private void updateScore(int id, float advance1, float advance2, float advance3,float advance4) {
+    private void updateScore(int id, String advance, float score) {
         //progressBar.setVisibility(View.VISIBLE);
         refreshLayout.setRefreshing(true);
         String url = new Connection().api;
@@ -409,10 +448,7 @@ public class SubjectFragment extends Fragment {
         JSONObject sendQuery = new JSONObject();
         try {
             JSONObject data = new JSONObject();
-            data.put("advance1", advance1);
-            data.put("advance2", advance2);
-            data.put("advance3", advance3);
-            data.put("advance4", advance4);
+            data.put(advance, score);
             JSONObject variables = new JSONObject();
             variables.put("data", data);
             variables.put("id", id);
