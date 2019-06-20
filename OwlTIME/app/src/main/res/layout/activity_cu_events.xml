@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/title"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/abc_vector_test"
+        app:startIconDrawable="@drawable/ic_bookmark_border_black_24dp"
         app:errorEnabled="true"
         android:layout_alignParentTop="true">
 
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/date"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/abc_vector_test"
+        app:startIconDrawable="@drawable/ic_today_black_24dp"
         app:errorEnabled="true"
         android:layout_below="@id/iTitle">
 
