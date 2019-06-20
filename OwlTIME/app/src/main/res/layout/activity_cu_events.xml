@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CU_Events"
-    android:padding="16dp">
+    tools:context=".CU_Events">
 
     <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:id="@+id/iTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +26,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:id="@+id/iDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,32 +45,19 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:id="@+id/subject"
         android:layout_below="@+id/iDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:id="@+id/school"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="true"
         android:text="@string/school"
-        android:textSize="18sp"
-        android:layout_below="@+id/subject"
-        android:padding="16dp"/>
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_below="@+id/school"-->
-        <!--android:gravity="center">-->
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--style="@style/Widget.MaterialComponents.Button"-->
-            <!--android:text="@string/btnSave" />-->
-    <!--</LinearLayout>-->
+        android:textSize="16sp"
+        android:layout_below="@+id/subject" />
 
 </RelativeLayout>

@@ -38,9 +38,4 @@ public class Subjects {
         this.final_score = final_score;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return name;
-    }
 }

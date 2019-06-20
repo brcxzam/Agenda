@@ -1,6 +1,8 @@
 package com.brcxzam.owltime;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -77,7 +79,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_event, container, false);
-
+        v=view;
 
 
         refreshLayout = view.findViewById(R.id.refresh);
@@ -106,20 +108,38 @@ public class EventFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.fab:
-                addEvent();
+                addEvent(false, 0, null, null, false, 0);
                 break;
         }
     }
 
+    public void startAlarm(Calendar c, String title) {
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), AlertReceiver.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("datos", title);
+        intent.putExtra("bundle", bundle);
+        final int _id = (int) System.currentTimeMillis();
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), _id, intent, PendingIntent.FLAG_ONE_SHOT);
+        c.set(Calendar.SECOND, 0);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+    }
+
     int day, month, year, hour, minute;
-    ArrayList<Subjects> SUBJECTS;
+    int subject;
+    TextInputEditText title;
+    ArrayList<SubjectsEvent> SUBJECTS;
+    SwitchMaterial school;
     Spinner spinner;
+    ArrayAdapter<SubjectsEvent> adapter;
+    ArrayList<SubjectsEvent1> busqueda;
+    ArrayAdapter<SubjectsEvent1> adapterBusqueda;
     String fechaYhora;
-    private void addEvent() {
+    private void addEvent(final boolean isUpdate, final int id, String titulo, final Date fecha, boolean escolar, int asignatura) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_cu_events, null);
 
-        final TextInputEditText title = dialogView.findViewById(R.id.title);
+        title = dialogView.findViewById(R.id.title);
 
         final TextInputEditText edDate = dialogView.findViewById(R.id.date);
         edDate.setKeyListener(null);
@@ -127,6 +147,9 @@ public class EventFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 final Calendar c= Calendar.getInstance();
+                if (isUpdate) {
+                    c.setTime(fecha);
+                }
                 year = c.get(Calendar.YEAR);
                 month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
@@ -154,16 +177,14 @@ public class EventFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        school = dialogView.findViewById(R.id.school);
         spinner = dialogView.findViewById(R.id.subject);
         getSubjects();
-
-
-
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(getContext(), adapter.getItem(position).getName(), Toast.LENGTH_LONG).show();
+                subject = adapter.getItem(position).getId();
             }
 
             @Override
@@ -172,13 +193,28 @@ public class EventFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        SwitchMaterial school = dialogView.findViewById(R.id.school);
+        school.setChecked(false);
         school.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Snackbar.make(buttonView, "looks good "+ isChecked, Snackbar.LENGTH_LONG).show();
+                if (isChecked) {
+                    spinner.setVisibility(View.VISIBLE);
+                } else {
+                    spinner.setVisibility(View.GONE);
+                }
             }
         });
+
+        if (isUpdate) {
+            title.setText(titulo);
+            Calendar c= Calendar.getInstance();
+            c.setTime(fecha);
+            SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy h:mm a");
+            edDate.setText(format.format(c.getTime()));
+            format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            fechaYhora = format.format(c.getTime());
+            school.setChecked(escolar);
+        }
 
         new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
                 .setTitle("Evento")
@@ -186,8 +222,18 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                 .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String titulo = title.getText().toString();
-                        createEvent(titulo,fechaYhora, false, 0);
+                        if (isUpdate) {
+                            updateEvent(id,title.getText().toString(),
+                                    fechaYhora,
+                                    school.isChecked(),
+                                    subject);
+                        } else {
+                            createEvent(
+                                    title.getText().toString(),
+                                    fechaYhora,
+                                    school.isChecked(),
+                                    subject);
+                        }
                     }
                 })
                 .show();
@@ -200,7 +246,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
         JSONObject sendQuery = new JSONObject();
         try {
             JSONObject query = new JSONObject();
-            query.put("query", "{ subjects { id name final_score } }");
+            query.put("query", "{ subjects { id name } }");
             sendQuery = query;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -214,17 +260,30 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                         try {
                             JSONArray data = response.getJSONObject("data").getJSONArray("subjects");
                             SUBJECTS = new ArrayList<>();
+                            busqueda = new ArrayList<>();
                             for (int i = 0; i < data.length(); i++){
                                 JSONObject datos = data.getJSONObject(i);
-                                SUBJECTS.add(new Subjects(Integer.parseInt(datos.get("id").toString()),datos.getString("name"), (float) datos.getDouble("final_score")));
+                                SUBJECTS.add(new SubjectsEvent(Integer.parseInt(datos.get("id").toString()),datos.getString("name")));
+                                busqueda.add(new SubjectsEvent1(Integer.parseInt(datos.get("id").toString()),datos.getString("name")));
+                            }
+                            if (SUBJECTS.isEmpty()){
+                                spinner.setVisibility(View.GONE);
+                                school.setVisibility(View.GONE);
+                            } else {
+                                spinner.setVisibility(View.VISIBLE);
+                                if (school.isChecked()) {
+                                    spinner.setVisibility(View.VISIBLE);
+                                } else {
+                                    spinner.setVisibility(View.GONE);
+                                }
                             }
                             // Create an ArrayAdapter using the string array and a default spinner layout
-                            ArrayAdapter<Subjects> adapter = new ArrayAdapter<>(getContext(), R.layout.menu_item, SUBJECTS);
+                            adapter = new ArrayAdapter<>(getContext(), R.layout.menu_item, SUBJECTS);
+                            adapterBusqueda = new ArrayAdapter<>(getContext(), R.layout.menu_item, busqueda);
                             // Specify the layout to use when the list of choices appears
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             // Apply the adapter to the spinner
                             spinner.setAdapter(adapter);
-                            spinner.setSelection(2);
                             refreshLayout.setRefreshing(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -271,10 +330,19 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                             listDatos = new ArrayList<>();
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                             format.setTimeZone(TimeZone.getTimeZone("GMT"));
+//                            JSONObject datos = data.getJSONObject(0);
+//                            String myStrDate = datos.getString("date");
+//                            Date date = format.parse(myStrDate);
+//                            Calendar c= Calendar.getInstance();
+//                            c.setTime(date);
+//                            startAlarm(c);
                             for (int i = 0; i < data.length(); i++){
                                 JSONObject datos = data.getJSONObject(i);
                                 String myStrDate = datos.getString("date");
                                 Date date = format.parse(myStrDate);
+                                Calendar c= Calendar.getInstance();
+                                c.setTime(date);
+                                startAlarm(c, datos.getString("title"));
                                 if (datos.isNull("subject")){
                                     listDatos.add( new Events(datos.getInt("id"), datos.getString("title"), date, datos.getBoolean("school"), 0, null));
                                 } else {
@@ -300,21 +368,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                                 }
                                 @Override
                                 public void onLeftClicked(final int position) {
-                                    final View dialogView = inflater.inflate(R.layout.dialog_subject, null);
-                                    final EditText nameSubject = dialogView.findViewById(R.id.nameSubject);
-                                    //nameSubject.setText(listDatos.get(position).getName());
-                                    new MaterialAlertDialogBuilder(getContext(), R.style.Theme_Dialog)
-                                            .setTitle("Editar Asignatura")
-                                            .setView(dialogView)
-                                            .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    if (!nameSubject.getText().toString().isEmpty()){
-                                                        Toast.makeText(getContext(), "Looks good", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            })
-                                            .show();
+                                    addEvent(true, listDatos.get(position).getId(), listDatos.get(position).getTitle(), listDatos.get(position).getDate(), listDatos.get(position).isSchool(), listDatos.get(position).getIdSubject());
                                 }
                             }, getContext());
                             ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
@@ -455,7 +509,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
         MySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
     }
 
-    private void updateSubject(int id, String name) {
+    private void updateEvent(int id, String title, String date, boolean school, int subject) {
         //progressBar.setVisibility(View.VISIBLE);
         refreshLayout.setRefreshing(true);
         String url = new Connection().api;
@@ -463,12 +517,17 @@ public class EventFragment extends Fragment implements View.OnClickListener {
         JSONObject sendQuery = new JSONObject();
         try {
             JSONObject data = new JSONObject();
-            data.put("name", name);
+            data.put("title", title);
+            data.put("date", date);
+            data.put("school", school);
+            if (school){
+                data.put("subject", subject);
+            }
             JSONObject variables = new JSONObject();
             variables.put("data", data);
             variables.put("id", id);
             JSONObject query = new JSONObject();
-            query.put("query", "mutation($id: ID, $data: iSubjects) { uSubject(id: $id, data: $data) }");
+            query.put("query", "mutation($id: ID, $data: iEvents){ uEvent(id: $id, data: $data) }");
             query.put("variables", variables);
             sendQuery = query;
         } catch (JSONException e) {
@@ -482,8 +541,8 @@ public class EventFragment extends Fragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject data = response.getJSONObject("data");
-                            if (data.getString("uSubject").equals("done")){
-                                //getSubjects();
+                            if (data.getString("uEvent").equals("done")){
+                                getEvents();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
