@@ -71,8 +71,8 @@ const useStyles = makeStyles(theme => ({
 	footer: {
 		marginTop: theme.spacing(3),
 		color: 'white',
-		padding: '0 50px',
-		backgroundColor: '#37848c',
+		padding: theme.spacing(2, 1),
+		backgroundColor: '#0f1822',
 	},
 	titleBar: {
 		background:

@@ -19,7 +19,7 @@ import {
 	Route,
 	Switch as SwitchRoute,
 } from 'react-router-dom'
-import configAPI from './../API'
+import configAPI from '../API'
 import Account from './Account'
 import Main from './Main'
 

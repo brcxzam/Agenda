@@ -13,6 +13,7 @@ const schema = (0, _graphql.buildSchema)(`
 		subjects: [Subjects]
 		subject(id: ID): Subjects
 		scores: [Scores]
+		scoresSubject(id: ID): Scores
 		events: [Events]
 		event(id: ID): Events
 	}
@@ -87,7 +88,7 @@ const schema = (0, _graphql.buildSchema)(`
 		title: String
 		date: String
 		repeat: String
-		school: String
+		school: Boolean
 		subject: ID
 	}
 `);

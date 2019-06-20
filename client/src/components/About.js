@@ -45,6 +45,9 @@ const useStyles = makeStyles(theme => ({
 	button: {
 		margin: 15,
 	},
+	color: {
+		backgroundColor: '#0f1822',
+	},
 }))
 
 function TabContainer({ children, dir }) {
@@ -246,7 +249,7 @@ function About() {
 		<Container maxWidth="xl">
 			{redirect && <Redirect to="/app" />}
 			<div className={classes.root}>
-				<AppBar position="static">
+				<AppBar position="static" className={classes.color}>
 					<Toolbar>
 						<IconButton
 							edge="start"

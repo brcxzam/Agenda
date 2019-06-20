@@ -18,7 +18,7 @@ const sequelize = new _sequelize.default('mysql://root:@localhost:3306/agenda', 
   },
   logging: false,
   dialectOptions: {
-    dateStrings: true,
+    dateStrings: false,
     typeCast: true
   },
   timezone: '-05:00'
