@@ -1,435 +1,167 @@
-import { Model, STRING, INTEGER, DOUBLE, DATEONLY, BOOLEAN, TIME } from "sequelize";
-import sequelize from "./connection";
+import { BOOLEAN, DATE, DOUBLE, INTEGER, Model, STRING } from 'sequelize'
+import sequelize from './connection'
 
-class User extends Model { }
+class User extends Model {}
 User.init(
 	{
 		firstName: {
 			type: STRING,
 			allowNull: false,
 			validate: {
-				is: ["^[a-zñáéíóúü]+$", 'i'],
-				notEmpty: true
-			}
+				is: ['^[a-zñáéíóúü ]+$', 'i'],
+				notEmpty: true,
+			},
 		},
 		lastName: {
 			type: STRING,
 			validate: {
-				is: ["^[a-zñáéíóúü]+$", 'i'],
-				notEmpty: true
-			}
+				is: ['^[a-zñáéíóúü ]+$', 'i'],
+				notEmpty: true,
+			},
 		},
 		email: {
 			type: STRING,
 			allowNull: false,
 			validate: {
-				isEmail: true
-			}
+				isEmail: true,
+			},
 		},
 		password: {
 			type: STRING,
-			allowNull: false
+			allowNull: false,
 		},
 		profile_image: {
 			type: STRING,
-			defaultValue: "default.png",
+			defaultValue: 'default.png',
 			validate: {
-				is: ["^[^\/+\:+\*+\"+\<+\>+\|]+$"]
-			}
-		}
+				is: ['^[^/+:+*+"+<+>+|]+$'],
+			},
+		},
 	},
 	{
 		indexes: [
 			{
 				unique: true,
-				fields: ['email']
+				fields: ['email'],
 			},
 		],
 		modelName: 'User',
-		sequelize
+		sequelize,
 	}
-);
+)
 
-class Notification extends Model { }
-Notification.init(
-	{
-		user: {
-			type: INTEGER,
-			primaryKey: true,
-			references: {
-				model: User,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		},
-		morning: {
-			type: TIME,
-			defaultValue: "08:00:00"
-		},
-		afternoon: {
-			type: TIME,
-			defaultValue: "14:00:00"
-		},
-		night: {
-			type: TIME,
-			defaultValue: "20:00:00"
-		}
-	},
-	{
-		modelName: 'Notification',
-		timestamps: false,
-		sequelize
-	}
-);
-
-class Day extends Model { }//<---
-Day.init(
-	{
-		user: {
-			type: INTEGER,
-			primaryKey: true,
-			references: {
-				model: User,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		},
-		monday: {
-			type: BOOLEAN,
-			defaultValue: true
-		},
-		tuesday: {
-			type: BOOLEAN,
-			defaultValue: true
-		},
-		wednesday: {
-			type: BOOLEAN,
-			defaultValue: true
-		},
-		thursday: {
-			type: BOOLEAN,
-			defaultValue: true
-		},
-		friday: {
-			type: BOOLEAN,
-			defaultValue: true
-		},
-		saturday: {
-			type: BOOLEAN,
-			defaultValue: false
-		},
-		sunday: {
-			type: BOOLEAN,
-			defaultValue: false
-		}
-	},
-	{
-		modelName: 'Day',
-		timestamps: false,
-		sequelize
-	}
-);
-
-class Academic_data extends Model { }
-Academic_data.init(
-	{
-		user: {
-			type: INTEGER,
-			primaryKey: true,
-			references: {
-				model: User,
-				key: 'id',
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		},
-		partials: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false
-		},
-		maximum: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false
-		},
-		aproving: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false
-		},
-		final_score: {
-			type: DOUBLE.UNSIGNED
-		}
-	},
-	{
-		modelName: 'Academic_data',
-		timestamps: false,
-		sequelize
-	}
-);
-
-class Percentage extends Model { }
-Percentage.init(
-	{
-		partial: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false
-		},
-		percent: {
-			type: INTEGER.UNSIGNED,
-			allowNull: false
-		},
-		academic: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Academic_data,
-				key: 'user'
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		}
-	},
-	{
-		modelName: 'Percentage',
-		timestamps: false,
-		sequelize
-	}
-);
-
-class Color extends Model { }//<---
-Color.init(
-	{
-		color: {
-			type: STRING,
-			allowNull: false
-		}
-	},
-	{
-		modelName: 'Color',
-		timestamps: false,
-		sequelize
-	}
-);
-
-class Icon extends Model { }//<---
-Icon.init(
-	{
-		icon: {
-			type: STRING,
-			allowNull: false
-		}
-	},
-	{
-		modelName: 'Icon',
-		timestamps: false,
-		sequelize
-	}
-);
-
-class Subject extends Model { }
+class Subject extends Model {}
 Subject.init(
 	{
 		name: {
 			type: STRING,
 			allowNull: false,
 			validate: {
-				is: ["^[^\/+\:+\*+\"+\<+\>+\|]+$"]
-			}
+				is: ['^[^/+:+*+"+<+>+|]+$'],
+			},
 		},
 		user: {
 			type: INTEGER,
 			allowNull: false,
 			references: {
 				model: User,
-				key: 'id'
+				key: 'id',
 			},
 			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		}
+			onDelete: 'CASCADE',
+		},
 	},
 	{
 		modelName: 'Subject',
 		timestamps: false,
-		sequelize
+		sequelize,
 	}
-);
+)
 
-class Personalization extends Model { }//<---
-Personalization.init(
+class Score extends Model {}
+Score.init(
 	{
-		icon: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Icon,
-				key: 'id'
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		},
-		color: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Color,
-				key: 'id'
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		},
 		subject: {
 			type: INTEGER,
+			primaryKey: true,
 			references: {
 				model: Subject,
-				key: 'id'
+				key: 'id',
 			},
 			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-
-		}
+			onDelete: 'CASCADE',
+		},
+		advance1: {
+			type: DOUBLE,
+			defaultValue: 0,
+		},
+		advance2: {
+			type: DOUBLE,
+			defaultValue: 0,
+		},
+		advance3: {
+			type: DOUBLE,
+			defaultValue: 0,
+		},
+		advance4: {
+			type: DOUBLE,
+			defaultValue: 0,
+		},
+		final_score: {
+			type: DOUBLE,
+			defaultValue: 0,
+		},
 	},
 	{
-		modelName: 'Personalization',
+		modelName: 'Score',
 		timestamps: false,
-		sequelize
+		sequelize,
 	}
-);
+)
 
-
-class Partial extends Model { }
-Partial.init(
-	{
-		obtained: {
-			type: DOUBLE.UNSIGNED
-		},
-		percent: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Percentage,
-				key: 'id'
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		},
-		subject: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Subject,
-				key: 'id'
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		}
-	},
-	{
-		modelName: 'Partial',
-		timestamps: false,
-		sequelize
-	}
-);
-
-
-
-class Schedule extends Model { }
-Schedule.init(
-	{
-		start: {
-			type: TIME,
-			allowNull: false
-		},
-		finish: {
-			type: TIME,
-			allowNull: false
-		},
-		day: {
-			type: STRING
-		},
-		subject: {
-			type: INTEGER,
-			allowNull: false,
-			references: {
-				model: Subject,
-				key: 'id'
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-
-		}
-	},
-	{
-		modelName: 'Schedule',
-		timestamps: false,
-		sequelize
-	}
-);
-
-class Event extends Model { }
+class Event extends Model {}
 Event.init(
 	{
 		title: {
 			type: STRING,
 			allowNull: false,
 			validate: {
-				is: ["^[^\/+\:+\*+\"+\<+\>+\|]+$"]
-			}
+				is: ['^[^/+:+*+"+<+>+|]+$'],
+			},
 		},
 		date: {
-			type: DATEONLY,
-			allowNull: false
-		},
-		time: {
-			type: TIME,
-			allowNull: false
-		},
-		repeat: {
-			type: STRING,
-			defaultValue: "No repetir"
-		},
-		priority: {
-			type: STRING,
-			defaultValue: "Ninguna"
+			type: DATE,
+			allowNull: false,
 		},
 		school: {
 			type: BOOLEAN,
-			defaultValue: false
+			defaultValue: false,
 		},
 		user: {
 			type: INTEGER,
 			allowNull: false,
 			references: {
 				model: User,
-				key: 'id'
+				key: 'id',
 			},
 			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		},
-		personalization: {
-			type: INTEGER,
-			references: {
-				model: Personalization,
-				key: 'id'
-			},
-			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
+			onDelete: 'CASCADE',
 		},
 		subject: {
 			type: INTEGER,
 			references: {
 				model: Subject,
-				key: 'id'
+				key: 'id',
 			},
 			onUpdate: 'CASCADE',
-			onDelete: 'CASCADE'
-		}
+			onDelete: 'CASCADE',
+		},
 	},
 	{
 		modelName: 'Event',
 		timestamps: false,
-		sequelize
+		sequelize,
 	}
-);
+)
 
-export { Notification, Day, User, Academic_data, Percentage, Partial, Color, Icon, Subject, Personalization, Schedule, Event, sequelize };
+export { User, Subject, Score, Event, sequelize }

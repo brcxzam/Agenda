@@ -1,24 +1,29 @@
-import Sequelize from 'sequelize';
+import Sequelize from 'sequelize'
 
 const sequelize = new Sequelize('mysql://root:@localhost:3306/agenda', {
 	pool: {
 		max: 5,
 		min: 0,
 		acquire: 30000,
-		idle: 10000
+		idle: 10000,
 	},
-	logging: false
-});
+	logging: false,
+	dialectOptions: {
+		dateStrings: false,
+		typeCast: true,
+	},
+	timezone: '-05:00',
+})
 
 async function connection() {
 	try {
-		await sequelize.authenticate();
-		console.log('DataBase is Connected');
+		await sequelize.authenticate()
+		console.log('DataBase is Connected')
 	} catch (error) {
-		console.error(error);
+		console.error(error)
 	}
 }
 
-connection();
+connection()
 
-export default sequelize;
+export default sequelize

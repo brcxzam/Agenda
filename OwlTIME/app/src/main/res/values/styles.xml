@@ -1,0 +1,44 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:datePickerDialogTheme">@style/Theme_DatePicker</item>
+        <item name="android:timePickerDialogTheme">@style/Theme_TimePicker</item>
+    </style>
+
+    <style name="Theme_Dialog" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:background">@color/background</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+    </style>
+
+    <style name="Theme_DatePicker" parent="Theme.MaterialComponents.Dialog">
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorOnPrimary">@color/primaryColor</item>
+        <item name="colorPrimary">@color/back</item>
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
+    </style>
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:headerBackground">@color/primaryColor</item>
+        <item name="android:background">@color/background</item>
+    </style>
+
+    <style name="Theme_TimePicker" parent="Theme.MaterialComponents.Dialog">
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorOnPrimary">@color/primaryColor</item>
+        <item name="colorPrimary">@color/background</item>
+        <item name="android:timePickerStyle">@style/MyTimePickerStyle</item>
+    </style>
+
+    <style name="MyTimePickerStyle" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:headerBackground">@color/primaryColor</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:numbersBackgroundColor">#0f1822</item>
+    </style>
+
+</resources>

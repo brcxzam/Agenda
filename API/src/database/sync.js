@@ -1,5 +1,5 @@
-import {sequelize} from './model';
+import { sequelize } from './model'
 
 sequelize.sync({
-	force: true
-});
+	force: true,
+})
