@@ -1,5 +1,5 @@
 export default {
-	API: '/api',
+	API: 'http://localhost:3001/api',
 	tokenItem: 'authToken',
-	staticFiles: '',
+	staticFiles: 'http://localhost:3001',
 }

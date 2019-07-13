@@ -8,12 +8,14 @@ import Home from './components/Home'
 import { PrivateRoute } from './privateRoute'
 import { PublicRoute } from './publicRoute'
 import theme from './theme/theme'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 dayjs.locale('es')
 
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
+			<CssBaseline />
 			<Router>
 				<Switch>
 					<PublicRoute exact path="/" component={About} />

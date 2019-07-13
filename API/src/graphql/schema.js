@@ -23,6 +23,7 @@ const schema = buildSchema(`
 		cEvent(data: iEvents): Events
 		uEvent(id: ID, data: iEvents): String
 		dEvent(id: ID): String
+		contact(data: iContact): Boolean
 	}
 
 	type Users {
@@ -83,6 +84,10 @@ const schema = buildSchema(`
 		repeat: String
 		school: Boolean
 		subject: ID
+	}
+	input iContact {
+		subject: String, 
+		composeEmail: String
 	}
 `)
 

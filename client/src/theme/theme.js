@@ -1,14 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-// const palette = {
-// 	primary: { main: '#02738C' },
-// 	secondary: { main: '#04F2F2' },
-// 	background: { default: '#0C0C0C', paper: '#212121' },
-// 	type: 'dark',
-// 	error: { main: '#04F2F2' },
-// }
-// const themeName = 'Paradiso My Sin Snakes'
-
 export default createMuiTheme({
 	palette: {
 		common: { black: 'rgba(0, 0, 0, 1)', white: 'rgba(255, 255, 255, 1)' },
@@ -40,5 +31,6 @@ export default createMuiTheme({
 			disabled: 'rgba(251, 248, 239, 1)',
 			hint: 'rgba(251, 248, 239, 1)',
 		},
+		type: 'dark',
 	},
 })

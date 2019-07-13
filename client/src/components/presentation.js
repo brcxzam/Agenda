@@ -6,10 +6,20 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import SwipeableViews from 'react-swipeable-views'
 import { autoPlay } from 'react-swipeable-views-utils'
 import configAPI from '../API'
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import clsx from 'clsx'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
@@ -51,6 +61,9 @@ const useStyles = makeStyles(theme => ({
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: 'center',
 		height: 400,
+	},
+	button: {
+		margin: theme.spacing(1),
 	},
 	overlay: {
 		position: 'absolute',
@@ -95,102 +108,186 @@ const useStyles = makeStyles(theme => ({
 		padding: theme.spacing(2, 1),
 		margin: 10,
 	},
+	contact: {
+		margin: 20,
+	},
+	root: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+	wrapper: {
+		margin: theme.spacing(1),
+		position: 'relative',
+	},
+	buttonSuccess: {
+		backgroundColor: theme.palette.secondary.main,
+		'&:hover': {
+			backgroundColor: theme.palette.secondary.dark,
+		},
+	},
+	buttonProgress: {
+		color: theme.palette.secondary.main,
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		marginTop: -12,
+		marginLeft: -12,
+	},
 }))
 
 function SwipeableTextMobileStepper() {
 	const classes = useStyles()
+
+	const [API] = useState(configAPI.API)
+	const [data, setData] = useState({
+		subject: '',
+		composeEmail: '',
+	})
+	const [loading, setLoading] = useState(false)
+	const [success, setSuccess] = useState(false)
+	const timer = useRef()
+
+	const buttonClassname = clsx({
+		[classes.buttonSuccess]: success,
+	})
+
+	useEffect(() => {
+		return () => {
+			clearTimeout(timer.current)
+		}
+	}, [])
+
+	const handleChange = name => event => {
+		setData({ ...data, [name]: event.target.value })
+	}
+
+	async function handleContact(event) {
+		event.preventDefault()
+		if (!loading) {
+			setSuccess(false)
+			setLoading(true)
+		}
+		const query = JSON.stringify({
+			query: 'mutation($data: iContact){ contact(data: $data) }',
+			variables: {
+				data,
+			},
+		})
+		try {
+			const res = await fetch(API, {
+				method: 'POST',
+				body: query,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+			const response = await res.json()
+			const { data, errors } = response
+			if (errors) {
+				console.error(errors)
+			} else {
+				console.log(data)
+				if (!loading) {
+					setSuccess(true)
+					setLoading(false)
+					timer.current = setTimeout(() => {
+						setSuccess(false)
+						setLoading(false)
+					}, 2000)
+				}
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
 	return (
 		<React.Fragment>
-			<br />
-			<main>
-				<Grid item xs={12}>
-					<AutoPlaySwipeableViews>
-						{tutorialSteps.map((step, index) => (
-							<div key={step.label}>
-								<Paper
-									className={classes.mainFeaturedPost}
-									style={{
-										backgroundImage: `url(${step.imgPath})`,
-									}}>
-									<div className={classes.overlay} />
-									<Grid container>
-										<Grid item xs={5}>
-											<div
-												className={
-													classes.mainFeaturedPostContent
-												}>
-												<Typography
-													variant="h3"
-													color="inherit"
-													gutterBottom>
-													{step.label}
-												</Typography>
-												<Typography
-													variant="h6"
-													color="inherit"
-													gutterBottom>
-													{step.content}
-												</Typography>
-											</div>
-										</Grid>
+			<Grid item xs={12}>
+				<AutoPlaySwipeableViews>
+					{tutorialSteps.map((step, index) => (
+						<div key={step.label}>
+							<Paper
+								className={classes.mainFeaturedPost}
+								style={{
+									backgroundImage: `url(${step.imgPath})`,
+								}}>
+								<div className={classes.overlay} />
+								<Grid container>
+									<Grid item xs={5}>
+										<div
+											className={
+												classes.mainFeaturedPostContent
+											}>
+											<Typography
+												variant="h3"
+												color="inherit"
+												gutterBottom>
+												{step.label}
+											</Typography>
+											<Typography
+												variant="h6"
+												color="inherit"
+												gutterBottom>
+												{step.content}
+											</Typography>
+										</div>
 									</Grid>
-								</Paper>
-							</div>
-						))}
-					</AutoPlaySwipeableViews>
-				</Grid>
-				<Grid container spacing={2}>
-					<Grid item xs={12} md={12} align="center">
-						<Paper elevation={0} className={classes.paper}>
-							<Grid item xs={12} md={12}>
-								<Typography
-									variant="h5"
-									align="center"
-									color="secondary">
-									Organiza cualquier cosa en cualquier lugar y
-									a cualquier hora
-								</Typography>
-								<br />
-								<Typography align="center">
-									Donde sea que esté, lleve su lista de tareas
-									con usted, ya que sus tareas se sincronizan
-									automáticamente en todos sus dispositivos,
-									lo que le brinda el máximo control, haciendo
-									que su lista de tareas esté accesible en
-									todas partes.
-								</Typography>
-								<Grid item xs={12} md={12} align="center">
-									<Avatar
-										alt="Icon"
-										src={`${
-											configAPI.staticFiles
-										}/profile_images/default.png`}
-										className={classes.bigAvatar}
-									/>
 								</Grid>
+							</Paper>
+						</div>
+					))}
+				</AutoPlaySwipeableViews>
+			</Grid>
+			<Grid container spacing={2}>
+				<Grid item xs={12} md={12} align="center">
+					<Paper elevation={0} className={classes.paper}>
+						<Grid item xs={12} md={12}>
+							<Typography
+								variant="h5"
+								align="center"
+								color="secondary">
+								Organiza cualquier cosa en cualquier lugar y a
+								cualquier hora
+							</Typography>
+							<br />
+							<Typography align="center">
+								Donde sea que esté, lleve su lista de tareas con
+								usted, ya que sus tareas se sincronizan
+								automáticamente en todos sus dispositivos, lo
+								que le brinda el máximo control, haciendo que su
+								lista de tareas esté accesible en todas partes.
+							</Typography>
+							<Grid item xs={12} md={12} align="center">
+								<Avatar
+									alt="Icon"
+									src={`${
+										configAPI.staticFiles
+									}/profile_images/default.png`}
+									className={classes.bigAvatar}
+								/>
 							</Grid>
-						</Paper>
-					</Grid>
-					<Grid item xs={12} md={12} align="center">
-						<Typography variant="h5" align="center" color="primary">
-							¡Planificar tu dia es cuestión de segundos!
-						</Typography>
-					</Grid>
-					<Grid item xs={12} sm={4}>
-						<Card className={classes.card}>
-							<CardMedia
-								component="img"
-								height="200"
-								image={`${
-									configAPI.staticFiles
-								}/img/evento1.jpg`}
-								title="Preferenciass"
-							/>
-							<CardContent>
-								<Typography variant="h6" component="h2">
-									Registre una materia
-								</Typography>
-								{/* <Typography
+						</Grid>
+					</Paper>
+				</Grid>
+				<Grid item xs={12} md={12} align="center">
+					<Typography variant="h5" align="center" color="primary">
+						¡Planificar tu dia es cuestión de segundos!
+					</Typography>
+				</Grid>
+				<Grid item xs={12} sm={4}>
+					<Card className={classes.card}>
+						<CardMedia
+							component="img"
+							height="200"
+							image={`${configAPI.staticFiles}/img/evento1.jpg`}
+							title="Preferenciass"
+						/>
+						<CardContent>
+							<Typography variant="h6" component="h2">
+								Registre una materia
+							</Typography>
+							{/* <Typography
 									variant="body2"
 									color="textSecondary"
 									component="p">
@@ -198,46 +295,44 @@ function SwipeableTextMobileStepper() {
 									mayor organización y descripción de sus
 									actividades.
 								</Typography> */}
-							</CardContent>
-						</Card>
-					</Grid>
-					<Grid item xs={12} sm={4}>
-						<Card className={classes.card}>
-							<CardMedia
-								component="img"
-								height="200"
-								image={`${
-									configAPI.staticFiles
-								}/img/evento2.jpg`}
-								title="Crear evento"
-							/>
-							<CardContent>
-								<Typography variant="h6" component="h2">
-									Cree un evento
-								</Typography>
-								{/* <Typography
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid item xs={12} sm={4}>
+					<Card className={classes.card}>
+						<CardMedia
+							component="img"
+							height="200"
+							image={`${configAPI.staticFiles}/img/evento2.jpg`}
+							title="Crear evento"
+						/>
+						<CardContent>
+							<Typography variant="h6" component="h2">
+								Cree un evento
+							</Typography>
+							{/* <Typography
 									variant="body2"
 									color="textSecondary"
 									component="p">
 									Agregue recordatorios unicos, diarios,
 									semanalmente, mensualmente o anualmente.
 								</Typography> */}
-							</CardContent>
-						</Card>
-					</Grid>
-					<Grid item xs={12} sm={4}>
-						<Card className={classes.card}>
-							<CardMedia
-								component="img"
-								height="200"
-								image={`${configAPI.staticFiles}/img/work.jpg`}
-								title="Datos academicos"
-							/>
-							<CardContent>
-								<Typography variant="h6" component="h2">
-									Introduzca sus calificaciones
-								</Typography>
-								{/* <Typography
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid item xs={12} sm={4}>
+					<Card className={classes.card}>
+						<CardMedia
+							component="img"
+							height="200"
+							image={`${configAPI.staticFiles}/img/work.jpg`}
+							title="Datos academicos"
+						/>
+						<CardContent>
+							<Typography variant="h6" component="h2">
+								Introduzca sus calificaciones
+							</Typography>
+							{/* <Typography
 									variant="body2"
 									color="textSecondary"
 									component="p">
@@ -245,16 +340,75 @@ function SwipeableTextMobileStepper() {
 									aprobatoria, asi como la cantidad de
 									parciales
 								</Typography> */}
-							</CardContent>
-						</Card>
-					</Grid>
+						</CardContent>
+					</Card>
 				</Grid>
-			</main>
+			</Grid>
+
+			<ExpansionPanel className={classes.contact}>
+				<ExpansionPanelSummary
+					expandIcon={<ExpandMoreIcon />}
+					aria-controls="panel1a-content"
+					id="panel1a-header">
+					<Typography className={classes.heading}>
+						Contacto
+					</Typography>
+				</ExpansionPanelSummary>
+				<form onSubmit={handleContact}>
+					<ExpansionPanelDetails>
+						<Grid
+							container
+							direction="column"
+							justify="center"
+							alignItems="center">
+							<TextField
+								id="subject"
+								label="Asunto"
+								value={data.subject}
+								onChange={handleChange('subject')}
+								margin="normal"
+								variant="outlined"
+								fullWidth
+								required
+							/>
+							<TextField
+								id="composeEmail"
+								label="Mensaje"
+								placeholder="Agregue su correo electrónico si desea una respuesta"
+								multiline
+								value={data.composeEmail}
+								onChange={handleChange('composeEmail')}
+								margin="normal"
+								variant="outlined"
+								fullWidth
+								required
+							/>
+							<div className={classes.wrapper}>
+								<Button
+									variant="contained"
+									color="primary"
+									type="submit"
+									className={buttonClassname}>
+									ENVIAR
+								</Button>
+								{loading && (
+									<CircularProgress
+										size={24}
+										className={classes.buttonProgress}
+									/>
+								)}
+							</div>
+						</Grid>
+					</ExpansionPanelDetails>
+				</form>
+			</ExpansionPanel>
 
 			<footer className={classes.footer}>
 				<Typography variant="subtitle2" align="center">
 					Proyecto Integrador
-					<br /> 2019
+				</Typography>
+				<Typography variant="subtitle2" align="center">
+					2019
 				</Typography>
 			</footer>
 		</React.Fragment>
